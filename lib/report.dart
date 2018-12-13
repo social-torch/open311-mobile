@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
-import "place_marker.dart";
+import "location.dart";
 
 class ReportPage extends Page {
   ReportPage() : super(const Icon(Icons.map), 'Report a problem');
@@ -57,12 +57,22 @@ class ReportBodyState extends State<ReportBody> {
     });
 
     //If we have made it to here, then it is time to select a location/address
-    var page = PlaceMarkerPage();
+    var page = LocationUiPage();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(title: Text(page.title)),
+          bottomNavigationBar: BottomAppBar(
+            child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(icon: Icon(Icons.menu), onPressed: () {},),
+                IconButton(icon: Icon(Icons.search), onPressed: () {},),
+              ],
+            ),
+          ),
           body: page,
         ),
       ),

@@ -6,6 +6,8 @@
     <string>The Open311 application would like to use your camera.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>The Open311 application would like to use your mic.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>The Open311 application would like to use your location.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
