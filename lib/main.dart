@@ -1,14 +1,30 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 import 'map_ui.dart';
 import 'page.dart';
 import "place_marker.dart";
+import "camera_ui.dart";
+import "globals.dart" as globals;
 
 final List<Page> _allPages = <Page>[
   MapUiPage(),
   PlaceMarkerPage(),
+  CameraUiPage(),
 ];
 
-void main() => runApp(MaterialApp(home: MyApp()));
+
+Future<void> main() async {
+  // Fetch the available cameras before initializing the app.
+  try {
+    globals.cameras = await availableCameras();
+  } on CameraException catch (e) {
+    print('Error: $e.code\nError Message: $e.descrption');
+  }
+  runApp(MaterialApp(home: MyApp()));
+}
+
+//void main() => runApp(MaterialApp(home: MyApp()));
 
 class MyApp extends StatelessWidget {
   void _pushPage(BuildContext context, Page page) {
