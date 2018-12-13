@@ -5,12 +5,14 @@ import 'map_ui.dart';
 import 'page.dart';
 import "place_marker.dart";
 import "camera_ui.dart";
+import "auth_test_ui.dart";
 import "globals.dart" as globals;
 
 final List<Page> _allPages = <Page>[
   MapUiPage(),
   PlaceMarkerPage(),
   CameraUiPage(),
+  AuthTestUiPage(),
 ];
 
 
