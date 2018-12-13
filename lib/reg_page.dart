@@ -69,6 +69,7 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView (
         child: Form(
           key: registrationFormKey,
