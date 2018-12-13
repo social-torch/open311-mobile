@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'map_ui.dart';
 import 'page.dart';
+import 'report.dart';
 import "place_marker.dart";
 import "camera_ui.dart";
 import "reg_page.dart";
@@ -13,6 +14,7 @@ final List<Page> _allPages = <Page>[
   PlaceMarkerPage(),
   CameraUiPage(),
   RegistrationPage(),
+  ReportPage(),
 ];
 
 
@@ -39,7 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('GoogleMaps examples')),
+      appBar: AppBar(title: const Text('Open311 Schenectady, NY')),
       body: ListView.builder(
         itemCount: _allPages.length,
         itemBuilder: (_, int index) =>

@@ -8,8 +8,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'page.dart';
 
 final LatLngBounds sydneyBounds = LatLngBounds(
-  southwest: const LatLng(-34.022631, 150.620685),
-  northeast: const LatLng(-33.571835, 151.325952),
+  southwest: const LatLng(42.8171, -74.1305),
+  northeast: const LatLng(42.9107, -73.9520),
 );
 
 class MapUiPage extends Page {
@@ -32,7 +32,7 @@ class MapUiBodyState extends State<MapUiBody> {
   MapUiBodyState();
 
   static final CameraPosition _kInitialPosition = const CameraPosition(
-    target: LatLng(-33.852, 151.211),
+    target: LatLng(42.8272, -73.9671),
     zoom: 11.0,
   );
 
