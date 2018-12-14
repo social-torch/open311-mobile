@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'globals.dart' as globals;
 
 final userPool = new CognitoUserPool(
-  'us-east-1_14d72f5a-86a7-48f7-85ad-589226b2f631', '71bcfdg2bvel54sn0r6bloaf7f');
+  globals.userPoolId, globals.clientPoolId );
 
 class RegistrationPage extends Page {
   RegistrationPage() : super(const Icon(Icons.map), 'Registration');
@@ -26,6 +27,7 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
 
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwordAgainController = TextEditingController();
   final givenNameController = TextEditingController();
   final familyNameController = TextEditingController();
   final emailController = TextEditingController();
@@ -38,27 +40,34 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
     // Clean up the controller when the Widget is disposed
     usernameController.dispose();
     passwordController.dispose();
+    passwordAgainController.dispose();
     familyNameController.dispose();
     givenNameController.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
   void register() async {
-    var data;
     try {
       final userAttributes = [
         new AttributeArg(name: 'given_name', value: givenNameController.text),
         new AttributeArg(name: 'family_name', value: familyNameController.text),
         new AttributeArg(name: 'email', value: emailController.text),
       ];
-      data = await userPool.signUp(usernameController.text, passwordController.text,
+      await userPool.signUp(usernameController.text, passwordController.text,
           userAttributes: userAttributes);
-      print(data);
+      _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: new Text('Check your email for a registration code.'),
+          duration: new Duration(seconds: 5),
+        ),
+      );
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
+          backgroundColor: Color.fromARGB(255, 255, 0, 0),
           content: new Text('Error: ${e.message}'),
-          duration: new Duration(seconds: 10),
+          duration: new Duration(seconds: 5),
         ),
       );
       print(e);
@@ -102,7 +111,22 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                   // code when the user saves the form.
                 },
                 validator: (String value) {
-                  return null;
+                  return value == passwordAgainController.text ? null : "Passwords must match.";
+                },
+              ),
+              TextFormField(
+                controller: passwordAgainController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  icon: Icon(Icons.lock),
+                  hintText: 'Password (Repeat)',
+                ),
+                onSaved: (String value) {
+                  // This optional block of code can be used to run
+                  // code when the user saves the form.
+                },
+                validator: (String value) {
+                  return value == passwordController.text ? null : "Passwords must match.";
                 },
               ),
               TextFormField(
@@ -157,7 +181,7 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                       register();
                     }
                   },
-                  child: Text('Submit'),
+                  child: Text('Register'),
                 ),
                 ),
           ],

@@ -7,6 +7,9 @@ import 'report.dart';
 import "place_marker.dart";
 import "camera_ui.dart";
 import "reg_page.dart";
+import "confirm_page.dart";
+import "resend_confirm_page.dart";
+import "auth_page.dart";
 import "globals.dart" as globals;
 
 final List<Page> _allPages = <Page>[
@@ -14,6 +17,9 @@ final List<Page> _allPages = <Page>[
   PlaceMarkerPage(),
   CameraUiPage(),
   RegistrationPage(),
+  ConfirmPage(),
+  ResendConfirmPage(),
+  AuthPage(),
   ReportPage(),
 ];
 
