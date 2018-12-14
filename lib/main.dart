@@ -31,7 +31,9 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error: $e.code\nError Message: $e.descrption');
   }
-  runApp(MaterialApp(home: MyApp()));
+  runApp(MaterialApp(
+    home: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

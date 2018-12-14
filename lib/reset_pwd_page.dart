@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'reset_pwd_verify_page.dart';
 import 'globals.dart' as globals;
 
 final userPool = new CognitoUserPool(
@@ -41,6 +42,10 @@ class ResetPasswordPageBodyState extends State<ResetPasswordPageBody> {
       final cognitoUser = new CognitoUser(usernameController.text, userPool);
       try {
         await cognitoUser.forgotPassword();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ConfirmResetPasswordPage(cognitoUser)),
+        );
       } catch (e) {
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(

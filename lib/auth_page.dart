@@ -44,7 +44,8 @@ class AuthPageBodyState extends State<AuthPageBody> {
   void authenticate() async {
       final cognitoUser = new CognitoUser(usernameController.text, userPool);
       final authDetails = new AuthenticationDetails(
-          username: usernameController.text, password: passwordController.text);
+        username: usernameController.text, password:
+        passwordController.text);
       CognitoUserSession session;
       try {
         session = await cognitoUser.authenticateUser(authDetails);
@@ -152,7 +153,9 @@ class AuthPageBodyState extends State<AuthPageBody> {
                         ..onTap = () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ResetPasswordPageBody()),
+                            MaterialPageRoute(
+                                settings: RouteSettings(name: '/auth'),
+                                builder: (context) => ResetPasswordPage()),
                           );
                         },
                     ),
