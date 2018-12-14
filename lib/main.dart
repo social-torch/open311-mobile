@@ -1,28 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'map_ui.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'page.dart';
-import 'report.dart';
-import "place_marker.dart";
-import "camera_ui.dart";
-import "reg_page.dart";
-import "confirm_page.dart";
-import "resend_confirm_page.dart";
 import "auth_page.dart";
 import "globals.dart" as globals;
-
-final List<Page> _allPages = <Page>[
-  MapUiPage(),
-  PlaceMarkerPage(),
-  CameraUiPage(),
-  RegistrationPage(),
-  ConfirmPage(),
-  ResendConfirmPage(),
-  AuthPage(),
-  ReportPage(),
-];
-
 
 Future<void> main() async {
   // Fetch the available cameras before initializing the app.
@@ -36,30 +18,28 @@ Future<void> main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
-  void _pushPage(BuildContext context, Page page) {
-    Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (_) =>
-            Scaffold(
-              appBar: AppBar(title: Text(page.title)),
-              body: page,
-            )));
-  }
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => new _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Open311 Schenectady, NY')),
-      body: ListView.builder(
-        itemCount: _allPages.length,
-        itemBuilder: (_, int index) =>
-            ListTile(
-              leading: _allPages[index].leading,
-              title: Text(_allPages[index].title),
-              onTap: () => _pushPage(context, _allPages[index]),
-            ),
-      ),
+  return new SplashScreen(
+      seconds: 3,
+      navigateAfterSeconds: AuthPage(),
+      title: new Text('Welcome In SplashScreen',
+      style: new TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20.0
+      ),),
+      image: new Image.network('https://i.imgur.com/TyCSG9A.png'),
+      backgroundColor: Colors.white,
+      styleTextUnderTheLoader: new TextStyle(),
+      photoSize: 100.0,
+      onClick: ()=>print("Flutter Egypt"),
+      loaderColor: Colors.red
     );
   }
 }
-

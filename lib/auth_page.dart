@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'report.dart';
 import 'reset_pwd_page.dart';
 import 'globals.dart' as globals;
 
@@ -94,6 +95,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
+      appBar: AppBar(title: Text('Authenticate')),
       body: SingleChildScrollView (
         child: Center(
         child: Form(
@@ -156,6 +158,29 @@ class AuthPageBodyState extends State<AuthPageBody> {
                             MaterialPageRoute(
                                 settings: RouteSettings(name: '/auth'),
                                 builder: (context) => ResetPasswordPage()),
+                          );
+                        },
+                    ),
+                  ],
+                )
+              ),
+              RichText(
+                text: new TextSpan (
+                  children: [
+                    new TextSpan(
+                      text: "Click at your own risk!",
+                      style: new TextStyle(color: Colors.blue),
+                      recognizer: new TapGestureRecognizer()
+                        ..onTap = () {
+                          var page = ReportPage();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Scaffold(
+                                appBar: AppBar(title: Text(page.title)),
+                                body: page,
+                              ),
+                            ),
                           );
                         },
                     ),

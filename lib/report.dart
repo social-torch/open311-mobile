@@ -63,16 +63,6 @@ class ReportBodyState extends State<ReportBody> {
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: AppBar(title: Text(page.title)),
-          bottomNavigationBar: BottomAppBar(
-            child: new Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(icon: Icon(Icons.menu), onPressed: () {},),
-                IconButton(icon: Icon(Icons.search), onPressed: () {},),
-              ],
-            ),
-          ),
           body: page,
         ),
       ),

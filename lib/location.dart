@@ -1,19 +1,15 @@
-// Copyright 2018 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:location/location.dart';
+import 'package:latlong/latlong.dart';
 import 'page.dart';
-
-final LatLngBounds locationBounds = LatLngBounds(
-  southwest: const LatLng(42.8171, -74.1305),
-  northeast: const LatLng(42.9107, -73.9520),
-);
+import 'address.dart';
+import 'photo.dart';
 
 class LocationUiPage extends Page {
-  LocationUiPage() : super(const Icon(Icons.map), 'User interface');
+  LocationUiPage() : super(const Icon(Icons.map), 'Select Location');
 
   @override
   Widget build(BuildContext context) {
@@ -31,63 +27,166 @@ class LocationUiBody extends StatefulWidget {
 class LocationUiBodyState extends State<LocationUiBody> {
   LocationUiBodyState();
 
-  static final CameraPosition _kInitialPosition = const CameraPosition(
-    target: LatLng(42.8501, -73.9729),
-    zoom: 13.0,
-  );
+  //Map variables
+  var _defaultLoc = LatLng(42.8137, -73.9398);
+  LatLng _markerLoc = null;
+  var _defaultZoom = 15.0;
+  MapController _mapController = MapController();
 
-  GoogleMapController mapController;
-  CameraPosition _position = _kInitialPosition;
-  bool _isMoving = false;
-  bool _compassEnabled = true;
-  CameraTargetBounds _cameraTargetBounds = CameraTargetBounds(locationBounds);
-  MinMaxZoomPreference _minMaxZoomPreference = MinMaxZoomPreference.unbounded;
-  MapType _mapType = MapType.hybrid;
-  bool _rotateGesturesEnabled = true;
-  bool _scrollGesturesEnabled = true;
-  bool _tiltGesturesEnabled = true;
-  bool _zoomGesturesEnabled = true;
-  bool _myLocationEnabled = true;
+  //Location variables
+  Map<String, double> _currentLocation;
+  StreamSubscription<Map<String, double>> _locationSubscription;
+  Location _location = new Location();
+  bool _permission = false;
+  String error;
 
   @override
   void initState() {
+    initPlatformState();
+    _locationSubscription = _location.onLocationChanged().listen((Map<String,double> result) {
+      setState(() {
+        _currentLocation = result;
+        assert(() {
+          //Using assert here for debug only prints
+          print(_currentLocation["latitude"]);
+          print(_currentLocation["longitude"]);
+          print(_currentLocation["accuracy"]);
+          print(_currentLocation["altitude"]);
+          print(_currentLocation["speed"]);
+          print(_currentLocation["speed_accuracy"]); // Will always be 0 on iOS
+          return true;
+        }());
+      });
+    });
     super.initState();
   }
 
-  void _onMapChanged() {
+  // Platform messages are asynchronous, so we initialize in an async method.
+  initPlatformState() async {
+    Map<String, double> location;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+
+    try {
+      _permission = await _location.hasPermission();
+      location = await _location.getLocation();
+      error = null;
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = 'Permission denied';
+      } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        error = 'Permission denied - please ask the user to enable it from the app settings';
+      }
+      //Default location to center on schenectady, ny
+      location["latitude"] = _defaultLoc.latitude;
+      location["longitude"] = _defaultLoc.longitude;
+    }
+
+    var latlng = LatLng(location["latitude"], location["longitude"]);
     setState(() {
-      _extractMapInfo();
+      _currentLocation = location;
+      _markerLoc = latlng;
+    });
+    _mapController.move(latlng, _defaultZoom);
+    
+  }
+
+  void _handleTap(LatLng latlng) {
+    setState(() {
+      _markerLoc = latlng;
     });
   }
 
-  void _extractMapInfo() {
-    _position = mapController.cameraPosition;
-    _isMoving = mapController.isCameraMoving;
+  Widget _selectMapMarker() {
+    return FlatButton(
+      child: Text('Use marker location on map'),
+      onPressed: () {
+        //If we have made it to here, then it is time to show submit form
+        var page = PhotoPage();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text(page.title)),
+              body: page,
+            ),
+          ),
+        );
+      },
+    );
   }
 
-  @override
-  void dispose() {
-    mapController.removeListener(_onMapChanged);
-    super.dispose();
+  Widget _inputAddr() {
+    return FlatButton(
+      child: Text('Report Address'),
+      onPressed: () {
+        //If we have made it to here, then it is time to show address form
+        var page = AddressPage();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              appBar: AppBar(title: Text(page.title)),
+              body: page,
+            ),
+          ),
+        );
+      },
+    );
   }
+
+  Widget _inputAddrContainer() {
+    return Expanded(
+      child: ListView(
+        children: <Widget>[
+          _selectMapMarker(),
+          Text('or', textAlign: TextAlign.center),
+          _inputAddr(),
+        ],
+      ),
+    );
+  }  
 
   @override
   Widget build(BuildContext context) {
-    final GoogleMap googleMap = GoogleMap(
-      onMapCreated: onMapCreated,
-      initialCameraPosition: _kInitialPosition,
-      trackCameraPosition: true,
-      compassEnabled: false,
-      cameraTargetBounds: _cameraTargetBounds,
-      minMaxZoomPreference: _minMaxZoomPreference,
-      mapType: _mapType,
-      rotateGesturesEnabled: _rotateGesturesEnabled,
-      scrollGesturesEnabled: _scrollGesturesEnabled,
-      tiltGesturesEnabled: _tiltGesturesEnabled,
-      zoomGesturesEnabled: _zoomGesturesEnabled,
-      myLocationEnabled: _myLocationEnabled,
-    );
 
+    if (_markerLoc == null) {
+      _markerLoc = _defaultLoc;
+    }
+
+    var markers = <Marker>[
+      new Marker(
+        width: 40.0,
+        height: 40.0,
+        point: _markerLoc,
+        builder: (ctx) => new Container(
+          child: new GestureDetector(
+            child: new FlutterLogo(
+              colors: Colors.green,
+            ),
+          ),
+        ),
+      ),
+    ];
+
+    final fm = FlutterMap(
+      mapController: _mapController,
+      options: new MapOptions(
+        center: _defaultLoc,
+        zoom: _defaultZoom,
+        minZoom: 13.0,
+        maxZoom: 19.0,
+        swPanBoundary: LatLng(42.761463, -73.986886),
+        nePanBoundary: LatLng(42.844432, -73.886104),
+        onTap: _handleTap,
+      ),
+      layers: [
+        new TileLayerOptions(
+          urlTemplate:
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']
+        ),
+        new MarkerLayerOptions(markers: markers)
+      ],
+    );
 
     final List<Widget> columnChildren = <Widget>[
       Padding(
@@ -97,40 +196,19 @@ class LocationUiBodyState extends State<LocationUiBody> {
             width: MediaQuery.of(context).size.width,
             //TODO: need a better way to set height dynamically based on phone dimension and layout
             height: MediaQuery.of(context).size.height * 0.65,
-            child: googleMap,
+            child: fm,
           ),
         ),
       ),
     ];
 
-    if (mapController != null) {
-      columnChildren.add(
-        Expanded(
-          child: ListView(
-            children: <Widget>[
-              Text('camera bearing: ${_position.bearing}'),
-              Text(
-                  'camera target: ${_position.target.latitude.toStringAsFixed(4)},'
-                      '${_position.target.longitude.toStringAsFixed(4)}'),
-              Text('camera zoom: ${_position.zoom}'),
-              Text('camera tilt: ${_position.tilt}'),
-              Text(_isMoving ? '(Camera moving)' : '(Camera idle)'),
-            ],
-          ),
-        ),
-      );
-    }
+    columnChildren.add(_inputAddrContainer());
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: columnChildren,
     );
-  }
 
-  void onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    mapController.addListener(_onMapChanged);
-    _extractMapInfo();
-    setState(() {});
   }
 }
