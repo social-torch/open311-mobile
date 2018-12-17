@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
+import 'data.dart';
 import 'photo.dart';
 
 class AddressPage extends Page {
@@ -43,9 +44,9 @@ class AddressBodyState extends State<AddressBody> {
   void nextPage() {
     setState(() {
       _street = streetCntl.text;
-      _city = streetCntl.text;
-      _state = streetCntl.text;
-      _zip = streetCntl.text;
+      _city = cityCntl.text;
+      _state = stateCntl.text;
+      _zip = zipCntl.text;
     });
 
     if (_street == '') {
@@ -65,6 +66,20 @@ class AddressBodyState extends State<AddressBody> {
       return;
     }
 
+
+    var addrd = new AddressData();
+    addrd.street = _street;
+    addrd.city = _city;
+    addrd.state = _state;
+    addrd.zip = _zip;
+    var rp = new ReportData();
+    rp.address = addrd;
+    assert(() {
+      //Using assert here for debug only prints
+      print(rp);
+      return true;
+    }());
+
     //If we have made it to here, then it is time to go to submit page
     var page = PhotoPage();
     Navigator.push(
@@ -79,11 +94,22 @@ class AddressBodyState extends State<AddressBody> {
   }
 
   @override
+  void initState() {
+    //Remove lat/long if user is inputting address
+    ReportData().latlng = null;
+    super.initState();
+  }
+
+  @override
   void dispose() {
     streetCntl.dispose();
     cityCntl.dispose();
     stateCntl.dispose();
     zipCntl.dispose();
+
+    //If user backs out remove address, they may choose lat/long instead
+    ReportData().address = null;
+
     super.dispose();
   }
 

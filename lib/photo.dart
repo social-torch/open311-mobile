@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
+import 'data.dart';
 import 'camera_ui.dart';
 import 'submit.dart';
 
@@ -38,6 +39,7 @@ class PhotoBodyState extends State<PhotoBody> {
 
   void skip() {
     //If we have made it to here, then it is time to go to submit page
+    print(ReportData());
     var page = SubmitPage();
     Navigator.push(
       context,

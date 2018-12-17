@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'page.dart';
 import 'address.dart';
 import 'photo.dart';
+import 'data.dart';
 
 class LocationUiPage extends Page {
   LocationUiPage() : super(const Icon(Icons.map), 'Select Location');
@@ -61,6 +62,13 @@ class LocationUiBodyState extends State<LocationUiBody> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    //If user backs out remove address, they may choose lat/long instead
+    ReportData().latlng = null;
+    super.dispose();
+  }
+
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     Map<String, double> location;
@@ -101,6 +109,14 @@ class LocationUiBodyState extends State<LocationUiBody> {
       child: Text('Use marker location on map'),
       onPressed: () {
         //If we have made it to here, then it is time to show submit form
+        var rp = new ReportData();
+        rp.latlng = _markerLoc;
+        assert(() {
+          //Using assert here for debug only prints
+          print(rp);
+          return true;
+        }());
+
         var page = PhotoPage();
         Navigator.push(
           context,

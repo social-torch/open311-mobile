@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
-import 'report.dart';
+import 'home.dart';
 import 'reset_pwd_page.dart';
 import 'globals.dart' as globals;
 
@@ -172,7 +172,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
                       style: new TextStyle(color: Colors.blue),
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
-                          var page = ReportPage();
+                          var page = HomePage();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

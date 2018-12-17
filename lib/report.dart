@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
 import "location.dart";
+import 'data.dart';
 
 class ReportPage extends Page {
   ReportPage() : super(const Icon(Icons.map), 'Report a problem');
@@ -22,7 +23,8 @@ class ReportBodyState extends State<ReportBody> {
   ReportBodyState();
 
   final descController = TextEditingController();
-  var _description = null;
+  ReportData repd = new ReportData();
+
   final List<String> _list = const [ 
                 'Broken Sidewalk', 
                 'Pothole',
@@ -35,7 +37,10 @@ class ReportBodyState extends State<ReportBody> {
                 'Park Complaint',
                 'Tree Complaint',
                 'Missed Trash Pickup',
-                'Steet Light Out'
+                'Street Light Out',
+                'Speeding in neighborhood',
+                'Sewer Issue',
+                'Water Leak'
               ];
   var _dSelect = null;
 
@@ -53,7 +58,8 @@ class ReportBodyState extends State<ReportBody> {
     }
 
     setState(() {
-      _description = descController.text;
+      repd.description = descController.text;
+      repd.type = _dSelect;
     });
 
     //If we have made it to here, then it is time to select a location/address

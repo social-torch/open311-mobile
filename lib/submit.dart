@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
+import 'data.dart';
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -27,6 +28,9 @@ class SubmitBodyState extends State<SubmitBody> {
         children: [
           new Column(
             children: <Widget>[
+              new Text(
+                '${ReportData()}',
+              ),
               new RaisedButton(
                 child: new Text( 
                 "Submit", 
