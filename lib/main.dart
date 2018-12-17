@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'page.dart';
 import "auth_page.dart";
 import "globals.dart" as globals;
 

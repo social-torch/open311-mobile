@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'page.dart';
 import 'data.dart';
 
@@ -21,6 +22,18 @@ class SubmitBody extends StatefulWidget {
 class SubmitBodyState extends State<SubmitBody> {
   SubmitBodyState();
 
+  void _apiGateway()
+  {
+    var url = "http://example.com/whatsit/create";
+    http.post(url, body: {"name": "doodle", "color": "blue"})
+    .then((response) {
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+    });
+
+    http.read("http://example.com/foobar.txt").then(print);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -32,6 +45,10 @@ class SubmitBodyState extends State<SubmitBody> {
                 '${ReportData()}',
               ),
               new RaisedButton(
+                onPressed: () {
+                    _apiGateway();
+                    Navigator.popUntil(context, ModalRoute.withName("/home"));
+                },
                 child: new Text( 
                 "Submit", 
                 ),

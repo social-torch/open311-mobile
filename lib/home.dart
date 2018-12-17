@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'page.dart';
 import 'report.dart';
 import 'faq.dart';
-import "globals.dart" as globals;
+
+class NavPage {
+  NavPage(this.pathname, this.page);
+
+  final String pathname;
+  final Page page;
+}
 
 //The home page give you the following options
-final List<Page> _allPages = <Page>[
-  ReportPage(),
-  FaqPage(),
+final List<NavPage> _allPages = <NavPage>[
+  NavPage("/report", ReportPage()),
+  NavPage("/faq", FaqPage()),
 ];
 
 class HomePage extends Page {
@@ -29,12 +35,18 @@ class HomeBody extends StatefulWidget {
 class HomeBodyState extends State<HomeBody> {
   HomeBodyState();
 
-  void _pushPage(BuildContext context, Page page) {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _pushPage(BuildContext context, NavPage npage) {
     Navigator.of(context).push(MaterialPageRoute<void>(
+        settings: RouteSettings(name: npage.pathname),
         builder: (_) =>
             Scaffold(
-              appBar: AppBar(title: Text(page.title)),
-              body: page,
+              appBar: AppBar(title: Text(npage.page.title)),
+              body: npage.page,
             )));
   }
 
@@ -45,8 +57,8 @@ class HomeBodyState extends State<HomeBody> {
         itemCount: _allPages.length,
         itemBuilder: (_, int index) =>
         ListTile(
-          leading: _allPages[index].leading,
-          title: Text(_allPages[index].title),
+          leading: _allPages[index].page.leading,
+          title: Text(_allPages[index].page.title),
           onTap: () => _pushPage(context, _allPages[index]),
         ),
       ),

@@ -173,9 +173,10 @@ class AuthPageBodyState extends State<AuthPageBody> {
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
                           var page = HomePage();
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
+                              settings: RouteSettings(name: '/home'),
                               builder: (context) => Scaffold(
                                 appBar: AppBar(title: Text(page.title)),
                                 body: page,
