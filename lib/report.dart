@@ -84,42 +84,43 @@ class ReportBodyState extends State<ReportBody> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new ListView(
-        children: [
-          new Column(
-            children: <Widget>[
-  	      new Text(
-                'Please enter a report type',
-                textAlign: TextAlign.center,
+      body: 
+        new Column (
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text(
+              'Please enter a report type',
+              textAlign: TextAlign.center,
+            ),
+            new DropdownButton<String>(
+              value: _dSelect,
+              items: _list.map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (value) { setState(() { _dSelect = value; }); },
+            ),
+            new Text(
+              'Description (optional)',
+              textAlign: TextAlign.center,
+            ),
+            new TextField(
+              keyboardType: TextInputType.multiline,
+              controller: descController,
+              maxLines: 10,
+            ),
+            new RaisedButton(
+              onPressed: nextPage,
+              child: new Text( 
+              "Next", 
               ),
-              new DropdownButton<String>(
-                value: _dSelect,
-                items: _list.map((String value) {
-                  return new DropdownMenuItem<String>(
-                    value: value,
-                    child: new Text(value),
-                  );
-                }).toList(),
-                onChanged: (value) { setState(() { _dSelect = value; }); },
-              ),
-  	      new Text(
-                'Description (optional)',
-                textAlign: TextAlign.center,
-              ),
-              new TextField(
-                keyboardType: TextInputType.multiline,
-                controller: descController,
-                maxLines: 10,
-              ),
-              new RaisedButton(
-                onPressed: nextPage,
-                child: new Text( 
-                "Next", 
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

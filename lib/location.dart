@@ -105,8 +105,9 @@ class LocationUiBodyState extends State<LocationUiBody> {
   }
 
   Widget _selectMapMarker() {
-    return FlatButton(
+    return OutlineButton(
       child: Text('Use marker location on map'),
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       onPressed: () {
         //If we have made it to here, then it is time to show submit form
         var rp = new ReportData();
@@ -132,8 +133,9 @@ class LocationUiBodyState extends State<LocationUiBody> {
   }
 
   Widget _inputAddr() {
-    return FlatButton(
+    return OutlineButton(
       child: Text('Report Address'),
+      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       onPressed: () {
         //If we have made it to here, then it is time to show address form
         var page = AddressPage();
@@ -168,7 +170,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
     if (_markerLoc == null) {
       _markerLoc = _defaultLoc;
     }
-
+   
     var markers = <Marker>[
       new Marker(
         width: 40.0,
@@ -176,13 +178,32 @@ class LocationUiBodyState extends State<LocationUiBody> {
         point: _markerLoc,
         builder: (ctx) => new Container(
           child: new GestureDetector(
-            child: new FlutterLogo(
-              colors: Colors.green,
+            child: new Icon(
+              Icons.place,
+              color: Colors.orange,
             ),
           ),
         ),
       ),
     ];
+
+    if (_currentLocation != null) {
+      markers.add(
+        new Marker(
+          width: 40.0,
+          height: 40.0,
+          point: LatLng(_currentLocation["latitude"], _currentLocation["longitude"]),
+          builder: (ctx) => new Container(
+            child: new GestureDetector(
+              child: new Icon(
+                Icons.person_pin_circle,
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     final fm = FlutterMap(
       mapController: _mapController,
