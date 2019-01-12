@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColorSliverButton extends FlatButton {
-  const ColorSliverButton({
+  ColorSliverButton({
     Key key,
     @required VoidCallback onPressed,
     ValueChanged<bool> onHighlightChanged,
@@ -25,67 +25,36 @@ class ColorSliverButton extends FlatButton {
          textTheme: textTheme,
          textColor: textColor,
          disabledTextColor: disabledTextColor,
-         color: color,
+         color: Colors.grey[200],
          disabledColor: disabledColor,
          highlightColor: highlightColor,
          splashColor: splashColor,
          colorBrightness: colorBrightness,
-         padding: padding,
-         //shape: shape,
-         shape: const RoundedRectangleBorder(borderRadius: const BorderRadius.circular(9.0)),
+         padding: EdgeInsets.only(left: 0.0),
+         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
          clipBehavior: clipBehavior,
          materialTapTargetSize: materialTapTargetSize,
-         child:  child,
-//         child:  Row(
-//           mainAxisAlignment: MainAxisAlignment.start,
-//           children: [
-//             Container(
-//               width: 10.0,
-//               height: 36.0,
-//               decoration:
-//                 BoxDecoration(
-//                   borderRadius: BorderRadius.all(Radius.circular(9.0)),
-//                   color: Colors.red[400],
-//                 ),
-//             ),
-//             Container(
-//               width: 10.0,
-//               height: 36.0,
-//             ),
-//             Container(
-//               child: child
-//             ),
-//           ]
-//         ),
+         child:  Row(
+           mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+             Container(
+               width: 10.0,
+               height: 36.0,
+               decoration:
+                 BoxDecoration(
+                   borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                   color: Colors.red[400],
+                 ),
+             ),
+             Container(
+               width: 10.0,
+               height: 36.0,
+             ),
+             Container(
+               child: child
+             ),
+           ]
+         ),
       );
 }
 
-
-//  Widget _selectMapMarker() {
-//    return FlatButton(
-//      padding: EdgeInsets.only(left: 0.0),
-//      color: Colors.grey[200],
-//      child: Row(
-//        mainAxisAlignment: MainAxisAlignment.start,
-//        children: [
-//          Container(
-//            width: 10.0,
-//            height: 36.0,
-//            decoration: 
-//              BoxDecoration(
-//                borderRadius: BorderRadius.all(Radius.circular(9.0)),
-//                color: Colors.red[400],
-//              ),
-//          ),
-//          Container(
-//            width: 10.0,
-//            height: 36.0,
-//          ),
-//          new Text(
-//            'Use marker location on map'
-//          ),
-//        ]
-//      ),
-//      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(9.0)),
-//)
-//

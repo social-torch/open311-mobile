@@ -106,31 +106,8 @@ class LocationUiBodyState extends State<LocationUiBody> {
   }
 
   Widget _selectMapMarker() {
-    return FlatButton(
-      padding: EdgeInsets.only(left: 0.0),
-      color: Colors.grey[200],
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: 10.0,
-            height: 36.0,
-            decoration: 
-              BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                color: Colors.red[400],
-              ),
-          ),
-          Container(
-            width: 10.0,
-            height: 36.0,
-          ),
-          new Text(
-            'Use marker location on map'
-          ),
-        ]
-      ),
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(9.0)),
+    return ColorSliverButton(
+      child: Text('Use marker location on map'),
       onPressed: () {
         //If we have made it to here, then it is time to show submit form
         var rp = new ReportData();
@@ -158,7 +135,6 @@ class LocationUiBodyState extends State<LocationUiBody> {
   Widget _inputAddr() {
     return ColorSliverButton(
       child: Text('Report Address'),
-      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       onPressed: () {
         //If we have made it to here, then it is time to show address form
         var page = AddressPage();
