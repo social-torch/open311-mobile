@@ -151,6 +151,11 @@ class LocationUiBodyState extends State<LocationUiBody> {
     );
   }
 
+  Widget _progressDots() {
+    return ProgressDots(
+    );
+  }
+
   Widget _inputAddrContainer() {
     return Expanded(
       child: Column(
@@ -158,6 +163,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
           _selectMapMarker(),
           Text('or', textAlign: TextAlign.center),
           _inputAddr(),
+          _progressDots(),
         ],
       ),
     );

@@ -1,5 +1,108 @@
 import 'package:flutter/material.dart';
 
+class ProgressDots extends Container {
+  ProgressDots({
+    Key key,
+    AlignmentGeometry alignment,
+    EdgeInsetsGeometry padding,
+    Color color,
+    Decoration decoration,
+    Decoration foregroundDecoration,
+    double width,
+    double height,
+    BoxConstraints constraints,
+    EdgeInsetsGeometry margin,
+    Matrix4 transform,
+    Widget child,
+  }) : super(
+      key: key,
+      alignment: alignment,
+      padding: padding,
+      color: color,
+      decoration: decoration,
+      foregroundDecoration: foregroundDecoration,
+      width: width,
+      height: height,
+      constraints: constraints,
+      margin: margin,
+      transform: transform,
+      //child: child,
+      child:  Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: 24.0,
+            height: 24.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+          ),
+          Container(
+            width: 24.0,
+            height: 2.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.black,
+              ),
+          ),
+          Container(
+            width: 24.0,
+            height: 24.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+          ),
+          Container(
+            width: 24.0,
+            height: 2.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.black,
+              ),
+          ),
+          Container(
+            width: 24.0,
+            height: 24.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.black,
+                shape: BoxShape.circle,
+              ),
+          ),
+          Container(
+            width: 24.0,
+            height: 2.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.black,
+              ),
+          ),
+          Container(
+            width: 24.0,
+            height: 24.0,
+            decoration:
+              BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                border: new Border.all(
+                  color: Colors.black,
+                  width: 3.0,
+                  style: BorderStyle.solid
+                ),
+              ),
+          ),
+          Container(                                                                                  child: child
+          ),
+        ]
+      ),
+  );
+}
+
+
 class ColorSliverButton extends FlatButton {
   ColorSliverButton({
     Key key,
