@@ -1,7 +1,54 @@
 import 'package:flutter/material.dart';
 
+Widget _getDot(stage, idx) {
+  var clr = Colors.black;
+  var thk = 3.0;
+  if ( idx == stage ) {
+    clr = Colors.white;
+  }
+  else if ( idx > stage ) {
+    clr = Colors.white;
+    thk = 1.0;
+  }
+  return Container(
+    width: 24.0,
+    height: 24.0,
+    decoration:
+      BoxDecoration(
+        color: clr,
+        shape: BoxShape.circle,                                                                   border: new Border.all(                                                                     color: Colors.black,                                                                      width: thk,
+          style: BorderStyle.solid,
+        ),
+      ),
+    );
+}
+
+Row _getDots(stage, numStages, child) {
+  List<Widget> rowChildren = new List();
+  for(var i=0; i<numStages; i++) {
+    rowChildren.add(_getDot(stage, i));
+    if (i < (numStages-1)) {
+      rowChildren.add(Container(                                                                      width: 24.0,                                                                              height: 2.0,
+            decoration:  BoxDecoration(
+              color: Colors.black,
+          ),
+        ),
+      );
+    }
+  }
+  rowChildren.add(
+    Container(                                                                                  child: child
+    ),
+  );
+  return Row(
+    children: rowChildren,
+  );
+}
+
 class ProgressDots extends Container {
   ProgressDots({
+    @required int stage,
+    @required int numStages,
     Key key,
     AlignmentGeometry alignment,
     EdgeInsetsGeometry padding,
@@ -26,80 +73,8 @@ class ProgressDots extends Container {
       constraints: constraints,
       margin: margin,
       transform: transform,
-      //child: child,
-      child:  Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: 24.0,
-            height: 24.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-          ),
-          Container(
-            width: 24.0,
-            height: 2.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.black,
-              ),
-          ),
-          Container(
-            width: 24.0,
-            height: 24.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-          ),
-          Container(
-            width: 24.0,
-            height: 2.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.black,
-              ),
-          ),
-          Container(
-            width: 24.0,
-            height: 24.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-          ),
-          Container(
-            width: 24.0,
-            height: 2.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.black,
-              ),
-          ),
-          Container(
-            width: 24.0,
-            height: 24.0,
-            decoration:
-              BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: new Border.all(
-                  color: Colors.black,
-                  width: 3.0,
-                  style: BorderStyle.solid
-                ),
-              ),
-          ),
-          Container(                                                                                  child: child
-          ),
-        ]
-      ),
-  );
+      child:  _getDots(stage, numStages, child),
+      );
 }
 
 

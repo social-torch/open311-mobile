@@ -153,6 +153,8 @@ class LocationUiBodyState extends State<LocationUiBody> {
 
   Widget _progressDots() {
     return ProgressDots(
+      stage: 2,
+      numStages: 4,
     );
   }
 
