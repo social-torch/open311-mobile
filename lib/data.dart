@@ -1,5 +1,7 @@
 import 'package:latlong/latlong.dart';
 
+const String APP_NAME = "311";
+
 class AddressData {
   String street;
   String city;

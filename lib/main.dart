@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
-import "auth_page.dart";
+import "login.dart";
 import "globals.dart" as globals;
 
 Future<void> main() async {

@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
-import "location.dart";
+import "submit.dart";
 import 'data.dart';
 
-class ReportPage extends Page {
-  ReportPage() : super(const Icon(Icons.map), 'Report a problem');
+class DescriptionPage extends Page {
+  DescriptionPage() : super(const Icon(Icons.map), APP_NAME);
 
   @override
   Widget build(BuildContext context) {
-    return const ReportBody();
+    return const DescriptionBody();
   }
 }
 
-class ReportBody extends StatefulWidget {
-  const ReportBody();
+class DescriptionBody extends StatefulWidget {
+  const DescriptionBody();
 
   @override
-  State<StatefulWidget> createState() => ReportBodyState();
+  State<StatefulWidget> createState() => DescriptionBodyState();
 }
 
-class ReportBodyState extends State<ReportBody> {
-  ReportBodyState();
+class DescriptionBodyState extends State<DescriptionBody> {
+  DescriptionBodyState();
 
   final descController = TextEditingController();
   ReportData repd = new ReportData();
@@ -63,7 +63,7 @@ class ReportBodyState extends State<ReportBody> {
     });
 
     //If we have made it to here, then it is time to select a location/address
-    var page = LocationUiPage();
+    var page = SubmitPage();
     Navigator.push(
       context,
       MaterialPageRoute(

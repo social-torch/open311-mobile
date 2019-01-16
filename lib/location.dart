@@ -5,13 +5,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:location/location.dart';
 import 'package:latlong/latlong.dart';
 import 'page.dart';
-import 'address.dart';
+import 'issue.dart';
 import 'photo.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
 
 class LocationUiPage extends Page {
-  LocationUiPage() : super(const Icon(Icons.map), 'Select Location');
+  LocationUiPage() : super(const Icon(Icons.map), APP_NAME);
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +118,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
           return true;
         }());
 
-        var page = PhotoPage();
+        var page = IssuePage();
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -137,16 +137,17 @@ class LocationUiBodyState extends State<LocationUiBody> {
       child: Text('Report Address'),
       onPressed: () {
         //If we have made it to here, then it is time to show address form
-        var page = AddressPage();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Scaffold(
-              appBar: AppBar(title: Text(page.title)),
-              body: page,
-            ),
-          ),
-        );
+//        var page = AddressPage();
+//        Navigator.push(
+//          context,
+//          MaterialPageRoute(
+//            builder: (context) => Scaffold(
+//              appBar: AppBar(title: Text(page.title)),
+//              body: page,
+//            ),
+//          ),
+//        );
+        print("Dead button");
       },
     );
   }
