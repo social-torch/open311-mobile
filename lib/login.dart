@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'data.dart';
 import 'new_report.dart';
 import 'reset_pwd_page.dart';
 import 'globals.dart' as globals;
@@ -10,7 +11,7 @@ final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);
 
 class AuthPage extends Page {
-  AuthPage() : super(const Icon(Icons.map), 'Authenticate');
+  AuthPage() : super(const Icon(Icons.map), APP_NAME);
 
   @override
   Widget build(BuildContext context) {

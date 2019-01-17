@@ -41,3 +41,22 @@ class ReportData{
   }
   ReportData._internal();
 }
+
+class DeviceData{
+
+  static final DeviceData _rds = new DeviceData._internal();
+
+  double ButtonHeight;
+  double DeviceWidth;
+
+  factory DeviceData() {
+    return _rds;
+  }
+  toString() {
+    String retval = "\n";
+    retval += "ButtonHeight: ${ButtonHeight}\n";
+    retval += "DeviceWidth: ${DeviceWidth}\n";
+    return retval;
+  }
+  DeviceData._internal();
+}

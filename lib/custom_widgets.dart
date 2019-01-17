@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'data.dart';
 
-Widget _getDot(stage, idx) {
+Widget _getDot(diam, stage, idx) {
   var clr = Colors.black;
   var thk = 3.0;
   if ( idx == stage ) {
@@ -11,12 +12,15 @@ Widget _getDot(stage, idx) {
     thk = 1.0;
   }
   return Container(
-    width: 24.0,
-    height: 24.0,
+    width: diam,
+    height: diam,
     decoration:
       BoxDecoration(
         color: clr,
-        shape: BoxShape.circle,                                                                   border: new Border.all(                                                                     color: Colors.black,                                                                      width: thk,
+        shape: BoxShape.circle,
+        border: new Border.all(
+          color: Colors.black,
+          width: thk,
           style: BorderStyle.solid,
         ),
       ),
@@ -25,10 +29,18 @@ Widget _getDot(stage, idx) {
 
 Row _getDots(stage, numStages, child) {
   List<Widget> rowChildren = new List();
+
+  //Each dot and line (o--) should ideally take up an 1/8 of the width, cause I said so...
+  //And each dot should be 3/10 of the dot and line (o--) combo, again cause I said so...
+  var dotAndLineCombo = DeviceData().DeviceWidth * 0.125;
+  var dotWidth = dotAndLineCombo * 0.3;
+  var lineLength = dotAndLineCombo - dotWidth;
   for(var i=0; i<numStages; i++) {
-    rowChildren.add(_getDot(stage, i));
+    rowChildren.add(_getDot(dotWidth, stage, i));
     if (i < (numStages-1)) {
-      rowChildren.add(Container(                                                                      width: 24.0,                                                                              height: 2.0,
+      rowChildren.add(Container(
+            width: lineLength,
+            height: 2.0,
             decoration:  BoxDecoration(
               color: Colors.black,
           ),
@@ -117,7 +129,7 @@ class ColorSliverButton extends FlatButton {
            children: [
              Container(
                width: 10.0,
-               height: 36.0,
+               height: DeviceData().ButtonHeight,
                decoration:
                  BoxDecoration(
                    borderRadius: BorderRadius.all(Radius.circular(9.0)),
@@ -126,7 +138,7 @@ class ColorSliverButton extends FlatButton {
              ),
              Container(
                width: 10.0,
-               height: 36.0,
+               height: DeviceData().ButtonHeight,
              ),
              Container(
                child: child

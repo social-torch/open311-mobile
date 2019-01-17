@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
+import "data.dart";
 import "login.dart";
 import "globals.dart" as globals;
 
@@ -25,6 +26,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {   
   @override
   Widget build(BuildContext context) {
+
+  //Initialize App Device data
+  DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
+  DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
+
   return new SplashScreen(
       seconds: 3,
       navigateAfterSeconds: AuthPage(),
