@@ -5,24 +5,24 @@ import 'location.dart';
 import 'bottom_app_bar.dart';
 
 
-class NewReportPage extends Page {
-  NewReportPage() : super(const Icon(Icons.map), APP_NAME);
+class ViewSubmittedPage extends Page {
+  ViewSubmittedPage() : super(const Icon(Icons.map), APP_NAME);
 
   @override
   Widget build(BuildContext context) {
-    return const NewReportBody();
+    return const ViewSubmittedBody();
   }
 }
 
-class NewReportBody extends StatefulWidget {
-  const NewReportBody();
+class ViewSubmittedBody extends StatefulWidget {
+  const ViewSubmittedBody();
 
   @override
-  State<StatefulWidget> createState() => NewReportBodyState();
+  State<StatefulWidget> createState() => ViewSubmittedBodyState();
 }
           
-class NewReportBodyState extends State<NewReportBody> {
-  NewReportBodyState();
+class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
+  ViewSubmittedBodyState();
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class NewReportBodyState extends State<NewReportBody> {
       body: new RaisedButton(
         onPressed: nextPage,
         child: new Text(
-        "Next",
+        "ViewSubmitted",
         ),
       ),
     );

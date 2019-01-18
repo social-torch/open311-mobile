@@ -15,6 +15,9 @@ Future<void> main() async {
   }
   runApp(MaterialApp(
     home: MyApp(),
+    routes: {
+    '/login': (context) => AuthPage(),
+  },
   ));
 }
 

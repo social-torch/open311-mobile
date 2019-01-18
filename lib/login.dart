@@ -3,9 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
 import 'data.dart';
+import 'bottom_app_bar.dart';
 import 'new_report.dart';
 import 'reset_pwd_page.dart';
 import 'globals.dart' as globals;
+
 
 final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);
@@ -97,6 +99,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: Text('Authenticate')),
+      bottomNavigationBar: commonBottomBar(context), 
       body: SingleChildScrollView (
         child: Center(
         child: Form(
@@ -177,7 +180,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              settings: RouteSettings(name: '/home'),
+                              settings: RouteSettings(name: '/newreport'),
                               builder: (context) => Scaffold(
                                 appBar: AppBar(title: Text(page.title)),
                                 body: page,
