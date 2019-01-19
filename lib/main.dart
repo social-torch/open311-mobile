@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
 import "data.dart";
+import "fake.dart";
 import "login.dart";
+import "new_report.dart";
+import "view_submitted.dart";
+import "all_reports.dart";
+import "settings.dart";
 import "globals.dart" as globals;
 
 Future<void> main() async {
@@ -17,6 +22,10 @@ Future<void> main() async {
     home: MyApp(),
     routes: {
     '/login': (context) => AuthPage(),
+    '/new_report': (context) => NewReportPage(),
+    '/view_submitted': (context) => ViewSubmittedPage(),
+    '/all_reports': (context) => AllReportsPage(),
+    '/settings': (context) => SettingsPage(),
   },
   ));
 }
@@ -36,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 
   return new SplashScreen(
       seconds: 3,
-      navigateAfterSeconds: AuthPage(),
+      navigateAfterSeconds: FakePage(),
       title: new Text('Open311 Schenectady, NY',
       style: new TextStyle(
         fontWeight: FontWeight.bold,

@@ -11,63 +11,19 @@ Widget commonBottomBar(context) {
           children: <Widget>[
             IconButton(icon: Icon(Icons.add_circle_outline), 
                        onPressed: () {
-                          var page = NewReportPage();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              settings: RouteSettings(name: '/login/newreport'),
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text(page.title)),
-                                bottomNavigationBar: commonBottomBar(context),
-                                body: page,
-                              ),
-                            ),
-                          );
+                         Navigator.of(context).pushNamedAndRemoveUntil('/new_report', ModalRoute.withName('/login'));
                         }),
             IconButton(icon: Icon(Icons.widgets),
                        onPressed: () {
-                          var page = ViewSubmittedPage();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              //settings: RouteSettings(name: '/home'),
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text(page.title)),
-                                bottomNavigationBar: commonBottomBar(context),
-                                body: page,
-                              ),
-                            ),
-                          );
+                         Navigator.of(context).pushNamedAndRemoveUntil('/view_submitted', ModalRoute.withName('/login'));
                         }),
             IconButton(icon: Icon(Icons.map),
                        onPressed: () {
-                          var page = AllReportsPage();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              //settings: RouteSettings(name: '/home'),
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text(page.title)),
-                                bottomNavigationBar: commonBottomBar(context),
-                                body: page,
-                              ),
-                            ),
-                          );
+                         Navigator.of(context).pushNamedAndRemoveUntil('/all_reports', ModalRoute.withName('/login'));
                         }),
             IconButton(icon: Icon(Icons.settings),
                        onPressed: () {
-                          var page = SettingsPage();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              //settings: RouteSettings(name: '/home'),
-                              builder: (context) => Scaffold(
-                                appBar: AppBar(title: Text(page.title)),
-                                bottomNavigationBar: commonBottomBar(context),
-                                body: page,
-                              ),
-                            ),
-                          );
+                         Navigator.of(context).pushNamedAndRemoveUntil('/settings', ModalRoute.withName('/login'));
                         }),
           ],
         ),

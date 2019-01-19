@@ -47,6 +47,8 @@ class SettingsBodyState extends State<SettingsBody> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold (
+      appBar: AppBar(title: Text(APP_NAME)),
+      bottomNavigationBar: commonBottomBar(context),
       body: new RaisedButton(
         onPressed: nextPage,
         child: new Text(
