@@ -3,6 +3,7 @@ import 'page.dart';
 import 'data.dart';
 import 'location.dart';
 import 'bottom_app_bar.dart';
+import 'custom_widgets.dart';
 
 
 class NewReportPage extends Page {
@@ -49,11 +50,25 @@ class NewReportBodyState extends State<NewReportBody> {
     return new Scaffold (
       appBar: AppBar(title: Text(APP_NAME)),
       bottomNavigationBar: commonBottomBar(context),
-      body: new RaisedButton(
-        onPressed: nextPage,
-        child: new Text(
-        "Next",
-        ),
+      body: Row (
+        children: [ 
+          Container(
+            width: 36.0,
+          ),
+          Expanded( 
+            child: Column(
+              children: [
+                ColorSliverButton(
+                  onPressed: nextPage,
+                  child: Text( "NewReport"),
+                ),
+              ]
+            ),
+          ),
+          Container(
+            width: 36.0,
+          ),
+        ]
       ),
     );
   }
