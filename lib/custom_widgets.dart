@@ -127,14 +127,28 @@ class ColorSliverButton extends FlatButton {
          child:  Row(
            mainAxisAlignment: MainAxisAlignment.start,
            children: [
-             Container(
-               width: 10.0,
-               height: DeviceData().ButtonHeight,
-               decoration:
-                 BoxDecoration(
-                   borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                   color: Colors.red[400],
+             Stack(
+               children: [
+                 Container(
+                   width: 10.0,
+                   height: DeviceData().ButtonHeight,
+                   decoration:
+                     BoxDecoration(
+                       borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                       color: Colors.red[400],
+                   ),
                  ),
+                 Positioned(
+                   left: 5.0,
+                   child: Container(
+                     width: 20.0,
+                     height: DeviceData().ButtonHeight,
+                     decoration: BoxDecoration(
+                       color: Colors.red[400],
+                     ),
+                   ),
+                 ),
+               ]
              ),
              Container(
                width: 10.0,
