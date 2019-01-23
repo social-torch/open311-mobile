@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
 import 'data.dart';
+import 'camera_ui.dart';
 import 'location.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
@@ -30,7 +31,22 @@ class NewReportBodyState extends State<NewReportBody> {
     super.initState();
   }
 
-  void nextPage() {
+  void camPage() {
+    //If we have made it to here, then it is time to use camera
+    var page = CameraUiPage();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(title: Text(page.title)),
+          bottomNavigationBar: commonBottomBar(context),
+          body: page,
+        ),
+      ),
+    );
+  }
+
+  void locPage() {
     //If we have made it to here, then it is time to select a location/address
     var page = LocationUiPage();
     Navigator.push(
@@ -58,9 +74,41 @@ class NewReportBodyState extends State<NewReportBody> {
           Expanded( 
             child: Column(
               children: [
+                Container(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'Select an Image',
+                      textAlign: TextAlign.left,
+                      textScaleFactor: 2.0,
+                    ),
+                  ),
+                ),
+                Container(height: 30.0),
+                ProgressDots(
+                  stage: 0,
+                  numStages: 4,
+                ),
+                Container(height: 30.0),
                 ColorSliverButton(
-                  onPressed: nextPage,
-                  child: Text( "NewReport"),
+                  onPressed: camPage,
+                  child: Text( "Camera"),
+                ),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: locPage,
+                  child: Text( "Photo Library"),
+                ),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: locPage,
+                  child: Text( "Most Recent"),
+                ),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: locPage,
+                  child: Text( "No Photo"),
                 ),
               ]
             ),
