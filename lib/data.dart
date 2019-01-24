@@ -42,6 +42,23 @@ class ReportData{
   ReportData._internal();
 }
 
+class CityData{
+
+  static final CityData _rds = new CityData._internal();
+
+  List<String> issues;
+
+  factory CityData() {
+    return _rds;
+  }
+  toString() {
+    String retval = "\n";
+    retval += "issues: ${issues}\n";
+    return retval;
+  }
+  CityData._internal();
+}
+
 class DeviceData{
 
   static final DeviceData _rds = new DeviceData._internal();

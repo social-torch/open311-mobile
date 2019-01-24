@@ -3,6 +3,7 @@ import 'page.dart';
 import 'data.dart';
 import 'camera_ui.dart';
 import 'location.dart';
+import 'issue_type.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 
@@ -46,6 +47,18 @@ class NewReportBodyState extends State<NewReportBody> {
     );
   }
 
+  void photoLibPage() {
+    //If we have made it to here, then it is time to select a photo from library
+    var page = IssueTypePage();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          body: page,
+        ),
+      ),
+    );
+  }
   void locPage() {
     //If we have made it to here, then it is time to select a location/address
     var page = LocationUiPage();
@@ -97,7 +110,7 @@ class NewReportBodyState extends State<NewReportBody> {
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: locPage,
+                  onPressed: photoLibPage,
                   child: Text( "Photo Library"),
                 ),
                 Container(height: 15.0),
