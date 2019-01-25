@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'page.dart';
 import 'data.dart';
 import 'camera_ui.dart';
@@ -26,39 +27,20 @@ class NewReportBody extends StatefulWidget {
           
 class NewReportBodyState extends State<NewReportBody> {
   NewReportBodyState();
+  Future<File> _image;
+
+  void getImage(ImageSource source) async {
+    var image = await ImagePicker.pickImage(source: source);
+    setState(() {
+      _image = image;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
   }
 
-  void camPage() {
-    //If we have made it to here, then it is time to use camera
-    var page = CameraUiPage();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: Text(page.title)),
-          bottomNavigationBar: commonBottomBar(context),
-          body: page,
-        ),
-      ),
-    );
-  }
-
-  void photoLibPage() {
-    //If we have made it to here, then it is time to select a photo from library
-    var page = IssueTypePage();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          body: page,
-        ),
-      ),
-    );
-  }
   void locPage() {
     //If we have made it to here, then it is time to select a location/address
     var page = LocationUiPage();
@@ -105,12 +87,12 @@ class NewReportBodyState extends State<NewReportBody> {
                 ),
                 Container(height: 30.0),
                 ColorSliverButton(
-                  onPressed: camPage,
+                  onPressed: () { getImage(ImageSource.camera); },
                   child: Text( "Camera"),
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: photoLibPage,
+                  onPressed: () { getImage(ImageSource.gallery); },
                   child: Text( "Photo Library"),
                 ),
                 Container(height: 15.0),
