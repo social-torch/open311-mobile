@@ -162,3 +162,70 @@ class ColorSliverButton extends FlatButton {
       );
 }
 
+
+class ColorSliverTextField extends Container{
+  ColorSliverTextField({
+    Key key,
+    TextEditingController controller,
+    AlignmentGeometry alignment,
+    EdgeInsetsGeometry padding,
+    Color color,
+    Decoration decoration,
+    Decoration foregroundDecoration,
+    double width,
+    double height,
+    BoxConstraints constraints,
+    EdgeInsetsGeometry margin,
+    Matrix4 transform,
+    Widget child,
+  }) : super(
+      key: key,
+      alignment: alignment,
+      padding: padding,
+      color: color,
+      decoration: decoration,
+      foregroundDecoration: foregroundDecoration,
+      width: width,
+      height: height,
+      constraints: constraints,
+      margin: margin,
+      transform: transform,
+      child: TextField(
+        keyboardType: TextInputType.multiline,
+        controller: controller,
+        //maxLines: 10,
+        decoration: InputDecoration(
+          prefixIcon: 
+             Stack(
+               children: [
+                 Container(
+                   width: 10.0,
+                   height: DeviceData().ButtonHeight*3,
+                   decoration:
+                     BoxDecoration(
+                       borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                       color: Colors.red[400],
+                   ),
+                 ),
+                 Positioned(
+                   left: 5.0,
+                   child: Container(
+                     width: 6.0,
+                     height: DeviceData().ButtonHeight*3,
+                     decoration: BoxDecoration(
+                       color: Colors.red[400],
+                     ),
+                   ),
+                 ),
+               ]
+             ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(9.0)),
+          filled: true,
+          fillColor: Colors.grey[200],
+          enabledBorder: const OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.grey[200], width: 0.0),
+            ),
+          ),
+        ),
+      );
+}

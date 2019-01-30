@@ -26,7 +26,12 @@ class DescriptionBody extends StatefulWidget {
 class DescriptionBodyState extends State<DescriptionBody> {
   DescriptionBodyState();
 
+  final descController = TextEditingController();
+
   void submitPage() {
+    //setState(() {
+      //TODO: set state of descController
+    //});
     var page = SubmitPage();
     Navigator.push(
       context,
@@ -38,6 +43,11 @@ class DescriptionBodyState extends State<DescriptionBody> {
     );
   }
 
+  @override
+  void dispose() {
+    descController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold (
@@ -68,9 +78,8 @@ class DescriptionBodyState extends State<DescriptionBody> {
                   numStages: 4,
                 ),
                 Container(height: 30.0),
-                ColorSliverButton(
-                  onPressed: () { getImage(ImageSource.camera); },
-                  child: Text( "Camera"),
+                ColorSliverTextField(
+                  controller: descController,
                 ),
                 Container(height: 15.0),
                 Row(
