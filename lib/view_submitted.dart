@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
 import 'data.dart';
-import 'location.dart';
+import 'description.dart';
 import 'bottom_app_bar.dart';
 
 
@@ -31,13 +31,11 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
 
   void nextPage() {
     //If we have made it to here, then it is time to select a location/address
-    var page = LocationUiPage();
+    var page = DescriptionPage();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          appBar: AppBar(title: Text(page.title)),
-          bottomNavigationBar: commonBottomBar(context),
           body: page,
         ),
       ),

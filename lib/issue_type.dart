@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'page.dart';
 import 'data.dart';
-import 'location.dart';
+import 'description.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 
@@ -30,15 +30,13 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
     super.initState();
   }
 
-  void locPage() {
+  void descPage() {
     //If we have made it to here, then it is time to select a location/address
-    var page = LocationUiPage();
+    var page = DescriptionPage();
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          appBar: AppBar(title: Text(page.title)),
-          bottomNavigationBar: commonBottomBar(context),
           body: page,
         ),
       ),
@@ -91,7 +89,7 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                     itemCount: CityData().issues.length,
                     itemBuilder: (BuildContext ctxt, int Index) {
                       return  new ColorSliverButton( 
-                        onPressed: locPage,
+                        onPressed: descPage,
                         child: Text(CityData().issues[Index]),
                       );
                     }
