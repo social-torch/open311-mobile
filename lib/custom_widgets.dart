@@ -167,6 +167,7 @@ class ColorSliverTextField extends Container{
   ColorSliverTextField({
     Key key,
     TextEditingController controller,
+    String labelText,
     AlignmentGeometry alignment,
     EdgeInsetsGeometry padding,
     Color color,
@@ -193,7 +194,8 @@ class ColorSliverTextField extends Container{
       child: TextField(
         keyboardType: TextInputType.multiline,
         controller: controller,
-        //maxLines: 10,
+        maxLines: 6,
+        maxLength: 200,
         decoration: InputDecoration(
           prefixIcon: 
              Stack(
@@ -222,6 +224,7 @@ class ColorSliverTextField extends Container{
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(9.0)),
           filled: true,
           fillColor: Colors.grey[200],
+          labelText: labelText,
           enabledBorder: const OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.grey[200], width: 0.0),
             ),

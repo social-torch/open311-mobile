@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'page.dart';
@@ -30,7 +32,7 @@ class NewReportBodyState extends State<NewReportBody> {
   Future<File> _image;
 
   void getImage(ImageSource source) async {
-    var image = await ImagePicker.pickImage(source: source);
+    var image = ImagePicker.pickImage(source: source);
     setState(() {
       _image = image;
     });

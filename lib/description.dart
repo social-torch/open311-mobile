@@ -51,6 +51,7 @@ class DescriptionBodyState extends State<DescriptionBody> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold (
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: Text(APP_NAME)),
       bottomNavigationBar: commonBottomBar(context),
       body: Row (
@@ -59,7 +60,7 @@ class DescriptionBodyState extends State<DescriptionBody> {
             width: 36.0,
           ),
           Expanded( 
-            child: Column(
+            child: ListView(
               children: [
                 Container(height: 30.0),
                 SizedBox(
@@ -80,6 +81,7 @@ class DescriptionBodyState extends State<DescriptionBody> {
                 Container(height: 30.0),
                 ColorSliverTextField(
                   controller: descController,
+                  labelText: 'Write an optional brief description here'
                 ),
                 Container(height: 15.0),
                 Row(

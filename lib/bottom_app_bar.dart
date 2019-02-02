@@ -6,7 +6,10 @@ import 'settings.dart';
 
 
 Widget commonBottomBar(context) {
- return BottomAppBar(                                                                             child: new Row(                                                                             mainAxisSize: MainAxisSize.max,
+ return BottomAppBar(
+ //return BottomNavigationBar(
+ //  type: BottomNavigationBarType.fixed,
+   child: new Row(                                                                             mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(icon: Icon(Icons.add_circle_outline), 
