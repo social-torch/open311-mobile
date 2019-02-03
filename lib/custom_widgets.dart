@@ -162,11 +162,19 @@ class ColorSliverButton extends FlatButton {
       );
 }
 
+int _getMaxLines(maxLines) {
+  if ( maxLines <= 1 ) {
+    return 1;
+  } else {
+    return (maxLines/2).toInt();
+  }
+}
 
 class ColorSliverTextField extends Container{
   ColorSliverTextField({
     Key key,
     TextEditingController controller,
+    int maxLines:1,
     String labelText,
     AlignmentGeometry alignment,
     EdgeInsetsGeometry padding,
@@ -194,7 +202,7 @@ class ColorSliverTextField extends Container{
       child: TextField(
         keyboardType: TextInputType.multiline,
         controller: controller,
-        maxLines: 6,
+        maxLines: maxLines,
         maxLength: 200,
         decoration: InputDecoration(
           prefixIcon: 
@@ -202,7 +210,7 @@ class ColorSliverTextField extends Container{
                children: [
                  Container(
                    width: 10.0,
-                   height: DeviceData().ButtonHeight*3,
+                   height: DeviceData().ButtonHeight*_getMaxLines(maxLines),
                    decoration:
                      BoxDecoration(
                        borderRadius: BorderRadius.all(Radius.circular(9.0)),
@@ -213,7 +221,7 @@ class ColorSliverTextField extends Container{
                    left: 5.0,
                    child: Container(
                      width: 6.0,
-                     height: DeviceData().ButtonHeight*3,
+                     height: DeviceData().ButtonHeight*_getMaxLines(maxLines),
                      decoration: BoxDecoration(
                        color: Colors.red[400],
                      ),

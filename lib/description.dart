@@ -80,6 +80,7 @@ class DescriptionBodyState extends State<DescriptionBody> {
                 ),
                 Container(height: 30.0),
                 ColorSliverTextField(
+                  maxLines: 6,
                   controller: descController,
                   labelText: 'Write an optional brief description here'
                 ),

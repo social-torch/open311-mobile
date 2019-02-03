@@ -9,6 +9,7 @@ import 'issue.dart';
 import 'photo.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
+import 'bottom_app_bar.dart';
 
 class LocationUiPage extends Page {
   LocationUiPage() : super(const Icon(Icons.map), APP_NAME);
@@ -28,7 +29,8 @@ class LocationUiBody extends StatefulWidget {
 
 class LocationUiBodyState extends State<LocationUiBody> {
   LocationUiBodyState();
-
+ 
+  final addrController = TextEditingController();
   //Map variables
   var _defaultLoc = LatLng(42.8137, -73.9398);
   LatLng _markerLoc = null;
@@ -67,6 +69,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
   void dispose() {
     //If user backs out remove address, they may choose lat/long instead
     ReportData().latlng = null;
+    addrController.dispose();
     super.dispose();
   }
 
@@ -249,11 +252,77 @@ class LocationUiBodyState extends State<LocationUiBody> {
 
     columnChildren.add(_inputAddrContainer());
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: columnChildren,
-    );
-
+    //return Column(
+    //  mainAxisAlignment: MainAxisAlignment.start,
+    //  crossAxisAlignment: CrossAxisAlignment.stretch,
+    //  children: columnChildren,
+    //);
+    return new Scaffold (
+      appBar: AppBar(title: Text(APP_NAME)),
+      bottomNavigationBar: commonBottomBar(context),                                   body: Row (                                                                        children: [
+          Container(
+            width: 36.0,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'Choose the Location',
+                      textAlign: TextAlign.left,
+                      textScaleFactor: 2.0,                                                          ),                                                                             ),
+                ),                                                                               Container(height: 30.0),                                                         ProgressDots(                                                                      stage: 1,                                                                        numStages: 4,
+                ),
+                Container(height: 10.0),
+                ColorSliverTextField(
+                  controller: addrController,
+                  labelText: 'Enter a location'
+                ),
+                Flexible( 
+                  child: Stack(
+                    children: [
+                      fm,
+                      Positioned(
+                        left: 4.0,
+                        bottom: 5.0,
+child: Container(
+      width: 40.0,
+      height: 40.0,
+      decoration: new BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
+    ),
+    ),
+                      Positioned(
+                        left: 0.0,
+                        bottom: 1.0,
+                        child: new IconButton(
+                          icon: new Icon(Icons.my_location, color: Colors.black),
+                          highlightColor: Color(0xFFFFFF),
+                          onPressed: () {
+                            setState(() {
+                              var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
+                              _markerLoc = latlng;
+                            });
+                          },
+                        ),
+                      ),
+                    ]
+                  ),
+                ),
+                Row(                                                                               children: [                                                                        FlatButton(                                                                        color: Colors.grey[900],
+                      textColor: Colors.white,                                                         onPressed: () {
+                        Navigator.of(context).pushNamed('/description');
+                      },
+                      child: Text( "Confirm Location"),                                              ),                                                                             ]                                                                              ),
+              ]
+            ),
+          ),
+          Container(                                                                         width: 36.0,                                                                   ),
+        ]                                                                              ),                                                                             );
   }
 }

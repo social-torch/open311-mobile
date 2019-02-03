@@ -45,17 +45,7 @@ class NewReportBodyState extends State<NewReportBody> {
 
   void locPage() {
     //If we have made it to here, then it is time to select a location/address
-    var page = LocationUiPage();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: Text(page.title)),
-          bottomNavigationBar: commonBottomBar(context),
-          body: page,
-        ),
-      ),
-    );
+    Navigator.of(context).pushNamed('/location');
   }
 
   @override
