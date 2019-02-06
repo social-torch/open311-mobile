@@ -9,6 +9,7 @@ import 'issue.dart';
 import 'photo.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
+import 'custom_icons.dart';
 import 'bottom_app_bar.dart';
 
 class LocationUiPage extends Page {
@@ -182,6 +183,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
       _markerLoc = _defaultLoc;
     }
    
+
     var markers = <Marker>[
       new Marker(
         width: 40.0,
@@ -190,7 +192,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
         builder: (ctx) => new Container(
           child: new GestureDetector(
             child: new Icon(
-              Icons.place,
+              Open311.map,
               color: Colors.orange,
             ),
           ),
