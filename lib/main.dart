@@ -10,6 +10,7 @@ import "view_submitted.dart";
 import "all_reports.dart";
 import "settings.dart";
 import "location.dart";
+import "issue_type.dart";
 import "description.dart";
 import "globals.dart" as globals;
 
@@ -29,6 +30,7 @@ Future<void> main() async {
     '/all_reports': (context) => AllReportsPage(),
     '/settings': (context) => SettingsPage(),
     '/location': (context) => LocationUiPage(),
+    '/issue_type': (context) => IssueTypePage(),
     '/description': (context) => DescriptionPage(),
   },
   ));

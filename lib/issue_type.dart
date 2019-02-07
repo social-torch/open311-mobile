@@ -31,16 +31,7 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
   }
 
   void descPage() {
-    //If we have made it to here, then it is time to select a location/address
-    var page = DescriptionPage();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          body: page,
-        ),
-      ),
-    );
+    Navigator.of(context).pushNamed('/description');
   }
 
   @override
@@ -89,7 +80,10 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                     itemCount: CityData().issues.length,
                     itemBuilder: (BuildContext ctxt, int Index) {
                       return  new ColorSliverButton( 
-                        onPressed: descPage,
+                        onPressed: () {
+                          ReportData().type = CityData().issues[Index];
+                          descPage();
+                        },
                         child: Text(CityData().issues[Index]),
                       );
                     }

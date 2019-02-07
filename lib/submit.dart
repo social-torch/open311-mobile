@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'page.dart';
 import 'data.dart';
+import 'bottom_app_bar.dart';
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -36,7 +37,9 @@ class SubmitBodyState extends State<SubmitBody> {
   
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new Scaffold (
+      appBar: AppBar(title: Text(APP_NAME)),
+      bottomNavigationBar: commonBottomBar(context),
       body: new ListView(
         children: [
           new Column(

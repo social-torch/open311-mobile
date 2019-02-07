@@ -29,9 +29,9 @@ class DescriptionBodyState extends State<DescriptionBody> {
   final descController = TextEditingController();
 
   void submitPage() {
-    //setState(() {
-      //TODO: set state of descController
-    //});
+    setState(() {
+      ReportData().description = descController.text;
+    });
     var page = SubmitPage();
     Navigator.push(
       context,

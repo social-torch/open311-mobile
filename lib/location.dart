@@ -108,73 +108,6 @@ class LocationUiBodyState extends State<LocationUiBody> {
     });
   }
 
-  Widget _selectMapMarker() {
-    return ColorSliverButton(
-      child: Text('Use marker location on map'),
-      onPressed: () {
-        //If we have made it to here, then it is time to show submit form
-        var rp = new ReportData();
-        rp.latlng = _markerLoc;
-        assert(() {
-          //Using assert here for debug only prints
-          print(rp);
-          return true;
-        }());
-
-        var page = IssuePage();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Scaffold(
-              appBar: AppBar(title: Text(page.title)),
-              body: page,
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _inputAddr() {
-    return ColorSliverButton(
-      child: Text('Report Address'),
-      onPressed: () {
-        //If we have made it to here, then it is time to show address form
-//        var page = AddressPage();
-//        Navigator.push(
-//          context,
-//          MaterialPageRoute(
-//            builder: (context) => Scaffold(
-//              appBar: AppBar(title: Text(page.title)),
-//              body: page,
-//            ),
-//          ),
-//        );
-        print("Dead button");
-      },
-    );
-  }
-
-  Widget _progressDots() {
-    return ProgressDots(
-      stage: 2,
-      numStages: 4,
-    );
-  }
-
-  Widget _inputAddrContainer() {
-    return Expanded(
-      child: Column(
-        children: <Widget>[
-          _selectMapMarker(),
-          Text('or', textAlign: TextAlign.center),
-          _inputAddr(),
-          _progressDots(),
-        ],
-      ),
-    );
-  }  
-
   @override
   Widget build(BuildContext context) {
 
@@ -236,27 +169,6 @@ class LocationUiBodyState extends State<LocationUiBody> {
       ],
     );
 
-    final List<Widget> columnChildren = <Widget>[
-      Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            //TODO: need a better way to set height dynamically based on phone dimension and layout
-            height: MediaQuery.of(context).size.height * 0.65,
-            child: fm,
-          ),
-        ),
-      ),
-    ];
-
-    columnChildren.add(_inputAddrContainer());
-
-    //return Column(
-    //  mainAxisAlignment: MainAxisAlignment.start,
-    //  crossAxisAlignment: CrossAxisAlignment.stretch,
-    //  children: columnChildren,
-    //);
     return new Scaffold (
       appBar: AppBar(title: Text(APP_NAME)),
       bottomNavigationBar: commonBottomBar(context),                                   body: Row (                                                                        children: [
@@ -316,7 +228,14 @@ child: Container(
                 ),
                 Row(                                                                               children: [                                                                        FlatButton(                                                                        color: Colors.grey[900],
                       textColor: Colors.white,                                                         onPressed: () {
-                        Navigator.of(context).pushNamed('/description');
+                        var rp = new ReportData();
+                        rp.latlng = _markerLoc;
+                         assert(() {
+                           //Using assert here for debug only prints
+                           print(rp);
+                           return true;
+                         }());
+                        Navigator.of(context).pushNamed('/issue_type');
                       },
                       child: Text( "Confirm Location"),                                              ),                                                                             ]                                                                              ),
               ]
