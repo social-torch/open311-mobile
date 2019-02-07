@@ -1,5 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'page.dart';
 import 'data.dart';
 import 'bottom_app_bar.dart';
@@ -23,16 +24,16 @@ class SubmitBody extends StatefulWidget {
 class SubmitBodyState extends State<SubmitBody> {
   SubmitBodyState();
 
-  void _apiGateway()
+  void _apiGateway() async
   {
-    var url = "http://example.com/whatsit/create";
-    http.post(url, body: {"name": "doodle", "color": "blue"})
-    .then((response) {
-      print("Response status: ${response.statusCode}");
-      print("Response body: ${response.body}");
-    });
-
-    http.read("http://example.com/foobar.txt").then(print);
+    try {
+      Response response;
+      Dio dio = new Dio();
+      response = await dio.get("http://www.google.com");
+      print(response.data);
+    } catch (e) {
+      print(e);
+    }
   }
   
   @override
@@ -50,7 +51,7 @@ class SubmitBodyState extends State<SubmitBody> {
               new RaisedButton(
                 onPressed: () {
                     _apiGateway();
-                    Navigator.popUntil(context, ModalRoute.withName("/home"));
+                    //Navigator.popUntil(context, ModalRoute.withName("/home"));
                 },
                 child: new Text( 
                 "Submit", 
