@@ -32,15 +32,8 @@ class DescriptionBodyState extends State<DescriptionBody> {
     setState(() {
       ReportData().description = descController.text;
     });
-    var page = SubmitPage();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          body: page,
-        ),
-      ),
-    );
+ 
+    Navigator.of(context).pushNamedAndRemoveUntil('/submit', ModalRoute.withName('/login'));
   }
 
   @override

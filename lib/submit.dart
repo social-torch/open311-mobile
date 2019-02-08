@@ -43,7 +43,10 @@ class SubmitBodyState extends State<SubmitBody> {
 
     _apiGateway();
     return new Scaffold (
-      appBar: AppBar(title: Text(APP_NAME)),
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        automaticallyImplyLeading: false,
+      ),
       bottomNavigationBar: commonBottomBar(context),
       body: Row (
         children: [
@@ -98,7 +101,10 @@ class SubmitBodyState extends State<SubmitBody> {
                       textAlign: TextAlign.right,
                       text: new TextSpan (
                         text: "Forgot Password",
-                        style: new TextStyle(color: Colors.black),
+                        style: new TextStyle(
+                          color: Colors.black,
+                          decoration: TextDecoration.underline,
+                        ),
                         recognizer: new TapGestureRecognizer()
                         ..onTap = () { },
                       )

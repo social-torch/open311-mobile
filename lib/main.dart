@@ -12,6 +12,7 @@ import "settings.dart";
 import "location.dart";
 import "issue_type.dart";
 import "description.dart";
+import "submit.dart";
 import "globals.dart" as globals;
 
 Future<void> main() async {
@@ -32,6 +33,7 @@ Future<void> main() async {
     '/location': (context) => LocationUiPage(),
     '/issue_type': (context) => IssueTypePage(),
     '/description': (context) => DescriptionPage(),
+    '/submit': (context) => SubmitPage(),
   },
   ));
 }

@@ -9,6 +9,7 @@ import 'location.dart';
 import 'issue_type.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
+import 'custom_colors.dart';
 
 
 class NewReportPage extends Page {
@@ -51,7 +52,10 @@ class NewReportBodyState extends State<NewReportBody> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold (
-      appBar: AppBar(title: Text(APP_NAME)),
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
+      ),
       bottomNavigationBar: commonBottomBar(context),
       body: Row (
         children: [ 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'data.dart';
+import 'custom_colors.dart';
 
 Widget _getDot(diam, stage, idx) {
   var clr = Colors.black;
@@ -135,7 +136,7 @@ class ColorSliverButton extends FlatButton {
                    decoration:
                      BoxDecoration(
                        borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                       color: Colors.red[400],
+                       color: CustomColors.salmon,
                    ),
                  ),
                  Positioned(
@@ -144,7 +145,7 @@ class ColorSliverButton extends FlatButton {
                      width: 20.0,
                      height: DeviceData().ButtonHeight,
                      decoration: BoxDecoration(
-                       color: Colors.red[400],
+                       color: CustomColors.salmon,
                      ),
                    ),
                  ),
@@ -214,7 +215,7 @@ class ColorSliverTextField extends Container{
                    decoration:
                      BoxDecoration(
                        borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                       color: Colors.red[400],
+                       color: CustomColors.salmon,
                    ),
                  ),
                  Positioned(
@@ -223,7 +224,7 @@ class ColorSliverTextField extends Container{
                      width: 6.0,
                      height: DeviceData().ButtonHeight*_getMaxLines(maxLines),
                      decoration: BoxDecoration(
-                       color: Colors.red[400],
+                       color: CustomColors.salmon,
                      ),
                    ),
                  ),
