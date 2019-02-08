@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'page.dart';
 import 'data.dart';
 import 'bottom_app_bar.dart';
+import 'custom_widgets.dart';
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -38,28 +40,78 @@ class SubmitBodyState extends State<SubmitBody> {
   
   @override
   Widget build(BuildContext context) {
+
+    _apiGateway();
     return new Scaffold (
       appBar: AppBar(title: Text(APP_NAME)),
       bottomNavigationBar: commonBottomBar(context),
-      body: new ListView(
+      body: Row (
         children: [
-          new Column(
-            children: <Widget>[
-              new Text(
-                '${ReportData()}',
-              ),
-              new RaisedButton(
-                onPressed: () {
-                    _apiGateway();
-                    //Navigator.popUntil(context, ModalRoute.withName("/home"));
-                },
-                child: new Text( 
-                "Submit", 
-                ),
-              ),
-            ],
+          Container(
+            width: 36.0,
           ),
-        ],
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'Your service request has been submitted',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 2.0,
+                    ),
+                  ),
+                ),
+                Container(height: 30.0),
+                SizedBox(
+                  width: 2 * DeviceData().ButtonHeight,
+                  child: Image.asset('images/confirmation.png'),
+                ),
+                Container(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'Create an account of log in to view and track your submitted issues.',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.0,
+                    ),
+                  ),
+                ),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: () { },
+                  child: Text( "Login"),
+                ),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: () { },
+                  child: Text( "Sign Up"),
+                ),
+                Container(height: 15.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: RichText(
+                      textAlign: TextAlign.right,
+                      text: new TextSpan (
+                        text: "Forgot Password",
+                        style: new TextStyle(color: Colors.black),
+                        recognizer: new TapGestureRecognizer()
+                        ..onTap = () { },
+                      )
+                    ),
+                  ),
+                ),
+              ]
+            ),
+          ),
+          Container(
+            width: 36.0,
+          ),
+        ]
       ),
     );
   }
