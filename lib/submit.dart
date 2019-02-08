@@ -6,6 +6,7 @@ import 'page.dart';
 import 'data.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
+import 'custom_colors.dart';
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -45,6 +46,7 @@ class SubmitBodyState extends State<SubmitBody> {
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: commonBottomBar(context),
@@ -106,7 +108,7 @@ class SubmitBodyState extends State<SubmitBody> {
                           decoration: TextDecoration.underline,
                         ),
                         recognizer: new TapGestureRecognizer()
-                        ..onTap = () { },
+                        ..onTap = () { Navigator.of(context).pushNamedAndRemoveUntil('/reset_password', ModalRoute.withName('/login')); },
                       )
                     ),
                   ),

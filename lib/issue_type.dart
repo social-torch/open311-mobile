@@ -4,6 +4,7 @@ import 'data.dart';
 import 'description.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
+import 'custom_colors.dart';
 
 
 class IssueTypePage extends Page {
@@ -37,7 +38,7 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
   @override
   Widget build(BuildContext context) {
 
-    //create some fake data for now this should come from back end
+    //TODO: make real!, create some fake data for now this should come from back end
     if ( CityData().issues == null ) { 
       CityData().issues = new List<String>();;
       CityData().issues.add("Animals");
@@ -48,7 +49,10 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
       CityData().issues.add("Transportation and Streets");
     }
     return new Scaffold (
-      appBar: AppBar(title: Text(APP_NAME)),
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
+      ),
       bottomNavigationBar: commonBottomBar(context),
       body: Row (
         children: [ 

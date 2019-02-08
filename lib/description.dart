@@ -5,6 +5,7 @@ import 'data.dart';
 import 'bottom_app_bar.dart';
 import 'submit.dart';
 import 'custom_widgets.dart';
+import 'custom_colors.dart';
 
 
 class DescriptionPage extends Page {
@@ -45,7 +46,10 @@ class DescriptionBodyState extends State<DescriptionBody> {
   Widget build(BuildContext context) {
     return new Scaffold (
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: Text(APP_NAME)),
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
+      ),
       bottomNavigationBar: commonBottomBar(context),
       body: Row (
         children: [ 

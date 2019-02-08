@@ -4,12 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:location/location.dart';
 import 'package:latlong/latlong.dart';
+import 'package:geocoder/geocoder.dart';
 import 'page.dart';
 import 'issue.dart';
 import 'photo.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
 import 'custom_icons.dart';
+import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
 
 class LocationUiPage extends Page {
@@ -125,7 +127,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
         builder: (ctx) => new Container(
           child: new GestureDetector(
             child: new Icon(
-              Open311.map,
+              Icons.place,
               color: Colors.orange,
             ),
           ),
@@ -172,8 +174,13 @@ class LocationUiBodyState extends State<LocationUiBody> {
     );
 
     return new Scaffold (
-      appBar: AppBar(title: Text(APP_NAME)),
-      bottomNavigationBar: commonBottomBar(context),                                   body: Row (                                                                        children: [
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
+      ),
+      bottomNavigationBar: commonBottomBar(context),
+      body: Row (
+        children: [
           Container(
             width: 36.0,
           ),
@@ -187,13 +194,25 @@ class LocationUiBodyState extends State<LocationUiBody> {
                     child: Text(
                       'Choose the Location',
                       textAlign: TextAlign.left,
-                      textScaleFactor: 2.0,                                                          ),                                                                             ),
-                ),                                                                               Container(height: 30.0),                                                         ProgressDots(                                                                      stage: 1,                                                                        numStages: 4,
+                      textScaleFactor: 2.0,
+                    ),
+                  ),
+                ),
+                Container(height: 30.0),
+                ProgressDots(
+                  stage: 1,
+                  numStages: 4,
                 ),
                 Container(height: 10.0),
                 ColorSliverTextField(
                   controller: addrController,
-                  labelText: 'Enter a location'
+                  labelText: 'Enter a location',
+                  onEditingComplete: () {
+                    //final query = "807 Union St, Schenectady, NY 12308";
+                    //var addresses = await Geocoder.local.findAddressesFromQuery(query);
+                    //var first = addresses.first;
+                    //print("${first.featureName} : ${first.coordinates}");
+                  },
                 ),
                 Flexible( 
                   child: Stack(
@@ -202,15 +221,15 @@ class LocationUiBodyState extends State<LocationUiBody> {
                       Positioned(
                         left: 4.0,
                         bottom: 5.0,
-child: Container(
-      width: 40.0,
-      height: 40.0,
-      decoration: new BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-    ),
-    ),
+                        child: Container(
+                          width: 40.0,
+                          height: 40.0,
+                          decoration: new BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
                       Positioned(
                         left: 0.0,
                         bottom: 1.0,
@@ -228,8 +247,12 @@ child: Container(
                     ]
                   ),
                 ),
-                Row(                                                                               children: [                                                                        FlatButton(                                                                        color: Colors.grey[900],
-                      textColor: Colors.white,                                                         onPressed: () {
+                Row(
+                  children: [                                                                        
+                    FlatButton(                                                                        
+                      color: CustomColors.appBarColor,
+                      textColor: Colors.white,
+                      onPressed: () {
                         var rp = new ReportData();
                         rp.latlng = _markerLoc;
                          assert(() {
@@ -239,11 +262,18 @@ child: Container(
                          }());
                         Navigator.of(context).pushNamed('/issue_type');
                       },
-                      child: Text( "Confirm Location"),                                              ),                                                                             ]                                                                              ),
+                      child: Text( "Confirm Location"),
+                    ),
+                  ]
+                ),
               ]
             ),
           ),
-          Container(                                                                         width: 36.0,                                                                   ),
-        ]                                                                              ),                                                                             );
+          Container(
+            width: 36.0,
+          ),
+        ]
+      ),
+    );
   }
 }

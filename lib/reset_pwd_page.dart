@@ -3,6 +3,8 @@ import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
 import 'reset_pwd_verify_page.dart';
 import 'globals.dart' as globals;
+import 'bottom_app_bar.dart';
+import 'custom_colors.dart';
 
 final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);
@@ -64,8 +66,12 @@ class ResetPasswordPageBodyState extends State<ResetPasswordPageBody> {
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        //title: Text(APP_NAME),
         title: Text('Reset Password'),
+        backgroundColor: CustomColors.appBarColor,
+        automaticallyImplyLeading: false,
       ),
+      bottomNavigationBar: commonBottomBar(context),
       body: SingleChildScrollView (
         child: Center(
         child: Form(

@@ -175,6 +175,7 @@ class ColorSliverTextField extends Container{
   ColorSliverTextField({
     Key key,
     TextEditingController controller,
+    VoidCallback onEditingComplete,
     int maxLines:1,
     String labelText,
     AlignmentGeometry alignment,
@@ -203,6 +204,7 @@ class ColorSliverTextField extends Container{
       child: TextField(
         keyboardType: TextInputType.multiline,
         controller: controller,
+        onEditingComplete: onEditingComplete,
         maxLines: maxLines,
         maxLength: 200,
         decoration: InputDecoration(

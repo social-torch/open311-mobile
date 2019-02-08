@@ -1,6 +1,6 @@
 import 'package:latlong/latlong.dart';
 
-const String APP_NAME = "311";
+const String APP_NAME = "Social Torch";
 
 class AddressData {
   String street;
@@ -57,6 +57,23 @@ class CityData{
     return retval;
   }
   CityData._internal();
+}
+
+class PreviousSubmittedData{
+
+  static final PreviousSubmittedData _rds = new PreviousSubmittedData._internal();
+
+  List<String> issues;
+
+  factory PreviousSubmittedData() {
+    return _rds;
+  }
+  toString() {
+    String retval = "\n";
+    retval += "issues: ${issues}\n";
+    return retval;
+  }
+  PreviousSubmittedData._internal();
 }
 
 class DeviceData{

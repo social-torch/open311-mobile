@@ -14,6 +14,7 @@ import "issue_type.dart";
 import "description.dart";
 import "submit.dart";
 import "globals.dart" as globals;
+import "reset_pwd_page.dart";
 
 Future<void> main() async {
   // Fetch the available cameras before initializing the app.
@@ -26,6 +27,7 @@ Future<void> main() async {
     home: MyApp(),
     routes: {
     '/login': (context) => AuthPage(),
+    '/reset_password': (context) => ResetPasswordPage(),
     '/new_report': (context) => NewReportPage(),
     '/view_submitted': (context) => ViewSubmittedPage(),
     '/all_reports': (context) => AllReportsPage(),
