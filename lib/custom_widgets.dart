@@ -202,7 +202,7 @@ class ColorSliverTextField extends Container{
       margin: margin,
       transform: transform,
       child: TextField(
-        keyboardType: TextInputType.multiline,
+        keyboardType: TextInputType.text,
         controller: controller,
         onEditingComplete: onEditingComplete,
         maxLines: maxLines,

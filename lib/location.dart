@@ -111,6 +111,15 @@ class LocationUiBodyState extends State<LocationUiBody> {
     });
   }
 
+  void _addressToLatLng(String address) async {
+    var addresses = await Geocoder.local.findAddressesFromQuery(address);
+    // print("${first.featureName} : ${first.coordinates}");
+    if (addresses.length > 0) {
+      var first = addresses.first;
+      _markerLoc = LatLng(first.coordinates.latitude, first.coordinates.longitude);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -208,10 +217,8 @@ class LocationUiBodyState extends State<LocationUiBody> {
                   controller: addrController,
                   labelText: 'Enter a location',
                   onEditingComplete: () {
-                    //final query = "807 Union St, Schenectady, NY 12308";
-                    //var addresses = await Geocoder.local.findAddressesFromQuery(query);
-                    //var first = addresses.first;
-                    //print("${first.featureName} : ${first.coordinates}");
+                    var query = "807 Union St, Schenectady, NY 12308";
+                    _addressToLatLng(addrController.text);
                   },
                 ),
                 Flexible( 
