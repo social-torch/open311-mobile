@@ -78,12 +78,33 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                           ReportData().type = PreviousSubmittedData().issues[Index];
                           nextPage();
                         },
-                        child: Text(PreviousSubmittedData().issues[Index]),
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                Text(PreviousSubmittedData().issues[Index]),
+                                Row(
+                                  children: [
+                                    Text("12/25/18, 1:39pm"),
+                                    Container(
+                                      width: 50.0,
+                                      height: 15.0,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                                          color: CustomColors.salmon,
+                                      ),
+                                    ),
+                                  ]
+                                ),
+                              ]
+                            ),
+                            Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
+                          ]
+                        ),
                       );
                     }
                   ),
                 ),
-
               ]
             ),
           ),
