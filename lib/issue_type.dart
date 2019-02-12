@@ -81,14 +81,15 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                 Container(height: 30.0),
                 Expanded(
                   child: new ListView.builder (
-                    itemCount: CityData().issues.length,
+                    //itemCount: CityData().issues.length,
+                    itemCount: CityData().serv_resp.services.length,
                     itemBuilder: (BuildContext ctxt, int Index) {
                       return  new ColorSliverButton( 
                         onPressed: () {
-                          ReportData().type = CityData().issues[Index];
+                          ReportData().type = CityData().serv_resp.services[Index].service_name;
                           descPage();
                         },
-                        child: Text(CityData().issues[Index]),
+                        child: Text(CityData().serv_resp.services[Index].service_name),
                       );
                     }
                   ),

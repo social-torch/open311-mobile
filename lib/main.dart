@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:dio/dio.dart';
+import "services.dart";
 import "data.dart";
 import "fake.dart";
 import "login.dart";
@@ -45,6 +47,16 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
+void _getServices(endpoint) async {
+  final Dio dio = Dio();
+  try {
+    Response response = await dio.get(endpoint);
+    CityData().serv_resp = ServicesResponse.fromJson(response.data);
+  } catch (error, stacktrace) {
+    print("Exception occured: $error stackTrace: $stacktrace");
+  }
+}
+
 class _MyAppState extends State<MyApp> {   
   @override
   Widget build(BuildContext context) {
@@ -52,6 +64,8 @@ class _MyAppState extends State<MyApp> {
   //Initialize App Device data
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
+
+  _getServices("https://roqlqvkke4.execute-api.us-east-1.amazonaws.com/Prod/services");
 
   return new SplashScreen(
       seconds: 3,
