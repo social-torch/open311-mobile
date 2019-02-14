@@ -1,5 +1,6 @@
 import 'package:latlong/latlong.dart';
 import 'services.dart';
+import 'requests.dart';
 
 const String APP_NAME = "Social Torch";
 
@@ -49,6 +50,7 @@ class CityData{
 
   List<String> issues;
   ServicesResponse serv_resp;
+  RequestsResponse req_resp;
 
   factory CityData() {
     return _rds;

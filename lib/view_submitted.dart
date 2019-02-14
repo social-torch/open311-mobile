@@ -71,18 +71,18 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                 Container(height: 30.0),
                 Expanded(
                   child: new ListView.builder (
-                    itemCount: PreviousSubmittedData().issues.length,
+                    itemCount: CityData().req_resp.requests.length,
                     itemBuilder: (BuildContext ctxt, int Index) {
                       return  new ColorSliverButton(
                         onPressed: () {
-                          ReportData().type = PreviousSubmittedData().issues[Index];
+                          ReportData().type = CityData().req_resp.requests[Index].service_name;
                           nextPage();
                         },
                         child: Row(
                           children: [
                             Column(
                               children: [
-                                Text(PreviousSubmittedData().issues[Index]),
+                                Text(CityData().req_resp.requests[Index].service_name),
                                 Row(
                                   children: [
                                     Text("12/25/18, 1:39pm"),

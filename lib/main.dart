@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:dio/dio.dart';
 import "services.dart";
+import "requests.dart";
 import "data.dart";
 import "fake.dart";
 import "login.dart";
@@ -57,6 +58,16 @@ void _getServices(endpoint) async {
   }
 }
 
+void _getRequests(endpoint) async {
+  final Dio dio = Dio();
+  try {
+    Response response = await dio.get(endpoint);
+    CityData().req_resp = RequestsResponse.fromJson(response.data);
+  } catch (error, stacktrace) {
+    print("Exception occured: $error stackTrace: $stacktrace");
+  }
+}
+
 class _MyAppState extends State<MyApp> {   
   @override
   Widget build(BuildContext context) {
@@ -65,7 +76,8 @@ class _MyAppState extends State<MyApp> {
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
 
-  _getServices("https://roqlqvkke4.execute-api.us-east-1.amazonaws.com/Prod/services");
+  _getServices(globals.endpoint311 + "/services");
+  _getRequests(globals.endpoint311 + "/requests");
 
   return new SplashScreen(
       seconds: 3,

@@ -37,17 +37,6 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
 
   @override
   Widget build(BuildContext context) {
-
-    //TODO: make real!, create some fake data for now this should come from back end
-    if ( CityData().issues == null ) { 
-      CityData().issues = new List<String>();;
-      CityData().issues.add("Animals");
-      CityData().issues.add("Garbage and Recycling");
-      CityData().issues.add("Health");
-      CityData().issues.add("Home and Buildings");
-      CityData().issues.add("Parking");
-      CityData().issues.add("Transportation and Streets");
-    }
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
@@ -81,7 +70,6 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                 Container(height: 30.0),
                 Expanded(
                   child: new ListView.builder (
-                    //itemCount: CityData().issues.length,
                     itemCount: CityData().serv_resp.services.length,
                     itemBuilder: (BuildContext ctxt, int Index) {
                       return  new ColorSliverButton( 
