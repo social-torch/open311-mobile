@@ -262,6 +262,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
                       onPressed: () {
                         var rp = new ReportData();
                         rp.latlng = _markerLoc;
+                        rp.addr = "";
                          assert(() {
                            //Using assert here for debug only prints
                            print(rp);

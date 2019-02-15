@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'page.dart';
 import 'data.dart';
+import 'requests.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
+import "globals.dart" as globals;
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -30,10 +32,38 @@ class SubmitBodyState extends State<SubmitBody> {
   void _apiGateway() async
   {
     try {
-      Response response;
-      Dio dio = new Dio();
-      response = await dio.get("http://www.google.com");
-      print(response.data);
+
+      //Populate our request with user data
+      Requests req = new Requests(
+        "",
+        "",
+        "",
+        ReportData().type,
+        "",
+        ReportData().description,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ReportData().addr,
+        0,
+        ReportData().latlng.latitude, 
+        ReportData().latlng.longitude, 
+        "");
+
+      print(req.toJson());
+
+      //Send post of user request to backend
+//      var endpoint = globals.endpoint311 + "/request";
+//      Response response;
+//      Dio dio = new Dio();
+//      response = await dio.post(
+//        endpoint,
+//        data: req.toJson(),
+//      );
+//      print(response.data);
     } catch (e) {
       print(e);
     }

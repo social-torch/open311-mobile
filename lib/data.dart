@@ -19,6 +19,7 @@ class ReportData{
   String description;
   LatLng latlng;
   AddressData address;
+  String addr;
 
   factory ReportData() {
     return _rds;

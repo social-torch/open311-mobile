@@ -17,7 +17,8 @@ class Requests {
   final double lon;
   final String media_url;
 
-  Requests(this.service_request_id,
+  Requests(
+    this.service_request_id,
     this.status,
     this.status_notes,
     this.service_name,
@@ -53,6 +54,28 @@ class Requests {
     lat = json["lat"] + 0.0,
     lon = json["lon"] + 0.0,
     media_url = json["media_url"];
+
+  Map<String, dynamic> toJson() =>
+  {
+    'service_request_id':service_request_id,
+    'status':status,
+    'status_notes':status_notes,
+    'service_name':service_name,
+    'service_code':service_code,
+    'description':description,
+    'agency_responsible':agency_responsible,
+    'service_notice':service_notice,
+    'requested_datetime':requested_datetime,
+    'update_datetime':update_datetime,
+    'expected_datetime':expected_datetime,
+    'address':address,
+    'address_id':address_id,
+    'zipcode':zipcode,
+    'lat':lat + 0.0,
+    'lon':lon + 0.0,
+    'media_url':media_url,
+  };
+  
 }
 
 class RequestsResponse {
