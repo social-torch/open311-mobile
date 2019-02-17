@@ -16,6 +16,7 @@ class ReportData{
   static final ReportData _rds = new ReportData._internal();
 
   String type;
+  String type_code;
   String description;
   LatLng latlng;
   AddressData address;
@@ -27,6 +28,7 @@ class ReportData{
   toString() {
     String retval = "\n";
     retval += "Type: ${type}\n";
+    retval += "TypeCode: ${type_code}\n";
     retval += "Description: ${description}\n";
     if ( latlng != null) {
       retval += "Location:\n";

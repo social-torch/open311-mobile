@@ -35,6 +35,14 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
     Navigator.of(context).pushNamed('/view_submitted');
   }
 
+  Color _getStatusColor(status) {
+    var retval = CustomColors.salmon;
+    if (status == "closed") {
+      retval = CustomColors.appBarColor;
+    }
+    return retval;
+  }
+
   @override
   Widget build(BuildContext context) {
     //TODO: make real!, create some fake data for now this should come from back end
@@ -85,13 +93,24 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                                 Text(CityData().req_resp.requests[Index].service_name),
                                 Row(
                                   children: [
-                                    Text("12/25/18, 1:39pm"),
+                                    Text(CityData().req_resp.requests[Index].requested_datetime),
                                     Container(
-                                      width: 50.0,
-                                      height: 15.0,
+                                      width: 15.0,
+                                    ),
+                                    Container(
+                                      width: DeviceData().ButtonHeight * 1.5,
+                                      height: DeviceData().ButtonHeight * 0.4,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                          color: CustomColors.salmon,
+                                          color: _getStatusColor(CityData().req_resp.requests[Index].status),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            CityData().req_resp.requests[Index].status,
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ]
                                       ),
                                     ),
                                   ]

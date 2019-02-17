@@ -75,6 +75,7 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                       return  new ColorSliverButton( 
                         onPressed: () {
                           ReportData().type = CityData().serv_resp.services[Index].service_name;
+                          ReportData().type_code = CityData().serv_resp.services[Index].service_code;
                           descPage();
                         },
                         child: Text(CityData().serv_resp.services[Index].service_name),

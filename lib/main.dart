@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:dio/dio.dart';
+import 'dart:convert';
 import "services.dart";
 import "requests.dart";
 import "data.dart";
@@ -18,6 +19,8 @@ import "description.dart";
 import "submit.dart";
 import "globals.dart" as globals;
 import "reset_pwd_page.dart";
+
+import 'dart:io';
 
 Future<void> main() async {
   // Fetch the available cameras before initializing the app.

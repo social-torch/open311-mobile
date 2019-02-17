@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'dart:convert';
 import 'page.dart';
 import 'data.dart';
 import 'requests.dart';
@@ -39,7 +40,7 @@ class SubmitBodyState extends State<SubmitBody> {
         "",
         "",
         ReportData().type,
-        "",
+        ReportData().type_code,
         ReportData().description,
         "",
         "",
@@ -53,17 +54,17 @@ class SubmitBodyState extends State<SubmitBody> {
         ReportData().latlng.longitude, 
         "");
 
-      print(req.toJson());
-
       //Send post of user request to backend
-//      var endpoint = globals.endpoint311 + "/request";
-//      Response response;
-//      Dio dio = new Dio();
-//      response = await dio.post(
-//        endpoint,
-//        data: req.toJson(),
-//      );
-//      print(response.data);
+      var endpoint = globals.endpoint311 + "/request";
+      Response response;
+      Dio dio = new Dio();
+      response = await dio.post(
+        endpoint,
+        data: req.toJson(),
+      );
+      print(response.data);
+      print(response.headers);
+      print(response.request);
     } catch (e) {
       print(e);
     }
