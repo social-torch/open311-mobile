@@ -9,6 +9,7 @@ import "requests.dart";
 import "data.dart";
 import "fake.dart";
 import "login.dart";
+import "my_homepage.dart";
 import "new_report.dart";
 import "view_submitted.dart";
 import "all_reports.dart";
@@ -32,6 +33,7 @@ Future<void> main() async {
   runApp(MaterialApp(
     home: MyApp(),
     routes: {
+    '/my_homepage': (context) => HomePage(),
     '/login': (context) => AuthPage(),
     '/reset_password': (context) => ResetPasswordPage(),
     '/new_report': (context) => NewReportPage(),

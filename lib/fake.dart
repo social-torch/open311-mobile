@@ -24,7 +24,7 @@ class FakeBodyState extends State<FakeBody> {
   FakeBodyState();
 
   initNav(context) {
-    Navigator.of(context).pushReplacementNamed('/login');
+    Navigator.of(context).pushReplacementNamed('/my_homepage');
   }
 
   @override
