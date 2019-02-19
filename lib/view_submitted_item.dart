@@ -40,13 +40,13 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
 
   Widget _getImg() {
-    Widget retval =  image: new Image.network( 
+    Widget retval = new Image.network( 
       CityData().req_resp.requests[CityData().prevReqIdx].media_url,
       fit: BoxFit.cover,
-      height: double.infinity,
+      height: (MediaQuery.of(context).size.width * 0.5) - 36.0,
       width: (MediaQuery.of(context).size.width * 0.5) - 36.0,
       alignment: Alignment.center,
-    ),
+    );
     return retval;
   }
 
@@ -83,19 +83,22 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                     _getImg(),
                     Column(
                       children: [
-                        Text(CityData().req_resp.requests[Index].service_name),
-                        Text(CityData().req_resp.requests[Index].requested_datetime),
+                        Text(
+                          CityData().req_resp.requests[CityData().prevReqIdx].service_name,
+                          textScaleFactor: 1.2,
+                        ),
+                        Text(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime),
                         Container(
                           width: DeviceData().ButtonHeight * 1.5,
                           height: DeviceData().ButtonHeight * 0.4,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                              color: _getStatusColor(CityData().req_resp.requests[Index].status),
+                              color: _getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
                           ),
                           child: Column(
                             children: [
                               Text(
-                                CityData().req_resp.requests[Index].status,
+                                CityData().req_resp.requests[CityData().prevReqIdx].status,
                                 style: TextStyle(color: Colors.white),
                               ),
                             ]
