@@ -12,6 +12,7 @@ import "login.dart";
 import "my_homepage.dart";
 import "new_report.dart";
 import "view_submitted.dart";
+import "view_submitted_item.dart";
 import "all_reports.dart";
 import "settings.dart";
 import "location.dart";
@@ -38,6 +39,7 @@ Future<void> main() async {
     '/reset_password': (context) => ResetPasswordPage(),
     '/new_report': (context) => NewReportPage(),
     '/view_submitted': (context) => ViewSubmittedPage(),
+    '/view_submitted_item': (context) => ViewSubmittedItemPage(),
     '/all_reports': (context) => AllReportsPage(),
     '/settings': (context) => SettingsPage(),
     '/location': (context) => LocationUiPage(),

@@ -54,6 +54,7 @@ class CityData{
   List<String> issues;
   ServicesResponse serv_resp;
   RequestsResponse req_resp;
+  int prevReqIdx; /*Hack, should pass this as part of view_submitted_item.dart constructor*/
 
   factory CityData() {
     return _rds;
