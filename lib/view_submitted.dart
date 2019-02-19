@@ -32,7 +32,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
   }
 
   void nextPage() {
-    Navigator.of(context).pushNamed('/view_submitted');
+    Navigator.of(context).pushNamed('/view_submitted_item');
   }
 
   Color _getStatusColor(status) {
@@ -45,12 +45,6 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: make real!, create some fake data for now this should come from back end
-    if ( PreviousSubmittedData().issues == null ) {
-      PreviousSubmittedData().issues = new List<String>();;
-      PreviousSubmittedData().issues.add("Garbage on Girard St.");
-    }
-
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
@@ -84,6 +78,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                       return  new ColorSliverButton(
                         onPressed: () {
                           ReportData().type = CityData().req_resp.requests[Index].service_name;
+                          CityData().prevReqIdx = Index;
                           nextPage();
                         },
                         child: Row(
