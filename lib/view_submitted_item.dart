@@ -5,6 +5,7 @@ import 'description.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
+import 'utils.dart';
 
 
 class ViewSubmittedItemPage extends Page {
@@ -31,21 +32,30 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     super.initState();
   }
 
-  Color _getStatusColor(status) {
-    var retval = CustomColors.salmon;
-    if (status == "closed") {
-      retval = CustomColors.appBarColor;
-    }
-    return retval;
-  }
-
   Widget _getImg() {
-    Widget retval = new Image.network( 
-      CityData().req_resp.requests[CityData().prevReqIdx].media_url,
-      fit: BoxFit.cover,
-      height: (MediaQuery.of(context).size.width * 0.5) - 36.0,
-      width: (MediaQuery.of(context).size.width * 0.5) - 36.0,
-      alignment: Alignment.center,
+    Widget retval = new Stack(
+      children: [
+        Container(
+          height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
+          width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+        ),
+        Positioned(
+          bottom: ((MediaQuery.of(context).size.width * 0.5) - 39.0)/2.0,
+          child: Text("Image not available"),
+        ),
+        Positioned(
+          child: Image.network( 
+            CityData().req_resp.requests[CityData().prevReqIdx].media_url,
+            fit: BoxFit.cover,
+            height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
+            width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
+            alignment: Alignment.center,
+          ),
+        ),
+      ]
     );
     return retval;
   }
@@ -81,19 +91,20 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                 Row(
                   children: [
                     _getImg(),
+                    Container(width: 6.0),
                     Column(
                       children: [
                         Text(
                           CityData().req_resp.requests[CityData().prevReqIdx].service_name,
                           textScaleFactor: 1.2,
                         ),
-                        Text(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime),
+                        Text(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime)),
                         Container(
                           width: DeviceData().ButtonHeight * 1.5,
                           height: DeviceData().ButtonHeight * 0.4,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                              color: _getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
+                              color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
                           ),
                           child: Column(
                             children: [

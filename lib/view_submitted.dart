@@ -5,7 +5,7 @@ import 'description.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
-
+import 'utils.dart';
 
 class ViewSubmittedPage extends Page {
   ViewSubmittedPage() : super(const Icon(Icons.map), APP_NAME);
@@ -33,14 +33,6 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
 
   void nextPage() {
     Navigator.of(context).pushNamed('/view_submitted_item');
-  }
-
-  Color _getStatusColor(status) {
-    var retval = CustomColors.salmon;
-    if (status == "closed") {
-      retval = CustomColors.appBarColor;
-    }
-    return retval;
   }
 
   @override
@@ -85,10 +77,10 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                           children: [
                             Column(
                               children: [
-                                Text(CityData().req_resp.requests[Index].service_name),
+                                Text(CityData().req_resp.requests[Index].service_name + " " + getBasicAddress(CityData().req_resp.requests[Index].address)),
                                 Row(
                                   children: [
-                                    Text(CityData().req_resp.requests[Index].requested_datetime),
+                                    Text(getTimeString(CityData().req_resp.requests[Index].requested_datetime)),
                                     Container(
                                       width: 15.0,
                                     ),
@@ -97,7 +89,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                                       height: DeviceData().ButtonHeight * 0.4,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                          color: _getStatusColor(CityData().req_resp.requests[Index].status),
+                                          color: getStatusColor(CityData().req_resp.requests[Index].status),
                                       ),
                                       child: Column(
                                         children: [
