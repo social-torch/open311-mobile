@@ -1,4 +1,5 @@
 import 'package:latlong/latlong.dart';
+import 'cities.dart';
 import 'services.dart';
 import 'requests.dart';
 
@@ -52,6 +53,7 @@ class CityData{
   static final CityData _rds = new CityData._internal();
 
   List<String> issues;
+  CitiesResponse cities_resp;
   ServicesResponse serv_resp;
   RequestsResponse req_resp;
   int prevReqIdx; /*Hack, should pass this as part of view_submitted_item.dart constructor*/

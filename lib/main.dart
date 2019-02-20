@@ -55,6 +55,16 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => new _MyAppState();
 }
 
+void _getCities(endpoint) async {
+  final Dio dio = Dio();
+  try {
+    Response response = await dio.get(endpoint);
+    CityData().cities_resp = CitiesResponse.fromJson(response.data);
+  } catch (error, stacktrace) {
+    print("Exception occured: $error stackTrace: $stacktrace");
+  }
+}
+
 void _getServices(endpoint) async {
   final Dio dio = Dio();
   try {
@@ -83,6 +93,7 @@ class _MyAppState extends State<MyApp> {
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
 
+  _getCities(globals.endpoint311 + "/cities");
   _getServices(globals.endpoint311 + "/services");
   _getRequests(globals.endpoint311 + "/requests");
 
