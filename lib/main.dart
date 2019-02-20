@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
+import "cities.dart";
 import "services.dart";
 import "requests.dart";
 import "data.dart";
