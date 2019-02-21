@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'page.dart';
 import 'data.dart';
 import 'description.dart';
@@ -37,6 +38,10 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: need to show loading... screen while we wait for data
+    while (CityData().serv_resp == null) {
+      sleep(const Duration(seconds: 1));
+    }
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),

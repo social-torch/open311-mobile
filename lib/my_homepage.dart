@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'page.dart';
 import 'data.dart';
 import 'bottom_app_bar.dart';

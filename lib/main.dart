@@ -5,10 +5,8 @@ import 'package:splashscreen/splashscreen.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import "cities.dart";
-import "services.dart";
-import "requests.dart";
 import "data.dart";
-import "fake.dart";
+import "select_city.dart";
 import "login.dart";
 import "my_homepage.dart";
 import "new_report.dart";
@@ -66,26 +64,6 @@ void _getCities(endpoint) async {
   }
 }
 
-void _getServices(endpoint) async {
-  final Dio dio = Dio();
-  try {
-    Response response = await dio.get(endpoint);
-    CityData().serv_resp = ServicesResponse.fromJson(response.data);
-  } catch (error, stacktrace) {
-    print("Exception occured: $error stackTrace: $stacktrace");
-  }
-}
-
-void _getRequests(endpoint) async {
-  final Dio dio = Dio();
-  try {
-    Response response = await dio.get(endpoint);
-    CityData().req_resp = RequestsResponse.fromJson(response.data);
-  } catch (error, stacktrace) {
-    print("Exception occured: $error stackTrace: $stacktrace");
-  }
-}
-
 class _MyAppState extends State<MyApp> {   
   @override
   Widget build(BuildContext context) {
@@ -94,13 +72,11 @@ class _MyAppState extends State<MyApp> {
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
 
-  _getCities(globals.endpoint311 + "/cities");
-  _getServices(globals.endpoint311 + "/services");
-  _getRequests(globals.endpoint311 + "/requests");
+  _getCities(globals.endpoint311base + "/cities");
 
   return new SplashScreen(
       seconds: 3,
-      navigateAfterSeconds: FakePage(),
+      navigateAfterSeconds: SelectCityPage(),
       title: new Text('Open311 Schenectady, NY',
       style: new TextStyle(
         fontWeight: FontWeight.bold,
