@@ -95,10 +95,13 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                     Column(
                       children: [
                         Text(
-                          CityData().req_resp.requests[CityData().prevReqIdx].service_name,
-                          textScaleFactor: 1.2,
+                          CityData().req_resp.requests[CityData().prevReqIdx].service_name + getBasicAddress(CityData().req_resp.requests[CityData().prevReqIdx].address),
+                          textScaleFactor: 1.0,
                         ),
-                        Text(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime)),
+                        Text(
+                          getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime),
+                          textScaleFactor: 0.8,
+                        ),
                         Container(
                           width: DeviceData().ButtonHeight * 1.5,
                           height: DeviceData().ButtonHeight * 0.4,

@@ -27,13 +27,15 @@ String getTimeString(timestr) {
 String getBasicAddress(inputstr) {
   var retval = inputstr;
   RegExp regExp = new RegExp(
-  r"^.*,",
+  r"^.*?,",
   caseSensitive: false,
   multiLine: false,
   );
   String addr = regExp.firstMatch(inputstr).toString();
   if (addr != "null") {
-    retval = regExp.firstMatch(inputstr).group(0);
+    //retval = regExp.firstMatch(inputstr).group(0);
+    retval = regExp.stringMatch(inputstr);
+    retval = retval.substring(0,retval.length-1);
   }
   return retval;
 }
