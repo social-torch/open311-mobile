@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 import 'page.dart';
 import 'data.dart';
+import 'login.dart';
+import 'reg_page.dart';
 import 'requests.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
@@ -122,12 +124,22 @@ class SubmitBodyState extends State<SubmitBody> {
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AuthPage()),
+                      );
+                    },
                   child: Text( "Login"),
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.push (
+                      context,
+                      MaterialPageRoute(builder: (context) => RegistrationPage()),
+                      );
+                    },
                   child: Text( "Sign Up"),
                 ),
                 Container(height: 15.0),
