@@ -111,10 +111,17 @@ class LocationUiBodyState extends State<LocationUiBody> {
 
   void _addressToLatLng(String address) async {
     var addresses = await Geocoder.local.findAddressesFromQuery(address);
-    // print("${first.featureName} : ${first.coordinates}");
     if (addresses.length > 0) {
       var first = addresses.first;
-      _markerLoc = LatLng(first.coordinates.latitude, first.coordinates.longitude);
+      assert(() {
+        //Using assert here for debug only prints
+        print("${first.featureName} : ${first.coordinates}");
+        return true;
+      } ());
+      setState(() {
+        _markerLoc = LatLng(first.coordinates.latitude, first.coordinates.longitude);
+      });
+      _mapController.move(_markerLoc, _defaultZoom);
     }
   }
 
@@ -167,8 +174,8 @@ class LocationUiBodyState extends State<LocationUiBody> {
         zoom: _defaultZoom,
         minZoom: 13.0,
         maxZoom: 19.0,
-        swPanBoundary: LatLng(42.761463, -73.986886),
-        nePanBoundary: LatLng(42.844432, -73.886104),
+        //swPanBoundary: LatLng(42.761463, -73.986886),
+        //nePanBoundary: LatLng(42.844432, -73.886104),
         onTap: _handleTap,
       ),
       layers: [
@@ -215,7 +222,6 @@ class LocationUiBodyState extends State<LocationUiBody> {
                   controller: addrController,
                   labelText: 'Enter a location',
                   onEditingComplete: () {
-                    var query = "807 Union St, Schenectady, NY 12308";
                     _addressToLatLng(addrController.text);
                   },
                 ),
@@ -224,27 +230,29 @@ class LocationUiBodyState extends State<LocationUiBody> {
                     children: [
                       fm,
                       Positioned(
-                        left: 4.0,
-                        bottom: 5.0,
+                        right: 9.0,
+                        bottom: 15.0,
                         child: Container(
                           width: 40.0,
                           height: 40.0,
                           decoration: new BoxDecoration(
-                            color: Colors.white,
+                            color: CustomColors.appBarColor,
                             shape: BoxShape.circle,
                           ),
                         ),
                       ),
                       Positioned(
-                        left: 0.0,
-                        bottom: 1.0,
+                        right: 5.0,
+                        bottom: 11.0,
                         child: new IconButton(
-                          icon: new Icon(Icons.my_location, color: Colors.black),
+                          icon: new Icon(Icons.my_location, color: Colors.white),
                           highlightColor: Color(0xFFFFFF),
                           onPressed: () {
                             setState(() {
-                              var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
-                              _markerLoc = latlng;
+                              if (_currentLocation != null) {
+                                var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
+                                _markerLoc = latlng;
+                              }
                             });
                           },
                         ),

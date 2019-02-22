@@ -11,6 +11,7 @@ import 'requests.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
+import 'select_city_common.dart';
 import "globals.dart" as globals;
 
 class SubmitPage extends Page {
@@ -71,6 +72,7 @@ class SubmitBodyState extends State<SubmitBody> {
         print(response.request);
         return true;
       }());
+      getRequests(globals.endpoint311 + "/requests");
     } catch (e) {
       print(e);
     }

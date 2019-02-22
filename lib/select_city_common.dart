@@ -8,7 +8,7 @@ import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
 
-void _getServices(endpoint) async {
+void getServices(endpoint) async {
   final Dio dio = Dio();
   try {
     Response response = await dio.get(endpoint);
@@ -18,7 +18,7 @@ void _getServices(endpoint) async {
   }
 }
 
-void _getRequests(endpoint) async {
+void getRequests(endpoint) async {
   final Dio dio = Dio();
   try {
     Response response = await dio.get(endpoint);
@@ -43,8 +43,8 @@ Widget setMyCity(BuildContext context, String nextPage) {
               onPressed: () {
                 globals.endpoint311 = CityData().cities_resp.cities[Index].endpoint;
                 globals.cityIdx = Index;
-                _getServices(globals.endpoint311 + "/services");
-                _getRequests(globals.endpoint311 + "/requests");
+                getServices(globals.endpoint311 + "/services");
+                getRequests(globals.endpoint311 + "/requests");
                 Navigator.of(context).pushReplacementNamed(nextPage);
               },
             ),
