@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
 													MaterialPageRoute(builder: (context) => AuthPage()),
 												);
 											},
-											child: Text( "Sign In As Guest"),
+											child: Text( "Continue Unregistered"),
 										),
 										Container(height: 15.0),
 										SizedBox(

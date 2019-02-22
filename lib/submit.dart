@@ -132,7 +132,7 @@ class SubmitBodyState extends State<SubmitBody> {
                       MaterialPageRoute(builder: (context) => AuthPage()),
                       );
                     },
-                  child: Text( "Login"),
+                  child: Text ("Login")
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(

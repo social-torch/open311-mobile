@@ -100,7 +100,7 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget> [
                     Text(
-                      'Sign Up',
+                      'Create an Account',
                       textAlign: TextAlign.center,
                       textScaleFactor: 2.0,
                     ),

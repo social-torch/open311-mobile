@@ -83,22 +83,32 @@ class NewReportBodyState extends State<NewReportBody> {
                 Container(height: 30.0),
                 ColorSliverButton(
                   onPressed: () { getImage(ImageSource.camera); },
-                  child: Text( "Camera"),
+                  child: Row(
+                    children: [
+                      Image.asset("images/camera.png", height: 30.0,),
+                      Text(" Camera"),
+                  ],
+                  ),
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
                   onPressed: () { getImage(ImageSource.gallery); },
-                  child: Text( "Photo Library"),
+                  child: Row(
+                    children: [
+                      Image.asset("images/library.png", height: 30.0,),
+                      Text(" Library"),
+                    ],
+                  ),
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
                   onPressed: locPage,
-                  child: Text( "Most Recent"),
-                ),
-                Container(height: 15.0),
-                ColorSliverButton(
-                  onPressed: locPage,
-                  child: Text( "No Photo"),
+                  child: Row(
+                    children: [
+                      Image.asset("images/no_photo.png", height: 30.0,),
+                      Text(" No Photo"),
+                    ],
+                  ),
                 ),
               ]
             ),
