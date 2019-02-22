@@ -62,9 +62,13 @@ class SubmitBodyState extends State<SubmitBody> {
         endpoint,
         data: req.toJson(),
       );
-      print(response.data);
-      print(response.headers);
-      print(response.request);
+      assert(() {
+        //Using assert here for debug only prints
+        print(response.data);
+        print(response.headers);
+        print(response.request);
+        return true;
+      }());
     } catch (e) {
       print(e);
     }

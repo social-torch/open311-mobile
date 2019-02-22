@@ -14,6 +14,7 @@ import "view_submitted.dart";
 import "view_submitted_item.dart";
 import "all_reports.dart";
 import "settings.dart";
+import "settings_select_city.dart";
 import "location.dart";
 import "issue_type.dart";
 import "description.dart";
@@ -41,6 +42,7 @@ Future<void> main() async {
     '/view_submitted_item': (context) => ViewSubmittedItemPage(),
     '/all_reports': (context) => AllReportsPage(),
     '/settings': (context) => SettingsPage(),
+    '/settings_select_city': (context) => SettingsSelectCityPage(),
     '/location': (context) => LocationUiPage(),
     '/issue_type': (context) => IssueTypePage(),
     '/description': (context) => DescriptionPage(),
@@ -59,6 +61,11 @@ void _getCities(endpoint) async {
   try {
     Response response = await dio.get(endpoint);
     CityData().cities_resp = CitiesResponse.fromJson(response.data);
+    assert(() {
+      //Using assert here for debug only prints
+      print(response.data);
+      return true;
+    }());
   } catch (error, stacktrace) {
     print("Exception occured: $error stackTrace: $stacktrace");
   }

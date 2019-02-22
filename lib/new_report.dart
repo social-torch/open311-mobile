@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'page.dart';
 import 'data.dart';
-import 'camera_ui.dart';
 import 'location.dart';
 import 'issue_type.dart';
 import 'bottom_app_bar.dart';

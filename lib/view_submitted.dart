@@ -72,46 +72,51 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                   child: new ListView.builder (
                     itemCount: CityData().req_resp.requests.length,
                     itemBuilder: (BuildContext ctxt, int Index) {
-                      return  new ColorSliverButton(
-                        onPressed: () {
-                          ReportData().type = CityData().req_resp.requests[Index].service_name;
-                          CityData().prevReqIdx = Index;
-                          nextPage();
-                        },
-                        child: Row(
-                          children: [
-                            Column(
+                      return  new Column( 
+                        children: [ 
+                          new ColorSliverButton(
+                            onPressed: () {
+                              ReportData().type = CityData().req_resp.requests[Index].service_name;
+                              CityData().prevReqIdx = Index;
+                              nextPage();
+                            },
+                            child: Row(
                               children: [
-                                Text(CityData().req_resp.requests[Index].service_name + " " + getBasicAddress(CityData().req_resp.requests[Index].address)),
-                                Row(
+                                Column(
                                   children: [
-                                    Text(getTimeString(CityData().req_resp.requests[Index].requested_datetime)),
-                                    Container(
-                                      width: 15.0,
-                                    ),
-                                    Container(
-                                      width: DeviceData().ButtonHeight * 1.5,
-                                      height: DeviceData().ButtonHeight * 0.4,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                          color: getStatusColor(CityData().req_resp.requests[Index].status),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            CityData().req_resp.requests[Index].status,
-                                            style: TextStyle(color: Colors.white),
+                                    Text(CityData().req_resp.requests[Index].service_name + " " + getBasicAddress(CityData().req_resp.requests[Index].address)),
+                                    Row(
+                                      children: [
+                                        Text(getTimeString(CityData().req_resp.requests[Index].requested_datetime)),
+                                        Container(
+                                          width: 15.0,
+                                        ),
+                                        Container(
+                                          width: DeviceData().ButtonHeight * 1.5,
+                                          height: DeviceData().ButtonHeight * 0.4,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                                              color: getStatusColor(CityData().req_resp.requests[Index].status),
                                           ),
-                                        ]
-                                      ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                CityData().req_resp.requests[Index].status,
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ]
+                                          ),
+                                        ),
+                                      ]
                                     ),
                                   ]
                                 ),
+                                Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
                               ]
                             ),
-                            Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
-                          ]
-                        ),
+                          ), 
+                          Container(height: 15.0),
+                        ]
                       );
                     }
                   ),

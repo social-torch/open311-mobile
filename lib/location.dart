@@ -6,8 +6,6 @@ import 'package:location/location.dart';
 import 'package:latlong/latlong.dart';
 import 'package:geocoder/geocoder.dart';
 import 'page.dart';
-import 'issue.dart';
-import 'photo.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
 import 'custom_icons.dart';

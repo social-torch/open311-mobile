@@ -3,6 +3,9 @@ import 'page.dart';
 import 'data.dart';
 import 'location.dart';
 import 'bottom_app_bar.dart';
+import 'custom_colors.dart';
+import 'custom_widgets.dart';
+import "globals.dart" as globals;
 
 
 class SettingsPage extends Page {
@@ -47,13 +50,54 @@ class SettingsBodyState extends State<SettingsBody> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold (
-      appBar: AppBar(title: Text(APP_NAME)),
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
+      ),
       bottomNavigationBar: commonBottomBar(context),
-      body: new RaisedButton(
-        onPressed: nextPage,
-        child: new Text(
-        "Settings",
-        ),
+      body: Row (
+        children: [
+          Container(
+            width: 36.0,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'Settings',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 2.0,
+                    ),
+                  ),
+                ),
+                Container(height: 30.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'Select City:',
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.0,
+                    ),
+                  ),
+                ),
+                ColorSliverButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/settings_select_city');
+                  },
+                  child: Text(CityData().cities_resp.cities[globals.cityIdx].city_name),
+                ),
+              ]
+            ),
+          ),
+          Container(
+            width: 36.0,
+          ),
+        ]
       ),
     );
   }
