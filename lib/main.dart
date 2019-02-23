@@ -90,7 +90,10 @@ class _MyAppState extends State<MyApp> {
         fontSize: 20.0,
         color: Colors.white,
       ),),
-      image: Image.asset("images/logo.png"),
+      image: Image.asset(
+        "images/logo.png",
+        width: DeviceData().DeviceWidth,
+      ),
       backgroundColor: Colors.black,
       styleTextUnderTheLoader: new TextStyle(),
       photoSize: 200.0,
