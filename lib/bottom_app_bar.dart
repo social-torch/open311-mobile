@@ -7,11 +7,18 @@ import 'custom_colors.dart';
 
 String navPage = "nada";
 
-Color _currentPage(currentPage) {
+Color _currentPageColor(currentPage) {
   if (navPage == currentPage) {
     return CustomColors.salmon;
   }
   return Colors.black;
+}
+
+FontWeight _currentPageBold(currentPage) {
+  if (navPage == currentPage) {
+    return FontWeight.bold;
+  }
+  return FontWeight.normal;
 }
 
 Widget commonBottomBar(context) {
@@ -21,80 +28,92 @@ Widget commonBottomBar(context) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Image.asset("images/add new.png"),
-              color: _currentPage("/new_report"),
-              highlightColor: CustomColors.salmon,
-              tooltip: 'Submit a new report',
-              onPressed: () {
-                navPage = "/new_report";
-                Navigator.of(context).pushNamedAndRemoveUntil('/new_report', ModalRoute.withName('/login'));
-              }
-            ),
-            Text(
-              "Create",
-              style: TextStyle(color: _currentPage("/new_report")),
-            ),
-          ]
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  icon: Image.asset("images/add new.png"),
+                  color: _currentPageColor("/new_report"),
+                  highlightColor: CustomColors.salmon,
+                  tooltip: 'Submit a new report',
+                  onPressed: () {
+                    navPage = "/new_report";
+                    Navigator.of(context).pushNamedAndRemoveUntil('/new_report', ModalRoute.withName('/login'));
+                  }
+              ),
+              Text(
+                "Create",
+                style: TextStyle(
+                  color: _currentPageColor("/new_report"),
+                  fontWeight: _currentPageBold("/new_report"),
+                ),
+              ),
+            ]
         ),
         Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Image.asset("images/add view requests.png"),
-              color: _currentPage("/view_submitted"),
-              highlightColor: CustomColors.salmon,
-              tooltip: 'View your past submissions',
-              onPressed: () {
-                navPage = "/view_submitted";
-                Navigator.of(context).pushNamedAndRemoveUntil('/view_submitted', ModalRoute.withName('/login'));
-              }
-            ),
-            Text(
-              "Requests",
-              style: TextStyle(color: _currentPage("/view_submitted")),
-            ),
-          ]
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  icon: Image.asset("images/add view requests.png"),
+                  color: _currentPageColor("/view_submitted"),
+                  highlightColor: CustomColors.salmon,
+                  tooltip: 'View your past submissions',
+                  onPressed: () {
+                    navPage = "/view_submitted";
+                    Navigator.of(context).pushNamedAndRemoveUntil('/view_submitted', ModalRoute.withName('/login'));
+                  }
+              ),
+              Text(
+                "Requests",
+                style: TextStyle(
+                  color: _currentPageColor("/view_submitted"),
+                  fontWeight: _currentPageBold("/view_submitted"),
+                ),
+              ),
+            ]
         ),
         Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Image.asset("images/map.png"),
-              color: _currentPage("/all_reports"),
-              highlightColor: CustomColors.salmon,
-              tooltip: 'Map of all reports',
-              onPressed: () {
-                navPage = "/all_reports";
-                Navigator.of(context).pushNamedAndRemoveUntil('/all_reports', ModalRoute.withName('/login'));
-              }
-            ),
-            Text(
-              "Map",
-              style: TextStyle(color: _currentPage("/all_reports")),
-            ),
-          ]
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  icon: Image.asset("images/map.png"),
+                  color: _currentPageColor("/all_reports"),
+                  highlightColor: CustomColors.salmon,
+                  tooltip: 'Map of all reports',
+                  onPressed: () {
+                    navPage = "/all_reports";
+                    Navigator.of(context).pushNamedAndRemoveUntil('/all_reports', ModalRoute.withName('/login'));
+                  }
+              ),
+              Text(
+                "Map",
+                style: TextStyle(
+                  color: _currentPageColor("/all_reports"),
+                  fontWeight: _currentPageBold("/all_reports"),
+                ),
+              ),
+            ]
         ),
         Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: Image.asset("images/settings.png"),
-              color: _currentPage("/settings"),
-              highlightColor: CustomColors.salmon,
-              tooltip: 'View your current settings',
-              onPressed: () {
-                navPage = "/settings";
-                Navigator.of(context).pushNamedAndRemoveUntil('/settings', ModalRoute.withName('/login'));
-              }
-            ),
-            Text(
-              "Settings",
-              style: TextStyle(color: _currentPage("/settings")),
-            ),
-          ]
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  icon: Image.asset("images/settings.png"),
+                  color: _currentPageColor("/settings"),
+                  highlightColor: CustomColors.salmon,
+                  tooltip: 'View your current settings',
+                  onPressed: () {
+                    navPage = "/settings";
+                    Navigator.of(context).pushNamedAndRemoveUntil('/settings', ModalRoute.withName('/login'));
+                  }
+              ),
+              Text(
+                "Settings",
+                style: TextStyle(
+                  color: _currentPageColor("/settings"),
+                  fontWeight: _currentPageBold("/settings"),
+                ),
+              ),
+            ]
         ),
       ],
     ),
