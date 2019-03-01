@@ -12,6 +12,7 @@ import 'custom_colors.dart';
 import 'custom_icons.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
+import 'view_submitted.dart';
 
 class AllReportsPage extends Page {
   AllReportsPage() : super(const Icon(Icons.map), APP_NAME);
@@ -229,6 +230,23 @@ class AllReportsBodyState extends State<AllReportsBody> {
                   ),
                 ),
                 Positioned(
+                  right: 95.0,
+                  top: 5.0,
+                  child: Container (
+                    width: DeviceData().DeviceWidth - 200.0,
+                      child: RaisedButton(
+                        onPressed:() {
+                          Navigator.push (
+                            context,
+                            MaterialPageRoute(builder: (context) => ViewSubmittedPage()),
+                          );
+                        },
+                       child: new Text(
+                           "List View",
+                          ),
+                    ),
+                  ),
+                ),Positioned(
                   left: 36.0,
                   bottom: 0.0,
                   child: new SizedBox(
