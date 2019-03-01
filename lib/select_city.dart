@@ -4,8 +4,7 @@ import 'dart:io';
 import 'page.dart';
 import 'data.dart';
 import 'login.dart';
-import "services.dart";
-import "requests.dart";
+import "cities.dart";
 import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
@@ -31,6 +30,8 @@ class SelectCityBody extends StatefulWidget {
 class SelectCityBodyState extends State<SelectCityBody> {
   SelectCityBodyState();
 
+  Widget _bodyWidget;
+
   //This function will only run if user has already chosen a default city
   initNav(context) {
     if (globals.endpoint311 != 'nada') {
@@ -40,18 +41,51 @@ class SelectCityBodyState extends State<SelectCityBody> {
 
   //Get city to use to determine endpoint calls, unless a default already exists
   Widget _getBody(BuildContext context) {
-    Widget retval = Text(" ");
-    if (globals.endpoint311 == 'nada') {
-      retval = setMyCity(context, "/my_homepage");
+    Widget retval = Text("Loading available cities...");
+    if (_bodyWidget != null) {
+      retval = _bodyWidget;
     }
     return retval;
   }
+
+  Future<Widget> getBodyText() async {
+    
+    Widget retval;
+    final Dio dio = Dio();
+    try {
+      Response response = await dio.get(globals.endpoint311base + "/cities");
+      CityData().cities_resp = CitiesResponse.fromJson(response.data);
+      assert(() {
+        //Using assert here for debug only prints
+        print(response.data);
+        return true;
+      }());
+      retval = setMyCity(context, "/my_homepage");
+    } catch (error, stacktrace) {
+      assert(() {
+        //Using assert here for debug only prints
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return true;
+      }());
+      getBodyText().then((wdgt) {
+        retval = wdgt;
+      });
+    }
+
+    return retval;
+  }  
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance
         .addPostFrameCallback((_) => initNav(context));
+
+    getBodyText().then((newBodyWidget) {
+      setState(() {
+        _bodyWidget = newBodyWidget;
+      });
+    });
   }
 
   @override

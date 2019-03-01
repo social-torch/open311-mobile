@@ -29,6 +29,7 @@ void getRequests(endpoint) async {
 }
 
 Widget setMyCity(BuildContext context, String nextPage) {
+  //TODO: verify the sleep below is no longer needed
   while (CityData().cities_resp == null) {
     sleep(const Duration(seconds: 1));
   }
