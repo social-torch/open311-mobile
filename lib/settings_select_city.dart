@@ -3,9 +3,11 @@ import 'package:dio/dio.dart';
 import 'dart:io';
 import 'page.dart';
 import 'data.dart';
+import 'cities.dart';
 import "custom_widgets.dart";
 import "custom_colors.dart";
 import "select_city_common.dart";
+import "globals.dart" as globals;
 
 
 class SettingsSelectCityPage extends Page {
@@ -27,9 +29,49 @@ class SettingsSelectCityBody extends StatefulWidget {
 class SettingsSelectCityBodyState extends State<SettingsSelectCityBody> {
   SettingsSelectCityBodyState();
 
+  Widget _bodyWidget;
+
   @override
   void initState() {
     super.initState();
+    getBodyText().then((newBodyWidget) {
+      setState(() {
+        _bodyWidget = newBodyWidget;
+      });
+    });
+  }
+
+  Future<Widget> getBodyText() async {
+    Widget retval;
+    final Dio dio = Dio();
+    try {
+      Response response = await dio.get(globals.endpoint311base + "/cities");
+      CityData().cities_resp = CitiesResponse.fromJson(response.data);
+      assert(() {
+        //Using assert here for debug only prints
+        print(response.data);
+        return true;
+      }());
+      retval = setMyCity(context, "/settings");
+    } catch (error, stacktrace) {
+      assert(() {
+        //Using assert here for debug only prints
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return true;
+      }());
+      getBodyText().then((wdgt) {
+        retval = wdgt;
+      });
+    }
+    return retval;
+  }
+
+  Widget _getBody(BuildContext context) {
+    Widget retval = Text("Loading available cities...");
+    if (_bodyWidget != null) {
+      retval = _bodyWidget;
+    }
+    return retval;
   }
 
   @override
@@ -59,7 +101,7 @@ class SettingsSelectCityBodyState extends State<SettingsSelectCityBody> {
                   ),
                 ),
                 Container(height: 30.0),
-                setMyCity(context, "/settings"),
+                _getBody(context),
               ]
             ),
           ),

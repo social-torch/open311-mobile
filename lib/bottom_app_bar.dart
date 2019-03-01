@@ -33,7 +33,10 @@ Widget commonBottomBar(context) {
                 Navigator.of(context).pushNamedAndRemoveUntil('/new_report', ModalRoute.withName('/login'));
               }
             ),
-            Text("Create"),
+            Text(
+              "Create",
+              style: TextStyle(color: _currentPage("/new_report")),
+            ),
           ]
         ),
         Column(
@@ -49,7 +52,10 @@ Widget commonBottomBar(context) {
                 Navigator.of(context).pushNamedAndRemoveUntil('/view_submitted', ModalRoute.withName('/login'));
               }
             ),
-            Text("Requests"),
+            Text(
+              "Requests",
+              style: TextStyle(color: _currentPage("/view_submitted")),
+            ),
           ]
         ),
         Column(
@@ -65,7 +71,10 @@ Widget commonBottomBar(context) {
                 Navigator.of(context).pushNamedAndRemoveUntil('/all_reports', ModalRoute.withName('/login'));
               }
             ),
-            Text("Map"),
+            Text(
+              "Map",
+              style: TextStyle(color: _currentPage("/all_reports")),
+            ),
           ]
         ),
         Column(
@@ -81,7 +90,10 @@ Widget commonBottomBar(context) {
                 Navigator.of(context).pushNamedAndRemoveUntil('/settings', ModalRoute.withName('/login'));
               }
             ),
-            Text("Settings"),
+            Text(
+              "Settings",
+              style: TextStyle(color: _currentPage("/settings")),
+            ),
           ]
         ),
       ],
