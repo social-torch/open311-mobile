@@ -67,8 +67,8 @@ flutter:
    - images/no_photo.png
    - images/settings.png
    - images/map.png
-   - images/add_new.png
-   - images/add_view_requests.png
+   - images/add new.png
+   - images/add view requests.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

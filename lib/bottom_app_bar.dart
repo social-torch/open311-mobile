@@ -24,7 +24,7 @@ Widget commonBottomBar(context) {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.add_circle_outline),
+              icon: Image.asset("images/add new.png"),
               color: _currentPage("/new_report"),
               highlightColor: CustomColors.salmon,
               tooltip: 'Submit a new report',
@@ -43,7 +43,7 @@ Widget commonBottomBar(context) {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.widgets),
+              icon: Image.asset("images/add view requests.png"),
               color: _currentPage("/view_submitted"),
               highlightColor: CustomColors.salmon,
               tooltip: 'View your past submissions',
@@ -62,7 +62,7 @@ Widget commonBottomBar(context) {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.map),
+              icon: Image.asset("images/map.png"),
               color: _currentPage("/all_reports"),
               highlightColor: CustomColors.salmon,
               tooltip: 'Map of all reports',
@@ -81,7 +81,7 @@ Widget commonBottomBar(context) {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: Icon(Icons.settings),
+              icon: Image.asset("images/settings.png"),
               color: _currentPage("/settings"),
               highlightColor: CustomColors.salmon,
               tooltip: 'View your current settings',

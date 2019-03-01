@@ -235,15 +235,16 @@ class AllReportsBodyState extends State<AllReportsBody> {
                   child: Container (
                     width: DeviceData().DeviceWidth - 200.0,
                       child: RaisedButton(
+                        child: new Text(
+                          "List View",
+                        ),
                         onPressed:() {
                           Navigator.push (
                             context,
                             MaterialPageRoute(builder: (context) => ViewSubmittedPage()),
                           );
                         },
-                       child: new Text(
-                           "List View",
-                          ),
+
                     ),
                   ),
                 ),Positioned(
