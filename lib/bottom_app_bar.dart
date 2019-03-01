@@ -7,11 +7,18 @@ import 'custom_colors.dart';
 
 String navPage = "nada";
 
-Color _currentPage(currentPage) {
+Color _currentPageColor(currentPage) {
   if (navPage == currentPage) {
     return CustomColors.salmon;
   }
   return Colors.black;
+}
+
+FontWeight _currentPageBold(currentPage) {
+  if (navPage == currentPage) {
+    return FontWeight.bold;
+  }
+  return FontWeight.normal;
 }
 
 Widget commonBottomBar(context) {
@@ -25,7 +32,7 @@ Widget commonBottomBar(context) {
           children: [
             IconButton(
               icon: Icon(Icons.add_circle_outline),
-              color: _currentPage("/new_report"),
+              color: _currentPageColor("/new_report"),
               highlightColor: CustomColors.salmon,
               tooltip: 'Submit a new report',
               onPressed: () {
@@ -35,7 +42,10 @@ Widget commonBottomBar(context) {
             ),
             Text(
               "Create",
-              style: TextStyle(color: _currentPage("/new_report")),
+              style: TextStyle(
+                color: _currentPageColor("/new_report"),
+                fontWeight: _currentPageBold("/new_report"),
+              ),
             ),
           ]
         ),
@@ -44,7 +54,7 @@ Widget commonBottomBar(context) {
           children: [
             IconButton(
               icon: Icon(Icons.widgets),
-              color: _currentPage("/view_submitted"),
+              color: _currentPageColor("/view_submitted"),
               highlightColor: CustomColors.salmon,
               tooltip: 'View your past submissions',
               onPressed: () {
@@ -54,7 +64,10 @@ Widget commonBottomBar(context) {
             ),
             Text(
               "Requests",
-              style: TextStyle(color: _currentPage("/view_submitted")),
+              style: TextStyle(
+                color: _currentPageColor("/view_submitted"),
+                fontWeight: _currentPageBold("/view_submitted"),
+              ),
             ),
           ]
         ),
@@ -63,7 +76,7 @@ Widget commonBottomBar(context) {
           children: [
             IconButton(
               icon: Icon(Icons.map),
-              color: _currentPage("/all_reports"),
+              color: _currentPageColor("/all_reports"),
               highlightColor: CustomColors.salmon,
               tooltip: 'Map of all reports',
               onPressed: () {
@@ -73,7 +86,10 @@ Widget commonBottomBar(context) {
             ),
             Text(
               "Map",
-              style: TextStyle(color: _currentPage("/all_reports")),
+              style: TextStyle(
+                color: _currentPageColor("/all_reports"),
+                fontWeight: _currentPageBold("/all_reports"),
+              ),
             ),
           ]
         ),
@@ -82,7 +98,7 @@ Widget commonBottomBar(context) {
           children: [
             IconButton(
               icon: Icon(Icons.settings),
-              color: _currentPage("/settings"),
+              color: _currentPageColor("/settings"),
               highlightColor: CustomColors.salmon,
               tooltip: 'View your current settings',
               onPressed: () {
@@ -92,7 +108,10 @@ Widget commonBottomBar(context) {
             ),
             Text(
               "Settings",
-              style: TextStyle(color: _currentPage("/settings")),
+              style: TextStyle(
+                color: _currentPageColor("/settings"),
+                fontWeight: _currentPageBold("/settings"),
+              ),
             ),
           ]
         ),
