@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
 
-  _getCities(globals.endpoint311base + "/cities");
+  //_getCities(globals.endpoint311base + "/cities");
 
   return new SplashScreen(
       seconds: 3,
