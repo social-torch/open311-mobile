@@ -27,9 +27,50 @@ class IssueTypeBody extends StatefulWidget {
 class IssueTypeBodyState extends State<IssueTypeBody> {
   IssueTypeBodyState();
 
+ Widget _bodyWidget;
+
+  Future<Widget> getBodyFuture() async {
+    while (CityData().serv_resp == null) {
+      sleep(const Duration(seconds: 1));
+    } 
+    return new Expanded(
+      child: new ListView.builder (
+        itemCount: CityData().serv_resp.services.length,
+        itemBuilder: (BuildContext ctxt, int Index) {
+          return new Column(
+            children: [
+              new ColorSliverButton( 
+                onPressed: () {
+                  ReportData().type = CityData().serv_resp.services[Index].service_name;
+                  ReportData().type_code = CityData().serv_resp.services[Index].service_code;
+                  descPage();
+                },
+                child: Expanded( child: Column(children: [ Text(CityData().serv_resp.services[Index].service_name) ] ),),
+              ),
+              Container(height: 15.0),
+            ]
+          );
+        }
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    getBodyFuture().then((newBodyWidget) {
+      setState(() {
+        _bodyWidget = newBodyWidget;
+      });
+    });
+  }
+  
+  Widget _getBody(BuildContext context) {
+    Widget retval = Text("Loading report types...");
+    if (_bodyWidget != null) {
+      retval = _bodyWidget;
+    }
+    return retval;
   }
 
   void descPage() {
@@ -38,10 +79,6 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: need to show loading... screen while we wait for data
-    while (CityData().serv_resp == null) {
-      sleep(const Duration(seconds: 1));
-    }
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
@@ -73,26 +110,7 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                   numStages: 4,
                 ),
                 Container(height: 30.0),
-                Expanded(
-                  child: new ListView.builder (
-                    itemCount: CityData().serv_resp.services.length,
-                    itemBuilder: (BuildContext ctxt, int Index) {
-                      return new Column(
-                        children: [
-                          new ColorSliverButton( 
-                            onPressed: () {
-                              ReportData().type = CityData().serv_resp.services[Index].service_name;
-                              ReportData().type_code = CityData().serv_resp.services[Index].service_code;
-                              descPage();
-                            },
-                            child: Expanded( child: Column(children: [ Text(CityData().serv_resp.services[Index].service_name) ] ),),
-                          ),
-                          Container(height: 15.0),
-                        ]
-                      );
-                    }
-                  ),
-                ),
+                _getBody(context),
               ]
             ),
           ),

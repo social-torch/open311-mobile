@@ -230,21 +230,23 @@ class AllReportsBodyState extends State<AllReportsBody> {
                   ),
                 ),
                 Positioned(
-                  right: 95.0,
                   top: 5.0,
-                  child: Container (
-                    width: DeviceData().DeviceWidth - 200.0,
-                      child: RaisedButton(
-                        child: new Text(
-                          "List View",
-                        ),
-                        onPressed:() {
-                          Navigator.push (
-                            context,
-                            MaterialPageRoute(builder: (context) => ViewSubmittedPage()),
-                          );
-                        },
-
+                  child: new Container (
+                    width: DeviceData().DeviceWidth,
+                    alignment: Alignment(0.0, 0.0),
+                    child: FlatButton(
+                      color: CustomColors.appBarColor,
+                      textColor: Colors.white,
+                      onPressed:() {
+                        Navigator.push (
+                          context,
+                          MaterialPageRoute(builder: (context) => ViewSubmittedPage()),
+                        );
+                      },
+                      child: new Text(
+                        "List View",
+                        textScaleFactor: 2.0,
+                      ),
                     ),
                   ),
                 ),Positioned(
