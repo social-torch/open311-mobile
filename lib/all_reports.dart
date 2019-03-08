@@ -237,6 +237,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
                     child: FlatButton(
                       color: CustomColors.appBarColor,
                       textColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
                       onPressed:() {
                         Navigator.push (
                           context,

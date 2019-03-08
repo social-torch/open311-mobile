@@ -263,6 +263,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
                 Row(
                   children: [                                                                        
                     FlatButton(                                                                        
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
                       color: CustomColors.appBarColor,
                       textColor: Colors.white,
                       onPressed: () {

@@ -86,6 +86,7 @@ class DescriptionBodyState extends State<DescriptionBody> {
                   children: [
                     FlatButton(
                       color: CustomColors.appBarColor,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
                       textColor: Colors.white,
                       onPressed: submitPage,
                       child: Text( "Submit the Issue"),
