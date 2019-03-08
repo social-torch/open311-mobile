@@ -6,6 +6,7 @@ import 'settings.dart';
 import 'custom_colors.dart';
 
 String navPage = "nada";
+String basePage = "/login";
 
 Color _currentPageColor(currentPage) {
   if (navPage == currentPage) {
@@ -36,8 +37,11 @@ Widget commonBottomBar(context) {
                   highlightColor: CustomColors.salmon,
                   tooltip: 'Submit a new report',
                   onPressed: () {
-                    navPage = "/new_report";
-                    Navigator.of(context).pushNamedAndRemoveUntil('/new_report', ModalRoute.withName('/login'));
+                    var newPage = "/new_report";
+                    if (navPage != newPage) {
+                      navPage = newPage;
+                      Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                    }
                   }
               ),
               Text(
@@ -58,8 +62,11 @@ Widget commonBottomBar(context) {
                   highlightColor: CustomColors.salmon,
                   tooltip: 'View your past submissions',
                   onPressed: () {
-                    navPage = "/view_submitted";
-                    Navigator.of(context).pushNamedAndRemoveUntil('/view_submitted', ModalRoute.withName('/login'));
+                    var newPage = "/view_submitted";
+                    if (navPage != newPage) {
+                      navPage = newPage;
+                      Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                    }
                   }
               ),
               Text(
@@ -80,8 +87,11 @@ Widget commonBottomBar(context) {
                   highlightColor: CustomColors.salmon,
                   tooltip: 'Map of all reports',
                   onPressed: () {
-                    navPage = "/all_reports";
-                    Navigator.of(context).pushNamedAndRemoveUntil('/all_reports', ModalRoute.withName('/login'));
+                    var newPage = "/all_reports";
+                    if (navPage != newPage) {
+                      navPage = newPage;
+                      Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                    }
                   }
               ),
               Text(
@@ -102,8 +112,11 @@ Widget commonBottomBar(context) {
                   highlightColor: CustomColors.salmon,
                   tooltip: 'View your current settings',
                   onPressed: () {
-                    navPage = "/settings";
-                    Navigator.of(context).pushNamedAndRemoveUntil('/settings', ModalRoute.withName('/login'));
+                    var newPage = "/settings";
+                    if (navPage != newPage) {
+                      navPage = newPage;
+                      Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                    }
                   }
               ),
               Text(

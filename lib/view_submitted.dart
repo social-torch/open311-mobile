@@ -27,13 +27,90 @@ class ViewSubmittedBody extends StatefulWidget {
 class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
   ViewSubmittedBodyState();
 
+  Widget _bodyWidget;
+
+  Future<Widget> getBodyFuture() async {
+    while (CityData().req_resp == null) {
+      sleep(const Duration(seconds: 1));
+    }
+    return new Expanded(
+      child: new ListView.builder (
+        itemCount: CityData().req_resp.requests.length,
+        itemBuilder: (BuildContext ctxt, int Index) {
+          return  new Column( 
+            children: [ 
+              new ColorSliverButton(
+                onPressed: () {
+                  ReportData().type = CityData().req_resp.requests[Index].service_name;
+                  CityData().prevReqIdx = Index;
+                  nextPage();
+                },
+                child: Expanded( 
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text(CityData().req_resp.requests[Index].service_name + " " + getBasicAddress(CityData().req_resp.requests[Index].address)),
+                          Row(
+                            children: [
+                              Text(getTimeString(CityData().req_resp.requests[Index].requested_datetime)),
+                              Container(
+                                width: 15.0,
+                              ),
+                              Container(
+                                width: DeviceData().ButtonHeight * 1.5,
+                                height: DeviceData().ButtonHeight * 0.4,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                                    color: getStatusColor(CityData().req_resp.requests[Index].status),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      CityData().req_resp.requests[Index].status,
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ]
+                                ),
+                              ),
+                            ]
+                          ),
+                        ]
+                      ),
+                      Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
+                    ]
+                  ),
+                ),
+              ), 
+              Container(height: 15.0),
+            ]
+          );
+        }
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    getBodyFuture().then((newBodyWidget) {
+      setState(() {
+        _bodyWidget = newBodyWidget;
+      });
+    });
   }
 
   void nextPage() {
     Navigator.of(context).pushNamed('/view_submitted_item');
+  }
+
+  Widget _getBody(BuildContext context) {
+    Widget retval = Text("Loading submitted reports...");
+    if (_bodyWidget != null) {
+      retval = _bodyWidget;
+    }
+    return retval;
   }
 
   @override
@@ -68,62 +145,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                   ),
                 ),
                 Container(height: 30.0),
-                Expanded(
-                  child: new ListView.builder (
-                    itemCount: CityData().req_resp.requests.length,
-                    itemBuilder: (BuildContext ctxt, int Index) {
-                      return  new Column( 
-                        children: [ 
-                          new ColorSliverButton(
-                            onPressed: () {
-                              ReportData().type = CityData().req_resp.requests[Index].service_name;
-                              CityData().prevReqIdx = Index;
-                              nextPage();
-                            },
-                            child: Expanded( 
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(CityData().req_resp.requests[Index].service_name + " " + getBasicAddress(CityData().req_resp.requests[Index].address)),
-                                      Row(
-                                        children: [
-                                          Text(getTimeString(CityData().req_resp.requests[Index].requested_datetime)),
-                                          Container(
-                                            width: 15.0,
-                                          ),
-                                          Container(
-                                            width: DeviceData().ButtonHeight * 1.5,
-                                            height: DeviceData().ButtonHeight * 0.4,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                                color: getStatusColor(CityData().req_resp.requests[Index].status),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  CityData().req_resp.requests[Index].status,
-                                                  style: TextStyle(color: Colors.white),
-                                                ),
-                                              ]
-                                            ),
-                                          ),
-                                        ]
-                                      ),
-                                    ]
-                                  ),
-                                  Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
-                                ]
-                              ),
-                            ),
-                          ), 
-                          Container(height: 15.0),
-                        ]
-                      );
-                    }
-                  ),
-                ),
+                _getBody(context),
               ]
             ),
           ),

@@ -85,7 +85,7 @@ class DescriptionBodyState extends State<DescriptionBody> {
                 Row(
                   children: [
                     FlatButton(
-                      color: Colors.grey[900],
+                      color: CustomColors.appBarColor,
                       textColor: Colors.white,
                       onPressed: submitPage,
                       child: Text( "Submit the Issue"),

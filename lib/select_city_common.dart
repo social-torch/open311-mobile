@@ -8,23 +8,38 @@ import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
 
-void getServices(endpoint) async {
+Future<int> getServices(endpoint) async {
   final Dio dio = Dio();
+  int retval = 0;
   try {
+    retval++;
     Response response = await dio.get(endpoint);
     CityData().serv_resp = ServicesResponse.fromJson(response.data);
   } catch (error, stacktrace) {
-    print("Exception occured: $error stackTrace: $stacktrace");
+    assert(() {
+      //Using assert here for debug only prints
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return true;
+    }());
+    getServices(endpoint).then((cnt) { retval += cnt; });
   }
+  return retval;
 }
 
-void getRequests(endpoint) async {
+Future<int> getRequests(endpoint) async {
   final Dio dio = Dio();
+  int retval = 0;
   try {
+    retval++;
     Response response = await dio.get(endpoint);
     CityData().req_resp = RequestsResponse.fromJson(response.data);
   } catch (error, stacktrace) {
-    print("Exception occured: $error stackTrace: $stacktrace");
+    assert(() {
+      //Using assert here for debug only prints
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return true;
+    }());
+    getRequests(endpoint).then((cnt) { retval += cnt; });
   }
 }
 
