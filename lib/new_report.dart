@@ -85,8 +85,8 @@ class NewReportBodyState extends State<NewReportBody> {
                   onPressed: () { getImage(ImageSource.camera); },
                   child: Row(
                     children: [
-                      Image.asset("images/camera.png", height: 30.0,),
-                      Text(" Camera"),
+                      Image.asset("images/camera.png", height: 45.0,),
+                      Text("    Camera"),
                   ],
                   ),
                 ),
@@ -95,8 +95,8 @@ class NewReportBodyState extends State<NewReportBody> {
                   onPressed: () { getImage(ImageSource.gallery); },
                   child: Row(
                     children: [
-                      Image.asset("images/library.png", height: 30.0,),
-                      Text(" Library"),
+                      Image.asset("images/library.png", height: 45.0,),
+                      Text("    Photo Library"),
                     ],
                   ),
                 ),
@@ -105,8 +105,8 @@ class NewReportBodyState extends State<NewReportBody> {
                   onPressed: locPage,
                   child: Row(
                     children: [
-                      Image.asset("images/no_photo.png", height: 30.0,),
-                      Text(" No Photo"),
+                      Image.asset("images/no_photo.png", height: 45.0,),
+                      Text("    No Photo"),
                     ],
                   ),
                 ),
