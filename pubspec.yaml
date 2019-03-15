@@ -16,6 +16,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_launcher_icons: "^0.7.0"
+
+
   camera: ^0.2.6
 
   amazon_cognito_identity_dart:
@@ -41,6 +44,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -96,3 +104,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
