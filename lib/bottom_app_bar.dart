@@ -128,6 +128,31 @@ Widget commonBottomBar(context) {
               ),
             ]
         ),
+        Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                  icon: Image.asset("images/login.png", color: _currentPageColor("/login")),
+                  color: _currentPageColor("/login"),
+                  highlightColor: CustomColors.salmon,
+                  tooltip: 'Log In',
+                  onPressed: () {
+                    var newPage = "/login";
+                    if (navPage != newPage) {
+                      navPage = newPage;
+                      Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                    }
+                  }
+              ),
+              Text(
+                "Log In",
+                style: TextStyle(
+                  color: _currentPageColor("/login"),
+                  fontWeight: _currentPageBold("/login"),
+                ),
+              ),
+            ]
+        ),
       ],
     ),
   );

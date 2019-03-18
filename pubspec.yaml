@@ -69,6 +69,7 @@ flutter:
    - images/map.png
    - images/add new.png
    - images/add view requests.png
+   - images/login.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
