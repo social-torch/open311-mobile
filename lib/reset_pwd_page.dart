@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'data.dart';
 import 'reset_pwd_verify_page.dart';
 import 'globals.dart' as globals;
 import 'bottom_app_bar.dart';
+import 'custom_widgets.dart';
 import 'custom_colors.dart';
 
 final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);
 
 class ResetPasswordPage extends Page {
-  ResetPasswordPage() : super(const Icon(Icons.map), 'Reset Password');
+  ResetPasswordPage() : super(const Icon(Icons.map), APP_NAME);
 
   @override
   Widget build(BuildContext context) {
@@ -66,50 +68,79 @@ class ResetPasswordPageBodyState extends State<ResetPasswordPageBody> {
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        //title: Text(APP_NAME),
-        title: Text('Reset Password'),
+        title: Text(APP_NAME),
         backgroundColor: CustomColors.appBarColor,
-        automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: commonBottomBar(context),
-      body: SingleChildScrollView (
-        child: Center(
-        child: Form(
-          key: registrationFormKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget> [
-              TextFormField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'Username',
+      body: Row (
+        children: [
+          Container(
+            width: 36.0,
+          ),
+          Expanded (
+            child: ListView(
+              children: [
+                Form(
+                  key: registrationFormKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget> [
+                      Text(
+                        'Reset Password',
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 2.0,
+                      ),
+                      Container(height: 30.0),
+                      SizedBox (
+                        width: 2 * DeviceData().ButtonHeight,
+                        child: Image.asset('images/logo.png'),
+                      ),
+                      Container(height: 30.0),
+                      SizedBox(
+                          width: double.infinity,
+                          child: Container(
+                              child: Text(
+                                'Type in your username and click \"Reset\" to receive an automated email to reset your password',
+                                textAlign: TextAlign.center,
+                                textScaleFactor: 1.0,
+                              )
+                          )
+                      ),
+                      Container(height: 30.0),
+                      TextFormField(
+                        controller: usernameController,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person),
+                          hintText: 'Username',
+                          ),
+                        onSaved: (String value) {
+                        // This optional block of code can be used to run
+                        // code when the user saves the form.
+                        },
+                        validator: (String value) {
+                          return value.contains('@') ? 'Do not use the @ char.' : null;
+                        },
+                      ),
+                      Container(
+                        height: 15.0,
+                      ),
+                      ColorSliverButton(
+                        onPressed: () {
+                          // Validate will return true if the form is valid, or false if
+                          // the form is invalid.
+                          if (registrationFormKey.currentState.validate()) {
+                            resetPassword();
+                          }
+                        },
+                        child: Text('Reset'),
+                      ),
+                    ],
                   ),
-                onSaved: (String value) {
-                // This optional block of code can be used to run
-                // code when the user saves the form.
-                },
-                validator: (String value) {
-                  return value.contains('@') ? 'Do not use the @ char.' : null;
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
-                  onPressed: () {
-                    // Validate will return true if the form is valid, or false if
-                    // the form is invalid.
-                    if (registrationFormKey.currentState.validate()) {
-                      resetPassword();
-                    }
-                  },
-                  child: Text('Reset'),
                 ),
-                ),
-          ],
-        ),
-      ),
-      ),
+              ]
+            ),
+          ),
+        ]
       ),
     );
   }

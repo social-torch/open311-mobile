@@ -21,6 +21,7 @@ import "description.dart";
 import "submit.dart";
 import "globals.dart" as globals;
 import "reset_pwd_page.dart";
+import "reg_page.dart";
 
 import 'dart:io';
 
@@ -47,6 +48,7 @@ Future<void> main() async {
     '/issue_type': (context) => IssueTypePage(),
     '/description': (context) => DescriptionPage(),
     '/submit': (context) => SubmitPage(),
+    '/registration': (context) => RegistrationPage(),
   },
   ));
 }

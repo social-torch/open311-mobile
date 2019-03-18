@@ -107,139 +107,133 @@ class AuthPageBodyState extends State<AuthPageBody> {
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: commonBottomBar(context),
-      body: SingleChildScrollView (
-        child: Center(
-          child: Form(
-            key: registrationFormKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget> [
-                Container(
-                  width: 36.0,
-                ),
-                Text (
-                  'Login',
-                  textAlign: TextAlign.center,
-                  textScaleFactor: 2.0,
-                ),
-                Container(height: 30.0),
-                SizedBox (
-                  width: 2 * DeviceData().ButtonHeight,
-                  child: Image.asset('images/logo.png'),
-                ),
-                Container(height: 30.0),
-                SizedBox(
-                    width: double.infinity,
-                    child: Container(
-                        child: Text(
-                          'To login and save your report, please enter your creditials. Otherwise, begin a new report at the button. ',
-                          textAlign: TextAlign.center,
-                          textScaleFactor: 1.0,
+      body: Row (
+        children: [
+          Container(
+            width: 36.0,
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                Form(
+                  key: registrationFormKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget> [
+                      Container(
+                        width: 36.0,
+                      ),
+                      Text (
+                        'Log In',
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 2.0,
+                      ),
+                      Container(height: 30.0),
+                      SizedBox (
+                        width: 2 * DeviceData().ButtonHeight,
+                        child: Image.asset('images/logo.png'),
+                      ),
+                      Container(height: 30.0),
+                      SizedBox(
+                          width: double.infinity,
+                          child: Container(
+                              child: Text(
+                                'Log in below or click \"Sign Up\" to create an account',
+                                textAlign: TextAlign.center,
+                                textScaleFactor: 1.0,
+                              )
+                          )
+                      ),
+                      Container(height: 30.0),
+                      TextFormField(
+                        controller: usernameController,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.person),
+                          hintText: 'Username',
+                        ),
+                        onSaved: (String value) {
+                          // This optional block of code can be used to run
+                          // code when the user saves the form.
+                        },
+                        validator: (String value) {
+                          return value.contains('@') ? 'Do not use the @ char.' : null;
+                        },
+                      ),
+                      Container(
+                        height: 20.0,
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.lock),
+                          hintText: 'Password',
+                        ),
+                        onSaved: (String value) {
+                          // This optional block of code can be used to run
+                          // code when the user saves the form.
+                        },
+                        validator: (String value) {
+                          return null;
+                        },
+                      ),
+                      Container(
+                        height: 30.0,
+                      ),
+                      ColorSliverButton(
+                        onPressed: () {
+                          // Validate will return true if the form is valid, or false if
+                          // the form is invalid.
+                          if (registrationFormKey.currentState.validate()) {
+                            authenticate();
+                          }
+                        },
+                        child: Text('Authenticate'),
+                      ),
+                      Container(
+                        height: 20.0,
+                      ),
+                      RichText(
+                        text: new TextSpan (
+                          children: [
+                            new TextSpan(
+                              text: "Forgot Password?",
+                              style: new TextStyle(color: Colors.blue),
+                              recognizer: new TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pushNamedAndRemoveUntil('/reset_password', ModalRoute.withName('/login'));
+                              },
+                            ),
+                          ],
                         )
-                    )
-                ),
-                Container(height: 30.0),
-                TextFormField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.person),
-                    hintText: 'Username',
-                  ),
-                  onSaved: (String value) {
-                    // This optional block of code can be used to run
-                    // code when the user saves the form.
-                  },
-                  validator: (String value) {
-                    return value.contains('@') ? 'Do not use the @ char.' : null;
-                  },
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.lock),
-                    hintText: 'Password',
-                  ),
-                  onSaved: (String value) {
-                    // This optional block of code can be used to run
-                    // code when the user saves the form.
-                  },
-                  validator: (String value) {
-                    return null;
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      // Validate will return true if the form is valid, or false if
-                      // the form is invalid.
-                      if (registrationFormKey.currentState.validate()) {
-                        authenticate();
-                      }
-                    },
-                    child: Text('Authenticate'),
-                  ),
-                ),
-                RichText(
-                    text: new TextSpan (
-                      children: [
-                        new TextSpan(
-                          text: "Forgot Password?",
-                          style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    settings: RouteSettings(name: '/auth'),
-                                    builder: (context) => ResetPasswordPage()),
-                              );
-                            },
-                        ),
-                      ],
-                    )
-                ),
-                RichText(
-                    text: new TextSpan (
-                      children: [
-                        new TextSpan(
-                          style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () {
-                              var page = NewReportPage();
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  settings: RouteSettings(name: '/newreport'),
-                                  builder: (context) => Scaffold(
-                                    appBar: AppBar(title: Text(page.title)),
-                                    body: page,
-                                  ),
-                                ),
-                              );
-                            },
-                        ),
-                      ],
-                    )
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                    onPressed: () {
-                      // Used so that user can return to homepage
-                      Navigator.push (
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    },
-                    child: Text("Return To Home Page"),
+                      ),
+                      Container(
+                        height: 20.0,
+                      ),
+                      RichText(
+                        text: new TextSpan (
+                          children: [
+                            new TextSpan(
+                              text: "Sign Up",
+                              style: new TextStyle(color: Colors.blue),
+                              recognizer: new TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pushNamedAndRemoveUntil('/registration', ModalRoute.withName('/login'));
+                              },
+                            ),
+                          ],
+                        )
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ),
+          Container(
+            width: 36.0,
+          ),
+        ]
       ),
     );
   }

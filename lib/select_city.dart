@@ -35,7 +35,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
   //This function will only run if user has already chosen a default city
   initNav(context) {
     if (globals.endpoint311 != 'nada') {
-      Navigator.of(context).pushReplacementNamed('/my_homepage');
+      Navigator.of(context).pushReplacementNamed('/all_reports');
     }
   }
 
@@ -60,7 +60,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
         print(response.data);
         return true;
       }());
-      retval = setMyCity(context, "/my_homepage");
+      retval = setMyCity(context, "/all_reports");
     } catch (error, stacktrace) {
       assert(() {
         //Using assert here for debug only prints

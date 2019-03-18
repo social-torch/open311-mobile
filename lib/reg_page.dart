@@ -84,7 +84,6 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
       appBar: AppBar(
         title: Text(APP_NAME),
         backgroundColor: CustomColors.appBarColor,
-        automaticallyImplyLeading: false,
       ),
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
@@ -94,147 +93,162 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
               width: 36.0,
             ),
             Expanded (
-              child: Form(
-                key: registrationFormKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget> [
-                    Text(
-                      'Create an Account',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 2.0,
+              child: ListView(
+                children: [
+                  Form(
+                    key: registrationFormKey,
+                    child: Column(
+                      //mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        Text(
+                          'Create an Account',
+                          textAlign: TextAlign.center,
+                          textScaleFactor: 2.0,
+                        ),
+                        SizedBox(
+                          width: 2 * DeviceData().ButtonHeight,
+                          child: Image.asset("images/logo.png"),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Container(
+                            child: Text(
+                              'Create an account, passwords must be at least 8 characters long and contain a number, special character, lowercase and uppercase letters',
+                              textAlign: TextAlign.center,
+                              textScaleFactor: 1.0,
+                            )
+                          )
+                        ),
+                        Container(height: 30.0),
+                        TextFormField(
+                          controller: usernameController,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.person),
+                            hintText: 'Username',
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value.contains('@') ? 'Do not use the @ char.' : null;
+                          },
+                        ),
+                        Container(
+                          height: 10.0
+                        ),
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.lock),
+                            hintText: 'Password',
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value == passwordAgainController.text ? null : "Passwords must match.";
+                          },
+                        ),
+                        Container(
+                          height: 10.0
+                        ),
+                        TextFormField(
+                          controller: passwordAgainController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.lock),
+                            hintText: 'Password (Repeat)',
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value == passwordController.text ? null : "Passwords must match.";
+                          },
+                        ),
+                        Container(
+                          height: 10.0
+                        ),
+                        TextFormField (
+                          controller: emailController,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.people),
+                            hintText: 'E-mail',
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value.length > 5 && value.contains("@") ? null: "Invalid email";
+                          },
+                        ),
+                        Container(
+                          height: 10.0
+                        ),
+                        //Number special character upper and lowercase letter, 8 characters minimum
+                        TextFormField (
+                          controller: givenNameController,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.people),
+                            hintText: 'First Name',
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value.length < 1 ? "First name must not be empty" : null;
+                          },
+                        ),
+                        Container(
+                          height: 10.0
+                        ),
+                        TextFormField(
+                          controller: familyNameController,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.people),
+                            hintText: 'Last Name',
+                          ),
+                          onSaved: (String value) {
+                            // This optional block of code can be used to run
+                            // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value.length < 1 ? "Last name must not be empty" : null;
+                          },
+                        ),
+                        Container(
+                          height: 30.0,
+                        ),
+                        ColorSliverButton(
+                          onPressed: () {
+                            // Validate will return true if the form is valid, or false if
+                            // the form is invalid.
+                            if (registrationFormKey.currentState.validate()) {
+                              register();
+                              Navigator.push (
+                                context,
+                                MaterialPageRoute(builder: (context) => HomePage()),
+                              );
+                            }
+                          },
+                          child: Text("Register"),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 2 * DeviceData().ButtonHeight,
-                      child: Image.asset("images/logo.png"),
-                    ),
-                    TextFormField(
-                      controller: usernameController,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.person),
-                        hintText: 'Username',
-                      ),
-                      onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                      },
-                      validator: (String value) {
-                        return value.contains('@') ? 'Do not use the @ char.' : null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.lock),
-                        hintText: 'Password',
-                      ),
-                      onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                      },
-                      validator: (String value) {
-                        return value == passwordAgainController.text ? null : "Passwords must match.";
-                      },
-                    ),
-                    TextFormField(
-                      controller: passwordAgainController,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.lock),
-                        hintText: 'Password (Repeat)',
-                      ),
-                      onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                      },
-                      validator: (String value) {
-                        return value == passwordController.text ? null : "Passwords must match.";
-                      },
-                    ),
-                    TextFormField (
-                      controller: emailController,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.people),
-                        hintText: 'E-mail',
-                      ),
-                      onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                      },
-                      validator: (String value) {
-                        return value.length > 5 && value.contains("@") ? null: "Invalid email";
-                      },
-                    ),
-                    TextFormField (
-                      controller: givenNameController,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.people),
-                        hintText: 'First Name',
-                      ),
-                      onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                      },
-                      validator: (String value) {
-                        return value.length < 1 ? "First name must not be empty" : null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: familyNameController,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.people),
-                        hintText: 'Last Name',
-                      ),
-                      onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                      },
-                      validator: (String value) {
-                        return value.length < 1 ? "Last name must not be empty" : null;
-                      },
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: RaisedButton(
-                        onPressed: () {
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                          if (registrationFormKey.currentState.validate()) {
-                            register();
-                            Navigator.push (
-                              context,
-                              MaterialPageRoute(builder: (context) => HomePage()),
-                            );
-                          }
-
-                        },
-                        child: Text("Register"),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: RaisedButton(
-                        onPressed: () {
-                          // Used so that user can return to homepage
-                          Navigator.push (
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                        child: Text("Return To Home Page"),
-                      ),
-                    ),
-
-                  ],
-                ),
+                  ),
+                ]
               ),
             ),
             Container(
                 width: 36.0
             ),
-          ]
+         ]
       ),
     );
   }

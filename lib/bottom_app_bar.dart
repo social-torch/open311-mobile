@@ -6,7 +6,7 @@ import 'settings.dart';
 import 'custom_colors.dart';
 
 String navPage = "nada";
-String basePage = "/login";
+String basePage = "/nada"; //No base page, but maybe someday there will be?
 
 Color _currentPageColor(currentPage) {
   if (navPage == currentPage) {
