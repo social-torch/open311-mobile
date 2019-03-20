@@ -18,7 +18,7 @@ Future<int> getServices(endpoint) async {
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
     getServices(endpoint).then((cnt) { retval += cnt; });
@@ -36,7 +36,7 @@ Future<int> getRequests(endpoint) async {
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      print("Exception occured: $error stackTrace: $stacktrace");
+      //print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
     getRequests(endpoint).then((cnt) { retval += cnt; });

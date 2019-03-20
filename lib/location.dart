@@ -252,6 +252,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
                               if (_currentLocation != null) {
                                 var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
                                 _markerLoc = latlng;
+                                _mapController.move(latlng, _mapController.zoom);
                               }
                             });
                           },

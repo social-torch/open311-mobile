@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'data.dart';
+import 'custom_colors.dart';
+import 'custom_widgets.dart';
 import 'globals.dart' as globals;
 
 final userPool = new CognitoUserPool(
@@ -49,6 +52,7 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
           duration: new Duration(seconds: 5),
         ),
       );
+      Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
@@ -64,6 +68,10 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(APP_NAME),
+        backgroundColor: CustomColors.appBarColor,
+      ),
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView (
@@ -72,6 +80,25 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget> [
+                        Text(
+                          'Confirm',
+                          textAlign: TextAlign.center,
+                          textScaleFactor: 2.0,
+                        ),
+                        SizedBox(
+                          width: 2 * DeviceData().ButtonHeight,
+                          child: Image.asset("images/logo.png"),
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Container(
+                            child: Text(
+                              'Check your email for a registration code.',
+                              textAlign: TextAlign.center,
+                              textScaleFactor: 1.0,
+                            )
+                          )
+                        ),
               TextFormField(
                 controller: usernameController,
                 decoration: const InputDecoration(
@@ -102,7 +129,7 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: RaisedButton(
+                child: ColorSliverButton(
                   onPressed: () {
                     // Validate will return true if the form is valid, or false if
                     // the form is invalid.
@@ -112,10 +139,10 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
                   },
                   child: Text('Confirm'),
                 ),
-                ),
-          ],
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

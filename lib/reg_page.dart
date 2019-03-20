@@ -60,12 +60,13 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
       ];
       await userPool.signUp(usernameController.text, passwordController.text,
           userAttributes: userAttributes);
-      _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: new Text('Check your email for a registration code.'),
-          duration: new Duration(seconds: 5),
-        ),
-      );
+      //_scaffoldKey.currentState.showSnackBar(
+      //  SnackBar(
+      //    content: new Text('Check your email for a registration code.'),
+      //    duration: new Duration(seconds: 5),
+      //  ),
+      //);
+      Navigator.of(context).pushNamedAndRemoveUntil('/confirm', ModalRoute.withName('/login'));
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
@@ -231,10 +232,6 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                             // the form is invalid.
                             if (registrationFormKey.currentState.validate()) {
                               register();
-                              Navigator.push (
-                                context,
-                                MaterialPageRoute(builder: (context) => HomePage()),
-                              );
                             }
                           },
                           child: Text("Register"),

@@ -22,6 +22,7 @@ import "submit.dart";
 import "globals.dart" as globals;
 import "reset_pwd_page.dart";
 import "reg_page.dart";
+import "confirm_page.dart";
 
 import 'dart:io';
 
@@ -49,6 +50,7 @@ Future<void> main() async {
     '/description': (context) => DescriptionPage(),
     '/submit': (context) => SubmitPage(),
     '/registration': (context) => RegistrationPage(),
+    '/confirm': (context) => ConfirmPage(),
   },
   ));
 }

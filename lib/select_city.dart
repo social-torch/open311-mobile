@@ -64,7 +64,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
     } catch (error, stacktrace) {
       assert(() {
         //Using assert here for debug only prints
-        print("Exception occured: $error stackTrace: $stacktrace");
+        //print("Exception occured: $error stackTrace: $stacktrace");
         return true;
       }());
       getBodyText().then((wdgt) {
@@ -81,11 +81,13 @@ class SelectCityBodyState extends State<SelectCityBody> {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => initNav(context));
 
-    getBodyText().then((newBodyWidget) {
-      setState(() {
-        _bodyWidget = newBodyWidget;
+    if (globals.endpoint311 == 'nada') {
+      getBodyText().then((newBodyWidget) {
+        setState(() {
+          _bodyWidget = newBodyWidget;
+        });
       });
-    });
+    }
   }
 
   @override
