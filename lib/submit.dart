@@ -33,10 +33,83 @@ class SubmitBody extends StatefulWidget {
 class SubmitBodyState extends State<SubmitBody> {
   SubmitBodyState();
 
-  void _apiGateway() async
-  {
-    try {
+  Widget _bodyWidget;
 
+  Widget successBody() {
+    return new Expanded(
+      child: Column(
+        children: [
+          Container(height: 30.0),
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              child: Text(
+                'Your service request has been submitted',
+                textAlign: TextAlign.center,
+                textScaleFactor: 2.0,
+              ),
+            ),
+          ),
+          Container(height: 30.0),
+          SizedBox(
+            width: 2 * DeviceData().ButtonHeight,
+            child: Image.asset('images/confirmation.png'),
+          ),
+          Container(height: 30.0),
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              child: Text(
+                'Thank you for your submission.',
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.0,
+              ),
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+
+  Widget failedBody() {
+    return new Expanded(
+      child: Column(
+        children: [
+          Container(height: 30.0),
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              child: Text(
+                'Your service request was unsuccessful',
+                textAlign: TextAlign.center,
+                textScaleFactor: 2.0,
+              ),
+            ),
+          ),
+          Container(height: 30.0),
+          SizedBox(
+            width: 2 * DeviceData().ButtonHeight,
+            child: Image.asset('images/failed.png'),
+          ),
+          Container(height: 30.0),
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              child: Text(
+                'Please try again at a later time.',
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.0,
+              ),
+            ),
+          ),
+        ]
+      ),
+    );
+  }
+
+  Future<Widget> getBodyFuture() async {
+    Widget retval;
+    try {
       //Populate our request with user data
       Requests req = new Requests(
         "",
@@ -64,6 +137,11 @@ class SubmitBodyState extends State<SubmitBody> {
       response = await dio.post(
         endpoint,
         data: req.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: globals.userIdToken
+          },
+        ),
       );
       assert(() {
         //Using assert here for debug only prints
@@ -72,16 +150,36 @@ class SubmitBodyState extends State<SubmitBody> {
         print(response.request);
         return true;
       }());
+      retval = successBody();
+      //Update lists of requests to include latest addition
       getRequests(globals.endpoint311 + "/requests");
     } catch (e) {
       print(e);
+      retval = failedBody();
     }
+    return retval;
   }
-  
+
+  @override
+  void initState() {
+    super.initState();
+    getBodyFuture().then((newBodyWidget) {
+      setState(() {
+        _bodyWidget = newBodyWidget;
+      });
+    });
+  }
+
+  Widget _getBody(BuildContext context) {
+    Widget retval = Text("Submitting Request...");
+    if(_bodyWidget != null) {
+      retval = _bodyWidget;
+    }
+    return retval;
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    _apiGateway();
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
@@ -94,77 +192,7 @@ class SubmitBodyState extends State<SubmitBody> {
           Container(
             width: 36.0,
           ),
-          Expanded(
-            child: Column(
-              children: [
-                Container(height: 30.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: Text(
-                      'Your service request has been submitted',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 2.0,
-                    ),
-                  ),
-                ),
-                Container(height: 30.0),
-                SizedBox(
-                  width: 2 * DeviceData().ButtonHeight,
-                  child: Image.asset('images/confirmation.png'),
-                ),
-                Container(height: 30.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: Text(
-                      'Create an account of log in to view and track your submitted issues.',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 1.0,
-                    ),
-                  ),
-                ),
-                Container(height: 15.0),
-                ColorSliverButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => AuthPage()),
-                      );
-                    },
-                  child: Text ("Login")
-                ),
-                Container(height: 15.0),
-                ColorSliverButton(
-                  onPressed: () {
-                    Navigator.push (
-                      context,
-                      MaterialPageRoute(builder: (context) => RegistrationPage()),
-                      );
-                    },
-                  child: Text( "Sign Up"),
-                ),
-                Container(height: 15.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: RichText(
-                      textAlign: TextAlign.right,
-                      text: new TextSpan (
-                        text: "Forgot Password",
-                        style: new TextStyle(
-                          color: Colors.black,
-                          decoration: TextDecoration.underline,
-                        ),
-                        recognizer: new TapGestureRecognizer()
-                        ..onTap = () { Navigator.of(context).pushNamedAndRemoveUntil('/reset_password', ModalRoute.withName('/login')); },
-                      )
-                    ),
-                  ),
-                ),
-              ]
-            ),
-          ),
+          _getBody(context),
           Container(
             width: 36.0,
           ),

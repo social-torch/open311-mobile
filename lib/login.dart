@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
+import 'dart:io';
 import 'page.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
@@ -56,13 +57,18 @@ class AuthPageBodyState extends State<AuthPageBody> {
     CognitoUserSession session;
     try {
       session = await cognitoUser.authenticateUser(authDetails);
-      print(session);
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
           content: new Text('Authenticated!'),
           duration: new Duration(seconds: 5),
         ),
       );
+      // This is a hack, allowing user to see authenticated snackbar then moving on
+      globals.userAccessToken = session.getAccessToken().getJwtToken();
+      globals.userIdToken = session.getIdToken().getJwtToken();
+      globals.userRefreshToken = session.getRefreshToken().getToken();
+      sleep(const Duration(seconds: 1));
+      Navigator.of(context).pushReplacementNamed('/all_reports');
     } on CognitoUserNewPasswordRequiredException catch (e) {
       // handle New Password challenge
       print(e);

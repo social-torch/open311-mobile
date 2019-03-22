@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'page.dart';
@@ -51,9 +52,17 @@ class SelectCityBodyState extends State<SelectCityBody> {
   Future<Widget> getBodyText() async {
     
     Widget retval;
+    await authenticate();
     final Dio dio = Dio();
     try {
-      Response response = await dio.get(globals.endpoint311base + "/cities");
+      Response response = await dio.get(
+        globals.endpoint311base + "/cities",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: globals.userIdToken
+          },
+        ),
+      );
       CityData().cities_resp = CitiesResponse.fromJson(response.data);
       assert(() {
         //Using assert here for debug only prints
@@ -64,7 +73,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
     } catch (error, stacktrace) {
       assert(() {
         //Using assert here for debug only prints
-        //print("Exception occured: $error stackTrace: $stacktrace");
+        print("Exception occured: $error stackTrace: $stacktrace");
         return true;
       }());
       getBodyText().then((wdgt) {
@@ -90,6 +99,43 @@ class SelectCityBodyState extends State<SelectCityBody> {
     }
   }
 
+  void authenticate() async {
+    final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
+    final cognitoUser = new CognitoUser(globals.userName, userPool);
+    final authDetails = new AuthenticationDetails(
+      username: globals.userName,
+      password: globals.userPass);
+    CognitoUserSession session;
+    try {
+      session = await cognitoUser.authenticateUser(authDetails);
+      globals.userAccessToken = session.getAccessToken().getJwtToken();
+      globals.userIdToken = session.getIdToken().getJwtToken();
+      globals.userRefreshToken = session.getRefreshToken().getToken();
+    } on CognitoUserNewPasswordRequiredException catch (e) {
+      // handle New Password challenge
+      print(e);
+    } on CognitoUserMfaRequiredException catch (e) {
+      // handle SMS_MFA challenge
+      print(e);
+    } on CognitoUserSelectMfaTypeException catch (e) {
+      // handle SELECT_MFA_TYPE challenge
+      print(e);
+    } on CognitoUserMfaSetupException catch (e) {
+      // handle MFA_SETUP challenge
+      print(e);
+    } on CognitoUserTotpRequiredException catch (e) {
+      // handle SOFTWARE_TOKEN_MFA challenge
+      print(e);
+    } on CognitoUserCustomChallengeException catch (e) {
+      // handle CUSTOM_CHALLENGE challenge
+      print(e);
+    } on CognitoUserConfirmationNecessaryException catch (e) {
+      // handle User Confirmation Necessary
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold (

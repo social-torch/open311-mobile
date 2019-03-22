@@ -13,12 +13,19 @@ Future<int> getServices(endpoint) async {
   int retval = 0;
   try {
     retval++;
-    Response response = await dio.get(endpoint);
+    Response response = await dio.get(
+      endpoint,
+      options: Options(
+        headers: {
+          HttpHeaders.authorizationHeader: globals.userIdToken
+        },
+      ),
+    );
     CityData().serv_resp = ServicesResponse.fromJson(response.data);
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      //print("Exception occured: $error stackTrace: $stacktrace");
+      print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
     getServices(endpoint).then((cnt) { retval += cnt; });
@@ -31,12 +38,19 @@ Future<int> getRequests(endpoint) async {
   int retval = 0;
   try {
     retval++;
-    Response response = await dio.get(endpoint);
+    Response response = await dio.get(
+      endpoint,
+      options: Options(
+        headers: {
+          HttpHeaders.authorizationHeader: globals.userIdToken
+        },
+      ),
+    );
     CityData().req_resp = RequestsResponse.fromJson(response.data);
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      //print("Exception occured: $error stackTrace: $stacktrace");
+      print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
     getRequests(endpoint).then((cnt) { retval += cnt; });

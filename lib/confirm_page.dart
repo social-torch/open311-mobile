@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
+import 'dart:io';
 import 'page.dart';
 import 'data.dart';
 import 'custom_colors.dart';
@@ -52,6 +53,8 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
           duration: new Duration(seconds: 5),
         ),
       );
+      // This is a hack, allowing user to see authenticated snackbar then moving on
+      sleep(const Duration(seconds: 1));
       Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(
