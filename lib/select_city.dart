@@ -10,6 +10,7 @@ import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
 import "select_city_common.dart";
+import "bottom_app_bar.dart";
 
 
 class SelectCityPage extends Page {
@@ -36,6 +37,8 @@ class SelectCityBodyState extends State<SelectCityBody> {
   //This function will only run if user has already chosen a default city
   initNav(context) {
     if (globals.endpoint311 != 'nada') {
+      //This is a bit of a hack but force bottom app bar to change color appropriately
+      navPage = "/all_reports";
       Navigator.of(context).pushReplacementNamed('/all_reports');
     }
   }
@@ -69,6 +72,8 @@ class SelectCityBodyState extends State<SelectCityBody> {
         print(response.data);
         return true;
       }());
+      //This is a bit of a hack but force bottom app bar to change color appropriately
+      navPage = "/all_reports";
       retval = setMyCity(context, "/all_reports");
     } catch (error, stacktrace) {
       assert(() {
@@ -100,14 +105,13 @@ class SelectCityBodyState extends State<SelectCityBody> {
   }
 
   void authenticate() async {
-    final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
-    final cognitoUser = new CognitoUser(globals.userName, userPool);
-    final authDetails = new AuthenticationDetails(
-      username: globals.userName,
-      password: globals.userPass);
-    CognitoUserSession session;
     try {
-      session = await cognitoUser.authenticateUser(authDetails);
+      final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
+      final cognitoUser = new CognitoUser(globals.userName, userPool);
+      final authDetails = new AuthenticationDetails(
+        username: globals.userName,
+        password: globals.userPass);
+      CognitoUserSession session = await cognitoUser.authenticateUser(authDetails);
       globals.userAccessToken = session.getAccessToken().getJwtToken();
       globals.userIdToken = session.getIdToken().getJwtToken();
       globals.userRefreshToken = session.getRefreshToken().getToken();
@@ -133,7 +137,11 @@ class SelectCityBodyState extends State<SelectCityBody> {
       // handle User Confirmation Necessary
       print(e);
     } catch (e) {
+      //If saved user/pass is for whatever reason invalid, login using guest
       print(e);
+      globals.userName = globals.guestName;
+      globals.userPass = globals.guestPass;
+      await authenticate();
     }
   }
   @override

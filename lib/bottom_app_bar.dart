@@ -4,6 +4,7 @@ import 'view_submitted.dart';
 import 'all_reports.dart';
 import 'settings.dart';
 import 'custom_colors.dart';
+import 'globals.dart' as globals;
 
 String navPage = "nada";
 String basePage = "/nada"; //No base page, but maybe someday there will be?
@@ -20,6 +21,14 @@ FontWeight _currentPageBold(currentPage) {
     return FontWeight.bold;
   }
   return FontWeight.normal;
+}
+
+String _logInOrOut() {
+  String retval = "Log In";
+  if (globals.userName != globals.guestName) {
+    retval = "Log Out";
+  }
+  return retval;
 }
 
 Widget commonBottomBar(context) {
@@ -135,17 +144,27 @@ Widget commonBottomBar(context) {
                   icon: Image.asset("images/login.png", color: _currentPageColor("/login")),
                   color: _currentPageColor("/login"),
                   highlightColor: CustomColors.salmon,
-                  tooltip: 'Log In',
+                  tooltip: _logInOrOut(),
                   onPressed: () {
-                    var newPage = "/login";
-                    if (navPage != newPage) {
-                      navPage = newPage;
-                      Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                    if (_logInOrOut() == "Log Out") {
+                      //Log out user, go back to as if app is first starting.
+                      basePage = 'nada';
+                      navPage = '/nada';
+                      globals.endpoint311 = 'nada';
+                      globals.userName = globals.guestName;
+                      globals.userPass = globals.guestPass;
+                      Navigator.of(context).pushReplacementNamed('/select_city');
+                    } else {
+                      var newPage = "/login";
+                      if (navPage != newPage) {
+                        navPage = newPage;
+                        Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
+                      }
                     }
                   }
               ),
               Text(
-                "Log In",
+                _logInOrOut(),
                 style: TextStyle(
                   color: _currentPageColor("/login"),
                   fontWeight: _currentPageBold("/login"),

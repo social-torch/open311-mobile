@@ -53,8 +53,6 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
           duration: new Duration(seconds: 5),
         ),
       );
-      // This is a hack, allowing user to see authenticated snackbar then moving on
-      sleep(const Duration(seconds: 1));
       Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(

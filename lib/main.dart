@@ -51,6 +51,7 @@ Future<void> main() async {
     '/submit': (context) => SubmitPage(),
     '/registration': (context) => RegistrationPage(),
     '/confirm': (context) => ConfirmPage(),
+    '/select_city': (context) => SelectCityPage(),
   },
   ));
 }

@@ -63,11 +63,13 @@ class AuthPageBodyState extends State<AuthPageBody> {
           duration: new Duration(seconds: 5),
         ),
       );
-      // This is a hack, allowing user to see authenticated snackbar then moving on
       globals.userAccessToken = session.getAccessToken().getJwtToken();
       globals.userIdToken = session.getIdToken().getJwtToken();
       globals.userRefreshToken = session.getRefreshToken().getToken();
-      sleep(const Duration(seconds: 1));
+      globals.userName = usernameController.text;
+      globals.userPass = passwordController.text;
+      //This is a bit of a hack but force bottom app bar to change color appropriately
+      navPage = "/all_reports";
       Navigator.of(context).pushReplacementNamed('/all_reports');
     } on CognitoUserNewPasswordRequiredException catch (e) {
       // handle New Password challenge
