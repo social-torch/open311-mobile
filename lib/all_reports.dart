@@ -31,12 +31,36 @@ class AllReportsBody extends StatefulWidget {
   State<StatefulWidget> createState() => AllReportsBodyState();
 }
 
-String __guestRestrictionMessage() {
-  var restriction = new StringBuffer();
-  [/*Icons.place,*/ "Only 25 Events are showing. Login in or sign up to view all events."].forEach((item) {
-    restriction.write(item);
-  });
-  return restriction.toString();
+Positioned __guestRestrictionMessage() {
+  String restriction = "Only 25 Events are showing. Login in or sign up to view all events.";
+  if (globals.userName == globals.guestName) {
+    return new Positioned(
+      top: 70,
+      left: 25,
+      right: 25,
+      child: new Container (
+        padding: EdgeInsets.all(5.0),
+        alignment: Alignment.topCenter,
+        width: DeviceData().DeviceWidth,
+        color: Colors.white,
+        child: new Text(
+          restriction,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
+          textScaleFactor: 1.0,
+        ),
+      )
+    );
+  } else {
+    return new Positioned(
+        top: 70,
+        left: 25,
+        right: 25,
+      child: new Container(
+
+      ),
+    );
+  }
 }
 
 class AllReportsBodyState extends State<AllReportsBody> {
@@ -240,7 +264,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
                   ),
                 ),
                 Positioned(
-                  top: 5.0,
+                   top: 5.0,
                   child: new Container (
                     width: DeviceData().DeviceWidth,
                     alignment: Alignment(0.0, 0.0),
@@ -261,23 +285,8 @@ class AllReportsBodyState extends State<AllReportsBody> {
                     ),
                   ),
                 ),
-                Positioned( //guest restriction message
-                  top: 70,
-                  left: 25,
-                  right: 25,
-                  child: new Container (
-                    padding: EdgeInsets.all(5.0),
-                    alignment: Alignment.topCenter,
-                    width: DeviceData().DeviceWidth,
-                    color: Colors.white,
-                    child: new Text(
-                      __guestRestrictionMessage(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
-                      textScaleFactor: 1.0,
-                      ),
-                ),
-                ), Positioned(
+                __guestRestrictionMessage(),
+                Positioned(
                   left: 36.0,
                   bottom: 0.0,
                   child: new SizedBox(
