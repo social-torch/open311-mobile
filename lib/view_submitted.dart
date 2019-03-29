@@ -7,6 +7,8 @@ import 'custom_widgets.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
 import 'utils.dart';
+import 'requests.dart';
+import "globals.dart" as globals;
 
 class ViewSubmittedPage extends Page {
   ViewSubmittedPage() : super(const Icon(Icons.map), APP_NAME);
@@ -30,18 +32,23 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
   Widget _bodyWidget;
 
   Future<Widget> getBodyFuture() async {
-    while (CityData().req_resp == null) {
+    while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
       sleep(const Duration(seconds: 1));
+    }
+    RequestsResponse req_resp = CityData().req_resp;
+    if (globals.userName == globals.guestName)
+    {
+      req_resp = CityData().limited_req_resp;
     }
     return new Expanded(
       child: new ListView.builder (
-        itemCount: CityData().req_resp.requests.length,
+        itemCount: req_resp.requests.length,
         itemBuilder: (BuildContext ctxt, int Index) {
           return  new Column( 
             children: [ 
               new ColorSliverButton(
                 onPressed: () {
-                  ReportData().type = CityData().req_resp.requests[Index].service_name;
+                  ReportData().type = req_resp.requests[Index].service_name;
                   CityData().prevReqIdx = Index;
                   nextPage();
                 },
@@ -51,10 +58,10 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                     children: [
                       Column(
                         children: [
-                          Text(CityData().req_resp.requests[Index].service_name + " " + getBasicAddress(CityData().req_resp.requests[Index].address)),
+                          Text(req_resp.requests[Index].service_name + " " + getBasicAddress(req_resp.requests[Index].address)),
                           Row(
                             children: [
-                              Text(getTimeString(CityData().req_resp.requests[Index].requested_datetime)),
+                              Text(getTimeString(req_resp.requests[Index].requested_datetime)),
                               Container(
                                 width: 15.0,
                               ),
@@ -63,12 +70,12 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                                 height: DeviceData().ButtonHeight * 0.4,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                    color: getStatusColor(CityData().req_resp.requests[Index].status),
+                                    color: getStatusColor(req_resp.requests[Index].status),
                                 ),
                                 child: Column(
                                   children: [
                                     Text(
-                                      CityData().req_resp.requests[Index].status,
+                                      req_resp.requests[Index].status,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ]
@@ -116,7 +123,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
   @override
   Widget build(BuildContext context) {
     //TODO: need to show loading... screen while we wait for data
-    while (CityData().req_resp == null) {
+    while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
       sleep(const Duration(seconds: 1));
     }
     return new Scaffold (

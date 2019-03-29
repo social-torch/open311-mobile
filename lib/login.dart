@@ -68,6 +68,19 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userRefreshToken = session.getRefreshToken().getToken();
       globals.userName = usernameController.text;
       globals.userPass = passwordController.text;
+      assert(() {
+        if (false) {
+          //Using assert here for debug only prints
+          print("userAccessToken:");
+          print(globals.userAccessToken);
+          print("userIdToken:");
+          print(globals.userIdToken);
+          print("userRefreshToken:");
+          print(globals.userRefreshToken);
+        }
+        return true;
+      }());
+
       //This is a bit of a hack but force bottom app bar to change color appropriately
       navPage = "/all_reports";
       Navigator.of(context).pushReplacementNamed('/all_reports');

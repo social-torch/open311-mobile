@@ -115,6 +115,18 @@ class SelectCityBodyState extends State<SelectCityBody> {
       globals.userAccessToken = session.getAccessToken().getJwtToken();
       globals.userIdToken = session.getIdToken().getJwtToken();
       globals.userRefreshToken = session.getRefreshToken().getToken();
+      assert(() {
+        if (false) {
+          //Using assert here for debug only prints
+          print("userAccessToken:");
+          print(globals.userAccessToken);
+          print("userIdToken:");
+          print(globals.userIdToken);
+          print("userRefreshToken:");
+          print(globals.userRefreshToken);
+        }
+        return true;
+      }());
     } on CognitoUserNewPasswordRequiredException catch (e) {
       // handle New Password challenge
       print(e);
