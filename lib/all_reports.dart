@@ -13,6 +13,7 @@ import 'custom_icons.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
 import 'view_submitted.dart';
+import 'globals.dart' as globals;
 
 class AllReportsPage extends Page {
   AllReportsPage() : super(const Icon(Icons.map), APP_NAME);
@@ -28,6 +29,14 @@ class AllReportsBody extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => AllReportsBodyState();
+}
+
+String __guestRestrictionMessage() {
+  var restriction = new StringBuffer();
+  [/*Icons.place,*/ "Only 25 Events are showing. Login in or sign up to view all events."].forEach((item) {
+    restriction.write(item);
+  });
+  return restriction.toString();
 }
 
 class AllReportsBodyState extends State<AllReportsBody> {
@@ -251,7 +260,24 @@ class AllReportsBodyState extends State<AllReportsBody> {
                       ),
                     ),
                   ),
-                ),Positioned(
+                ),
+                Positioned( //guest restriction message
+                  top: 70,
+                  left: 25,
+                  right: 25,
+                  child: new Container (
+                    padding: EdgeInsets.all(5.0),
+                    alignment: Alignment.topCenter,
+                    width: DeviceData().DeviceWidth,
+                    color: Colors.white,
+                    child: new Text(
+                      __guestRestrictionMessage(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.w200, fontSize: 16),
+                      textScaleFactor: 1.0,
+                      ),
+                ),
+                ), Positioned(
                   left: 36.0,
                   bottom: 0.0,
                   child: new SizedBox(
