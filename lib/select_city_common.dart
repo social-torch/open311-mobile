@@ -7,6 +7,7 @@ import 'requests.dart';
 import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
+import 'utils.dart';
 
 Future<int> getServices(endpoint) async {
   final Dio dio = Dio();
@@ -47,6 +48,22 @@ Future<int> getRequests(endpoint) async {
       ),
     );
     CityData().req_resp = RequestsResponse.fromJson(response.data);
+
+    //For guest user we only show latest 25 items, lets filter them out now.
+    RequestsResponse req_resp = CityData().req_resp;
+    while(req_resp.requests.length > 25)
+    {
+      var oldestIdx = 0;
+      for (var i=1; i<req_resp.requests.length; i++)
+      {
+        if (getLatestDateString(req_resp.requests[oldestIdx].requested_datetime, req_resp.requests[i].requested_datetime) == req_resp.requests[oldestIdx].requested_datetime)
+        {
+          oldestIdx = i;
+        }
+      }
+      req_resp.requests.removeAt(oldestIdx);
+    }
+    CityData().limited_req_resp = req_resp;
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints

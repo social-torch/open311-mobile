@@ -39,3 +39,27 @@ String getBasicAddress(inputstr) {
   }
   return retval;
 }
+
+String getLatestDateString(datestr1, datestr2) {
+  //2019-03-03T18:50:43Z
+  var retval = datestr1;
+  if (int.tryParse(retval.substring(0,4)) < int.tryParse(datestr2.substring(0,4))) {
+    retval = datestr2;
+  }
+  else if (int.tryParse(retval.substring(5,7)) < int.tryParse(datestr2.substring(5,7))) {
+    retval = datestr2;
+  }
+  else if (int.tryParse(retval.substring(8,10)) < int.tryParse(datestr2.substring(8,10))) {
+    retval = datestr2;
+  }
+  else if (int.tryParse(retval.substring(11,13)) < int.tryParse(datestr2.substring(11,13))) {
+    retval = datestr2;
+  }
+  else if (int.tryParse(retval.substring(14,16)) < int.tryParse(datestr2.substring(14,16))) {
+    retval = datestr2;
+  }
+  else if (int.tryParse(retval.substring(17,19)) < int.tryParse(datestr2.substring(17,19))) {
+    retval = datestr2;
+  }
+  return retval;
+}

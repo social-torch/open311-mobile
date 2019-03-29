@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'new_report.dart';
-import 'view_submitted.dart';
+import 'view_submitted_user.dart';
 import 'all_reports.dart';
 import 'settings.dart';
 import 'custom_colors.dart';
@@ -66,12 +66,12 @@ Widget commonBottomBar(context) {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                  icon: Image.asset("images/add view requests.png", color: _currentPageColor("/view_submitted")),
-                  color: _currentPageColor("/view_submitted"),
+                  icon: Image.asset("images/add view requests.png", color: _currentPageColor("/view_submitted_user")),
+                  color: _currentPageColor("/view_submitted_user"),
                   highlightColor: CustomColors.salmon,
                   tooltip: 'View your past submissions',
                   onPressed: () {
-                    var newPage = "/view_submitted";
+                    var newPage = "/view_submitted_user";
                     if (navPage != newPage) {
                       navPage = newPage;
                       Navigator.of(context).pushNamedAndRemoveUntil(newPage, ModalRoute.withName(basePage));
@@ -81,8 +81,8 @@ Widget commonBottomBar(context) {
               Text(
                 "Requests",
                 style: TextStyle(
-                  color: _currentPageColor("/view_submitted"),
-                  fontWeight: _currentPageBold("/view_submitted"),
+                  color: _currentPageColor("/view_submitted_user"),
+                  fontWeight: _currentPageBold("/view_submitted_user"),
                 ),
               ),
             ]

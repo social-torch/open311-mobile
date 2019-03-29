@@ -79,6 +79,7 @@ flutter:
    - images/add view requests.png
    - images/login.png
    - images/failed.png
+   - images/guest_reports.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

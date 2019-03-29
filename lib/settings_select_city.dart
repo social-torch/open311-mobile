@@ -45,7 +45,14 @@ class SettingsSelectCityBodyState extends State<SettingsSelectCityBody> {
     Widget retval;
     final Dio dio = Dio();
     try {
-      Response response = await dio.get(globals.endpoint311base + "/cities");
+      Response response = await dio.get(
+        globals.endpoint311base + "/cities",
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: globals.userIdToken
+          },
+        ),
+      );
       CityData().cities_resp = CitiesResponse.fromJson(response.data);
       assert(() {
         //Using assert here for debug only prints

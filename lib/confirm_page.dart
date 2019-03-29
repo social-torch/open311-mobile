@@ -81,25 +81,25 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget> [
-                        Text(
-                          'Confirm',
-                          textAlign: TextAlign.center,
-                          textScaleFactor: 2.0,
-                        ),
-                        SizedBox(
-                          width: 2 * DeviceData().ButtonHeight,
-                          child: Image.asset("images/logo.png"),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Container(
-                            child: Text(
-                              'Check your email for a registration code.',
-                              textAlign: TextAlign.center,
-                              textScaleFactor: 1.0,
-                            )
-                          )
-                        ),
+              Text(
+                'Confirm',
+                textAlign: TextAlign.center,
+                textScaleFactor: 2.0,
+              ),
+              SizedBox(
+                width: 2 * DeviceData().ButtonHeight,
+                child: Image.asset("images/logo.png"),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: Container(
+                  child: Text(
+                    'Check your email for a registration code.',
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 1.0,
+                  )
+                )
+              ),
               TextFormField(
                 controller: usernameController,
                 decoration: const InputDecoration(
