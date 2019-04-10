@@ -2,12 +2,15 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:uuid/uuid.dart';
+import 'package:path/path.dart' as p;
 import 'dart:convert';
 import 'page.dart';
 import 'data.dart';
 import 'login.dart';
 import 'reg_page.dart';
 import 'requests.dart';
+import 's3endpoint.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
@@ -110,6 +113,22 @@ class SubmitBodyState extends State<SubmitBody> {
   Future<Widget> getBodyFuture() async {
     Widget retval;
     try {
+      //Get s3 url we can send image to if applicable
+      String media_url = "";
+      if (ReportData().image != null) {
+        var uuid = new Uuid();
+        media_url = uuid.v4() + p.extension(ReportData().image.path);
+      }
+
+      //S3endpoint s3ep = await dio.get(
+      //  globals.endpoint311base + "/store/" + media_url,
+      //  options: Options(
+      //    headers: {
+      //      HttpHeaders.authorizationHeader: globals.userIdToken
+      //    },
+      //  ),
+      //);
+
       //Populate our request with user data
       Requests req = new Requests(
         "",
@@ -128,7 +147,8 @@ class SubmitBodyState extends State<SubmitBody> {
         0,
         ReportData().latlng.latitude, 
         ReportData().latlng.longitude, 
-        "");
+        media_url);
+
 
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";
@@ -139,7 +159,8 @@ class SubmitBodyState extends State<SubmitBody> {
         data: req.toJson(),
         options: Options(
           headers: {
-            HttpHeaders.authorizationHeader: globals.userIdToken
+            HttpHeaders.authorizationHeader: globals.userIdToken,
+            HttpHeaders.fromHeader: globals.userName
           },
         ),
       );

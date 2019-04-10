@@ -29,13 +29,12 @@ class NewReportBody extends StatefulWidget {
           
 class NewReportBodyState extends State<NewReportBody> {
   NewReportBodyState();
-  Future<File> _image;
 
   void getImage(ImageSource source) async {
-    var image = ImagePicker.pickImage(source: source);
-    setState(() {
-      _image = image;
+    await ImagePicker.pickImage(source: source).then((img) {
+      ReportData().image = img;
     });
+    locPage();
   }
 
   @override
@@ -102,7 +101,10 @@ class NewReportBodyState extends State<NewReportBody> {
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: locPage,
+                  onPressed: () {
+                    ReportData().image = null;
+                    locPage();
+                  },
                   child: Row(
                     children: [
                       Image.asset("images/no_photo.png", height: 45.0,),

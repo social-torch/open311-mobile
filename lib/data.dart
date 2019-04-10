@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:latlong/latlong.dart';
 import 'cities.dart';
 import 'services.dart';
@@ -22,6 +23,7 @@ class ReportData{
   LatLng latlng;
   AddressData address;
   String addr;
+  File image;
 
   factory ReportData() {
     return _rds;
@@ -42,6 +44,9 @@ class ReportData{
       retval += "  City: ${address?.city}\n";
       retval += "  State: ${address?.state}\n";
       retval += "  Zip: ${address?.zip}\n";
+    }
+    if ( image != null) {
+      retval += "Image: ${image.path}\n";
     }
     return retval;
   }
