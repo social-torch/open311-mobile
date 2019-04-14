@@ -113,21 +113,27 @@ class SubmitBodyState extends State<SubmitBody> {
   Future<Widget> getBodyFuture() async {
     Widget retval;
     try {
+      Dio dio = new Dio();
+
       //Get s3 url we can send image to if applicable
       String media_url = "";
       if (ReportData().image != null) {
         var uuid = new Uuid();
         media_url = uuid.v4() + p.extension(ReportData().image.path);
-      }
 
-      //S3endpoint s3ep = await dio.get(
-      //  globals.endpoint311base + "/store/" + media_url,
-      //  options: Options(
-      //    headers: {
-      //      HttpHeaders.authorizationHeader: globals.userIdToken
-      //    },
-      //  ),
-      //);
+        Response s3rep = await dio.get(
+          globals.endpoint311base + "/images/store/" + media_url,
+          options: Options(
+            headers: {
+              HttpHeaders.authorizationHeader: globals.userIdToken
+            },
+          ),
+        );
+        //Parse out url
+        S3endpoint s3ep = S3endpoint.fromJson(s3rep.data);
+
+        //Now that we have url, send image
+      }
 
       //Populate our request with user data
       Requests req = new Requests(
@@ -153,7 +159,6 @@ class SubmitBodyState extends State<SubmitBody> {
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";
       Response response;
-      Dio dio = new Dio();
       response = await dio.post(
         endpoint,
         data: req.toJson(),
