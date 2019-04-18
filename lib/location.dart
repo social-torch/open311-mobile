@@ -69,7 +69,6 @@ class LocationUiBodyState extends State<LocationUiBody> {
   @override
   void dispose() {
     //If user backs out remove address, they may choose lat/long instead
-    ReportData().latlng = null;
     addrController.dispose();
     super.dispose();
   }

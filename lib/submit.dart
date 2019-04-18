@@ -133,6 +133,10 @@ class SubmitBodyState extends State<SubmitBody> {
         S3endpoint s3ep = S3endpoint.fromJson(s3rep.data);
 
         //Now that we have url, send image
+        Response s3img = await dio.put(
+          s3ep.url,
+          data: ReportData().image.readAsBytesSync(),
+        );
       }
 
       //Populate our request with user data
