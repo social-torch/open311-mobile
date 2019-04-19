@@ -167,44 +167,45 @@ class AllReportsBodyState extends State<AllReportsBody> {
       _markerLoc = _defaultLoc;
     }
    
-
     var markers = List<Marker>();
 
-    if (globals.userName == globals.guestName) {
-      for (var i=0; i<CityData().limited_req_resp.requests.length; i++) {
-        markers.add(
-          new Marker(
-            width: 40.0,
-            height: 40.0,
-            point: LatLng(CityData().limited_req_resp.requests[i].lat, CityData().limited_req_resp.requests[i].lon),
-            builder: (ctx) => new Container(
-              child: new GestureDetector(
-                child: new Icon(
-                  Icons.place,
-                  color: Colors.orange,
+    if ((CityData().req_resp != null) && (CityData().limited_req_resp != null)) {
+      if (globals.userName == globals.guestName) {
+        for (var i=0; i<CityData().limited_req_resp.requests.length; i++) {
+          markers.add(
+            new Marker(
+              width: 40.0,
+              height: 40.0,
+              point: LatLng(CityData().limited_req_resp.requests[i].lat, CityData().limited_req_resp.requests[i].lon),
+              builder: (ctx) => new Container(
+                child: new GestureDetector(
+                  child: new Icon(
+                    Icons.place,
+                    color: Colors.orange,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
-      }
-    } else {
-      for (var i=0; i<CityData().req_resp.requests.length; i++) {
-        markers.add(
-          new Marker(
-            width: 40.0,
-            height: 40.0,
-            point: LatLng(CityData().req_resp.requests[i].lat, CityData().req_resp.requests[i].lon),
-            builder: (ctx) => new Container(
-              child: new GestureDetector(
-                child: new Icon(
-                  Icons.place,
-                  color: Colors.orange,
+          );
+        }
+      } else {
+        for (var i=0; i<CityData().req_resp.requests.length; i++) {
+          markers.add(
+            new Marker(
+              width: 40.0,
+              height: 40.0,
+              point: LatLng(CityData().req_resp.requests[i].lat, CityData().req_resp.requests[i].lon),
+              builder: (ctx) => new Container(
+                child: new GestureDetector(
+                  child: new Icon(
+                    Icons.place,
+                    color: Colors.orange,
+                  ),
                 ),
               ),
             ),
-          ),
-        );
+          );
+        }
       }
     }
 
