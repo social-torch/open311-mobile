@@ -6,7 +6,10 @@ import 'custom_widgets.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
 import 'utils.dart';
-
+import "globals.dart" as globals;
+import 's3endpoint.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 
 class ViewSubmittedItemPage extends Page {
   ViewSubmittedItemPage() : super(const Icon(Icons.map), APP_NAME);
@@ -27,25 +30,56 @@ class ViewSubmittedItemBody extends StatefulWidget {
 class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   ViewSubmittedItemBodyState();
 
+  Widget _validImg;
+
   @override
   void initState() {
     super.initState();
+ 
+    _getValidImgAsync().then((img) {
+      setState(() {
+        _validImg = img;
+      });
+    });
   }
 
-  Widget _getValidImg() {
-    Widget retval = new Text("");
+  Future<Widget> _getValidImgAsync() async {
+    Widget retval;
     if (CityData().req_resp.requests[CityData().prevReqIdx].media_url != "") {
-      retval = new Image.network(
-        CityData().req_resp.requests[CityData().prevReqIdx].media_url,
-        fit: BoxFit.cover,
-        height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
-        width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
-        alignment: Alignment.center,
-      );
+      try {
+        final Dio dio = Dio();
+        Response s3rep = await dio.get(
+          globals.endpoint311base + "/images/fetch/" + CityData().req_resp.requests[CityData().prevReqIdx].media_url,
+          options: Options(
+            headers: {
+              HttpHeaders.authorizationHeader: globals.userIdToken
+            },
+          ),
+        );
+        S3endpoint s3ep = S3endpoint.fromJson(s3rep.data);
+        debugPrint(CityData().req_resp.requests[CityData().prevReqIdx].media_url);
+        retval = new Image.network(
+          s3ep.url,
+          fit: BoxFit.cover,
+          height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
+          width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
+          alignment: Alignment.center,
+        );
+      } catch(e) {
+        print(e);
+      }
     }
     return retval;
   }
-  
+ 
+  Widget _getValidImg(BuildContext context) {
+    Widget retval = new Text("");
+    if (_validImg != null) {
+      retval = _validImg;
+    }
+    return retval;
+  }
+ 
   Widget _getImg() {
     Widget retval = new Stack(
       children: [
@@ -61,7 +95,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
           child: Text("No image available"),
         ),
         Positioned(
-          child: _getValidImg(),
+          child: _getValidImg(context),
         ),
       ]
     );

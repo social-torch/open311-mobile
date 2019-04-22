@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -133,9 +134,10 @@ class SubmitBodyState extends State<SubmitBody> {
         S3endpoint s3ep = S3endpoint.fromJson(s3rep.data);
 
         //Now that we have url, send image
-        Response s3img = await dio.put(
+        var put_resp = await http.put(
           s3ep.url,
-          data: ReportData().image.readAsBytesSync(),
+          body: ReportData().image.readAsBytesSync(),
+          headers: {"Content-Type": "image/" + media_url.split(".").last}
         );
       }
 
