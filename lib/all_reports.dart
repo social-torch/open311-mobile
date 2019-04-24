@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -79,6 +81,22 @@ class AllReportsBodyState extends State<AllReportsBody> {
   Location _location = new Location();
   bool _permission = false;
   String error;
+  var _markers = List<Marker>();
+
+  //This is a poor mans threadish way to doing processing on the side without deadlocking async
+  void delayedProcessing() {
+    compute(sleepThread, 1).then((num) {
+      if ((CityData().req_resp != null) && (CityData().limited_req_resp != null)) {
+        setState(() {
+          _getMarkers();
+        });
+      }
+      else
+      {
+        delayedProcessing();
+      }
+    });
+  } 
 
   @override
   void initState() {
@@ -98,6 +116,8 @@ class AllReportsBodyState extends State<AllReportsBody> {
         }());
       });
     });
+
+    delayedProcessing();
     super.initState();
   }
 
@@ -160,57 +180,51 @@ class AllReportsBodyState extends State<AllReportsBody> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  static int sleepThread(int input) {
+    sleep(const Duration(seconds: 1));
+    return input;
+  }
 
-    if (_markerLoc == null) {
-      _markerLoc = _defaultLoc;
-    }
-   
-    var markers = List<Marker>();
-
-    if ((CityData().req_resp != null) && (CityData().limited_req_resp != null)) {
-      if (globals.userName == globals.guestName) {
-        for (var i=0; i<CityData().limited_req_resp.requests.length; i++) {
-          markers.add(
-            new Marker(
-              width: 40.0,
-              height: 40.0,
-              point: LatLng(CityData().limited_req_resp.requests[i].lat, CityData().limited_req_resp.requests[i].lon),
-              builder: (ctx) => new Container(
-                child: new GestureDetector(
-                  child: new Icon(
-                    Icons.place,
-                    color: Colors.orange,
-                  ),
+  void _getMarkers() {
+    if (globals.userName == globals.guestName) {
+      for (var i=0; i<CityData().limited_req_resp.requests.length; i++) {
+        _markers.add(
+          new Marker(
+            width: 40.0,
+            height: 40.0,
+            point: LatLng(CityData().limited_req_resp.requests[i].lat, CityData().limited_req_resp.requests[i].lon),
+            builder: (ctx) => new Container(
+              child: new GestureDetector(
+                child: new Icon(
+                  Icons.place,
+                  color: Colors.orange,
                 ),
               ),
             ),
-          );
-        }
-      } else {
-        for (var i=0; i<CityData().req_resp.requests.length; i++) {
-          markers.add(
-            new Marker(
-              width: 40.0,
-              height: 40.0,
-              point: LatLng(CityData().req_resp.requests[i].lat, CityData().req_resp.requests[i].lon),
-              builder: (ctx) => new Container(
-                child: new GestureDetector(
-                  child: new Icon(
-                    Icons.place,
-                    color: Colors.orange,
-                  ),
+          ),
+        );
+      }
+    } else {
+      for (var i=0; i<CityData().req_resp.requests.length; i++) {
+        _markers.add(
+          new Marker(
+            width: 40.0,
+            height: 40.0,
+            point: LatLng(CityData().req_resp.requests[i].lat, CityData().req_resp.requests[i].lon),
+            builder: (ctx) => new Container(
+              child: new GestureDetector(
+                child: new Icon(
+                  Icons.place,
+                  color: Colors.orange,
                 ),
               ),
             ),
-          );
-        }
+          ),
+        );
       }
     }
-
     if (_currentLocation != null) {
-      markers.add(
+      _markers.add(
         new Marker(
           width: 40.0,
           height: 40.0,
@@ -226,7 +240,15 @@ class AllReportsBodyState extends State<AllReportsBody> {
         ),
       );
     }
+  }
 
+  @override
+  Widget build(BuildContext context) {
+
+    if (_markerLoc == null) {
+      _markerLoc = _defaultLoc;
+    }
+   
     final fm = FlutterMap(
       mapController: _mapController,
       options: new MapOptions(
@@ -243,7 +265,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
           urlTemplate:
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']
         ),
-        new MarkerLayerOptions(markers: markers)
+        new MarkerLayerOptions(markers: _markers)
       ],
     );
 
