@@ -195,9 +195,13 @@ class AllReportsBodyState extends State<AllReportsBody> {
             point: LatLng(CityData().limited_req_resp.requests[i].lat, CityData().limited_req_resp.requests[i].lon),
             builder: (ctx) => new Container(
               child: new GestureDetector(
-                child: new Icon(
-                  Icons.place,
-                  color: Colors.orange,
+                child: new IconButton(
+                  icon: new Icon(Icons.place, color: Colors.orange),
+                  highlightColor: CustomColors.salmon,
+                  onPressed: () {
+                    CityData().prevReqIdx = i;
+                    Navigator.of(context).pushNamed('/view_submitted_item');
+                  }
                 ),
               ),
             ),
@@ -213,9 +217,13 @@ class AllReportsBodyState extends State<AllReportsBody> {
             point: LatLng(CityData().req_resp.requests[i].lat, CityData().req_resp.requests[i].lon),
             builder: (ctx) => new Container(
               child: new GestureDetector(
-                child: new Icon(
-                  Icons.place,
-                  color: Colors.orange,
+                child: new IconButton(
+                  icon: new Icon(Icons.place, color: Colors.orange),
+                  highlightColor: CustomColors.salmon,
+                  onPressed: () {
+                    CityData().prevReqIdx = i;
+                    Navigator.of(context).pushNamed('/view_submitted_item');
+                  }
                 ),
               ),
             ),
