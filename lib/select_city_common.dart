@@ -50,7 +50,7 @@ Future<int> getRequests(endpoint) async {
     CityData().req_resp = RequestsResponse.fromJson(response.data);
 
     //For guest user we only show latest 25 items, lets filter them out now.
-    RequestsResponse req_resp = CityData().req_resp;
+    RequestsResponse req_resp = RequestsResponse.fromJson(response.data);
     while(req_resp.requests.length > 25)
     {
       var oldestIdx = 0;
