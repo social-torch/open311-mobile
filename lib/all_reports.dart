@@ -86,7 +86,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
   //This is a poor mans threadish way to doing processing on the side without deadlocking async
   void delayedProcessing() {
     compute(sleepThread, 1).then((num) {
-      if ((CityData().req_resp != null) && (CityData().limited_req_resp != null)) {
+      if ((CityData().req_resp != null) && (CityData().limited_req_resp != null) && (CityData().serv_resp != null) ) {
         setState(() {
           _getMarkers();
         });
@@ -183,6 +183,37 @@ class AllReportsBodyState extends State<AllReportsBody> {
   static int sleepThread(int input) {
     sleep(const Duration(seconds: 1));
     return input;
+  }
+
+  //Given a service code find its index in the list of total service codes and
+  //  and derive a color from it.  Try and handle as many colors as possible
+  //  to enable future service codes.
+  Color _getColorOfService(String service_code)
+  {
+    Color retval = Colors.orange;
+    int i = 0;
+    for (i=0; i<CityData().serv_resp.services.length; i++)
+    {
+      if (CityData().serv_resp.services[i].service_code == service_code)
+      {
+        break; //Found our index break now so we can derive a color from the index
+      }
+    }
+    //We only have so many primaries, use shades for indices that go over
+    if (i >= Colors.primaries.length) {
+      int shadeIdx = ( i / Colors.primaries.length ).toInt();
+      if (shadeIdx == 5) {
+        shadeIdx++; //500 is a primary switch to 600
+      } else if (shadeIdx > 9) {
+        shadeIdx = 9; //We have run out of colors eek!
+        print("Need to update color selection code we have run out of colors");
+      }
+      int primaryIdx = i % Colors.primaries.length;
+      retval = Colors.primaries[primaryIdx][shadeIdx];
+    } else {
+      retval = Colors.primaries[i];
+    }
+    return retval;
   }
 
   void _getMarkers() {
