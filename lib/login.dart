@@ -11,6 +11,7 @@ import 'reset_pwd_page.dart';
 import 'globals.dart' as globals;
 import 'custom_colors.dart';
 import 'my_homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 final userPool = new CognitoUserPool(
@@ -68,6 +69,17 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userRefreshToken = session.getRefreshToken().getToken();
       globals.userName = usernameController.text;
       globals.userPass = passwordController.text;
+
+      //Save creds into persistent storage
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userName', globals.userName);
+      await prefs.setString('userPass', globals.userPass);
+      bool autoLogIn = prefs.getBool('autoLogIn');
+      //Default to auto log in unless user has specified otherwise previously
+      if (autoLogIn == null) {
+        await prefs.setBool('autoLogIn', true);
+      }
+  
       assert(() {
         if (false) {
           //Using assert here for debug only prints

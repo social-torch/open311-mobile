@@ -11,7 +11,7 @@ import "custom_widgets.dart";
 import "custom_colors.dart";
 import "select_city_common.dart";
 import "bottom_app_bar.dart";
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectCityPage extends Page {
   SelectCityPage() : super(const Icon(Icons.map), APP_NAME);
@@ -106,6 +106,15 @@ class SelectCityBodyState extends State<SelectCityBody> {
 
   void authenticate() async {
     try {
+
+      //First attempt to pull user/pass from persistent data, unless user is guest
+      if (globals.userName == null)
+      {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        globals.userName = prefs.getString('userName');
+        globals.userPass = prefs.getString('userPass');
+      }
+
       final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
       final cognitoUser = new CognitoUser(globals.userName, userPool);
       final authDetails = new AuthenticationDetails(
