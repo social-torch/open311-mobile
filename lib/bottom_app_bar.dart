@@ -5,6 +5,7 @@ import 'all_reports.dart';
 import 'settings.dart';
 import 'custom_colors.dart';
 import 'globals.dart' as globals;
+import 'package:shared_preferences/shared_preferences.dart';
 
 String navPage = "nada";
 String basePage = "/nada"; //No base page, but maybe someday there will be?
@@ -29,6 +30,12 @@ String _logInOrOut() {
     retval = "Log Out";
   }
   return retval;
+}
+
+void resetPersistentData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('userName', "");
+  await prefs.setString('userPass', "");
 }
 
 Widget commonBottomBar(context) {
@@ -153,6 +160,10 @@ Widget commonBottomBar(context) {
                       globals.endpoint311 = 'nada';
                       globals.userName = globals.guestName;
                       globals.userPass = globals.guestPass;
+
+                      //Remove saved info from persistent store
+                      resetPersistentData();
+
                       Navigator.of(context).pushReplacementNamed('/select_city');
                     } else {
                       var newPage = "/login";

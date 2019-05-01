@@ -11,16 +11,18 @@ Color getStatusColor(status) {
 
 String getTimeString(timestr) {
   var retval = "XXXX/XX/XX, 12:00am";
+  var tsdt = DateTime.parse(timestr);
+  var timestr_local = tsdt.toLocal().toString();
   var timeAmPm = "12:00am";
-  if (int.tryParse(timestr.substring(11,13)) > 12)
+  if (int.tryParse(timestr_local.substring(11,13)) > 12)
   {
-    timeAmPm = (int.tryParse(timestr.substring(11,13)) - 12).toString() + ":" + timestr.substring(14,16) + "pm";
+    timeAmPm = (int.tryParse(timestr_local.substring(11,13)) - 12).toString() + ":" + timestr_local.substring(14,16) + "pm";
   }
   else
   {
-    timeAmPm = timestr.substring(11,13) + ":" + timestr.substring(14,16) + "am";
+    timeAmPm = timestr_local.substring(11,13) + ":" + timestr_local.substring(14,16) + "am";
   }
-  retval = timestr.substring(0,4) + "/" + timestr.substring(5,7) + "/" + timestr.substring(8,10) + ", " + timeAmPm;
+  retval = timestr_local.substring(0,4) + "/" + timestr_local.substring(5,7) + "/" + timestr_local.substring(8,10) + ", " + timeAmPm;
   return retval;
 }
 
@@ -43,23 +45,13 @@ String getBasicAddress(inputstr) {
 String getLatestDateString(datestr1, datestr2) {
   //2019-03-03T18:50:43Z
   var retval = datestr1;
-  if (int.tryParse(retval.substring(0,4)) < int.tryParse(datestr2.substring(0,4))) {
+
+  var ds1dt = DateTime.parse(datestr1);
+  var ds2dt = DateTime.parse(datestr2);
+
+  if (ds1dt.isBefore(ds2dt)) {
     retval = datestr2;
   }
-  else if (int.tryParse(retval.substring(5,7)) < int.tryParse(datestr2.substring(5,7))) {
-    retval = datestr2;
-  }
-  else if (int.tryParse(retval.substring(8,10)) < int.tryParse(datestr2.substring(8,10))) {
-    retval = datestr2;
-  }
-  else if (int.tryParse(retval.substring(11,13)) < int.tryParse(datestr2.substring(11,13))) {
-    retval = datestr2;
-  }
-  else if (int.tryParse(retval.substring(14,16)) < int.tryParse(datestr2.substring(14,16))) {
-    retval = datestr2;
-  }
-  else if (int.tryParse(retval.substring(17,19)) < int.tryParse(datestr2.substring(17,19))) {
-    retval = datestr2;
-  }
+
   return retval;
 }
