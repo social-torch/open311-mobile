@@ -125,7 +125,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
       globals.userIdToken = session.getIdToken().getJwtToken();
       globals.userRefreshToken = session.getRefreshToken().getToken();
       assert(() {
-        if (false) {
+        if (true) {
           //Using assert here for debug only prints
           print("userAccessToken:");
           print(globals.userAccessToken);

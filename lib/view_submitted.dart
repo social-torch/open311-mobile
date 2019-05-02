@@ -48,7 +48,6 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
             children: [ 
               new ColorSliverButton(
                 onPressed: () {
-                  ReportData().type = req_resp.requests[Index].service_name;
                   CityData().prevReqIdx = Index;
                   nextPage();
                 },

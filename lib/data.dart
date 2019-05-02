@@ -3,6 +3,7 @@ import 'package:latlong/latlong.dart';
 import 'cities.dart';
 import 'services.dart';
 import 'requests.dart';
+import 'users.dart';
 
 const String APP_NAME = "Social Torch";
 
@@ -62,6 +63,7 @@ class CityData{
   ServicesResponse serv_resp;
   RequestsResponse req_resp;
   RequestsResponse limited_req_resp;
+  Users users_resp;
   int prevReqIdx; /*Hack, should pass this as part of view_submitted_item.dart constructor*/
 
   factory CityData() {

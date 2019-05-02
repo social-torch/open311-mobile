@@ -60,17 +60,25 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
       while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
         sleep(const Duration(seconds: 1));
       }
-      RequestsResponse req_resp = CityData().req_resp;
+      List<int> users_to_req_idx = List();
+      List<Requests> users_list = List();
+      if ( (CityData().users_resp != null) && (CityData().users_resp.submitted_request_ids.length > 0) ) {
+        for (int i=0; i<CityData().req_resp.requests.length; i++) {
+          if (CityData().users_resp.submitted_request_ids.indexWhere((idx) => idx == CityData().req_resp.requests[i].service_request_id) != -1 ) {
+            users_list.add(CityData().req_resp.requests[i]);
+            users_to_req_idx.add(i);
+          }
+        }
+      }
       retval = new Expanded(
         child: new ListView.builder (
-          itemCount: req_resp.requests.length,
+          itemCount: users_list.length,
           itemBuilder: (BuildContext ctxt, int Index) {
             return  new Column( 
               children: [ 
                 new ColorSliverButton(
                   onPressed: () {
-                    ReportData().type = req_resp.requests[Index].service_name;
-                    CityData().prevReqIdx = Index;
+                    CityData().prevReqIdx = users_to_req_idx[Index];
                     nextPage();
                   },
                   child: Expanded( 
@@ -79,10 +87,10 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
                       children: [
                         Column(
                           children: [
-                            Text(req_resp.requests[Index].service_name + " " + getBasicAddress(req_resp.requests[Index].address)),
+                            Text(users_list[Index].service_name + " " + getBasicAddress(users_list[Index].address)),
                             Row(
                               children: [
-                                Text(getTimeString(req_resp.requests[Index].requested_datetime)),
+                                Text(getTimeString(users_list[Index].requested_datetime)),
                                 Container(
                                   width: 15.0,
                                 ),
@@ -91,12 +99,12 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
                                   height: DeviceData().ButtonHeight * 0.4,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                      color: getStatusColor(req_resp.requests[Index].status),
+                                      color: getStatusColor(users_list[Index].status),
                                   ),
                                   child: Column(
                                     children: [
                                       Text(
-                                        req_resp.requests[Index].status,
+                                        users_list[Index].status,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ]

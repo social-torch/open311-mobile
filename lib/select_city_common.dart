@@ -4,10 +4,38 @@ import 'dart:io';
 import 'data.dart';
 import 'services.dart';
 import 'requests.dart';
+import 'users.dart';
 import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
 import 'utils.dart';
+
+Future<int> getUsers(endpoint) async {
+  final Dio dio = Dio();
+  int retval = 0;
+  try {
+    retval++;
+    Response response = await dio.get(
+      endpoint,
+      options: Options(
+        headers: {
+          HttpHeaders.authorizationHeader: globals.userIdToken
+        },
+      ),
+    );
+    if ( response.data.toString().substring(0,9) != "Not Found" ) {
+      CityData().users_resp = Users.fromJson(response.data);
+    }
+  } catch (error, stacktrace) {
+    assert(() {
+      //Using assert here for debug only prints
+      print("Exception occured: $error stackTrace: $stacktrace");
+      return true;
+    }());
+    getUsers(endpoint).then((cnt) { retval += cnt; });
+  }
+  return retval;
+}
 
 Future<int> getServices(endpoint) async {
   final Dio dio = Dio();
@@ -92,6 +120,7 @@ Widget setMyCity(BuildContext context, String nextPage) {
                 globals.cityIdx = Index;
                 getServices(globals.endpoint311 + "/services");
                 getRequests(globals.endpoint311 + "/requests");
+                getUsers(globals.endpoint311 + "/user/" + globals.userName);
                 Navigator.of(context).pushReplacementNamed(nextPage);
               },
             ),
