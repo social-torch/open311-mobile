@@ -9,6 +9,7 @@ import 'package:latlong/latlong.dart';
 import 'package:geocoder/geocoder.dart';
 import 'page.dart';
 import 'data.dart';
+import 'requests.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
 import 'custom_icons.dart';
@@ -82,6 +83,8 @@ class AllReportsBodyState extends State<AllReportsBody> {
   bool _permission = false;
   String error;
   var _markers = List<Marker>();
+  List<Requests> req_list;
+  List<int> users_to_req_idx = List();
 
   //This is a poor mans threadish way to doing processing on the side without deadlocking async
   void delayedProcessing() {
@@ -218,19 +221,31 @@ class AllReportsBodyState extends State<AllReportsBody> {
 
   void _getMarkers() {
     if (globals.userName == globals.guestName) {
-      for (var i=0; i<CityData().limited_req_resp.requests.length; i++) {
+      users_to_req_idx = List();
+      req_list = List();
+      //Get index of limited to list to total list so when user selects items they get the item they selected
+      for (int j=0; j<CityData().limited_req_resp.requests.length; j++) {
+        for (int i=0; i<CityData().req_resp.requests.length; i++) {
+          if (CityData().req_resp.requests[i].service_request_id == CityData().limited_req_resp.requests[j].service_request_id) {
+            req_list.add(new Requests.fromJson(CityData().limited_req_resp.requests[j].toJson()));
+            users_to_req_idx.add(i);
+            break;
+          }
+        }
+      }
+      for (var i=0; i<req_list.length; i++) {
         _markers.add(
           new Marker(
             width: 40.0,
             height: 40.0,
-            point: LatLng(CityData().limited_req_resp.requests[i].lat, CityData().limited_req_resp.requests[i].lon),
+            point: LatLng(req_list[i].lat, req_list[i].lon),
             builder: (ctx) => new Container(
               child: new GestureDetector(
                 child: new IconButton(
                   icon: new Icon(Icons.place, color: Colors.orange),
                   highlightColor: CustomColors.salmon,
                   onPressed: () {
-                    CityData().prevReqIdx = i;
+                    CityData().prevReqIdx = users_to_req_idx[i];
                     Navigator.of(context).pushNamed('/view_submitted_item');
                   }
                 ),
@@ -240,12 +255,14 @@ class AllReportsBodyState extends State<AllReportsBody> {
         );
       }
     } else {
-      for (var i=0; i<CityData().req_resp.requests.length; i++) {
+      req_list = List();
+      CityData().req_resp.requests.forEach((r) => req_list.add(new Requests.fromJson(r.toJson())));
+      for (var i=0; i<req_list.length; i++) {
         _markers.add(
           new Marker(
             width: 40.0,
             height: 40.0,
-            point: LatLng(CityData().req_resp.requests[i].lat, CityData().req_resp.requests[i].lon),
+            point: LatLng(req_list[i].lat, req_list[i].lon),
             builder: (ctx) => new Container(
               child: new GestureDetector(
                 child: new IconButton(

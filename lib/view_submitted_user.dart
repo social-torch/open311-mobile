@@ -8,6 +8,7 @@ import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
 import 'utils.dart';
 import 'requests.dart';
+import 'select_city_common.dart';
 import "globals.dart" as globals;
 
 class ViewSubmittedUserPage extends Page {
@@ -30,6 +31,8 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
   ViewSubmittedUserBodyState();
 
   Widget _bodyWidget;
+  List<int> users_to_req_idx = List();
+  List<Requests> users_list;
 
   Future<Widget> getBodyFuture() async {
     Widget retval;
@@ -60,15 +63,17 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
       while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
         sleep(const Duration(seconds: 1));
       }
-      List<int> users_to_req_idx = List();
-      List<Requests> users_list = List();
       if ( (CityData().users_resp != null) && (CityData().users_resp.submitted_request_ids.length > 0) ) {
-        for (int i=0; i<CityData().req_resp.requests.length; i++) {
-          if (CityData().users_resp.submitted_request_ids.indexWhere((idx) => idx == CityData().req_resp.requests[i].service_request_id) != -1 ) {
-            users_list.add(CityData().req_resp.requests[i]);
-            users_to_req_idx.add(i);
+        setState(() {
+          users_to_req_idx = List();
+          users_list = List();
+          for (int i=0; i<CityData().req_resp.requests.length; i++) {
+            if (CityData().users_resp.submitted_request_ids.indexWhere((idx) => idx == CityData().req_resp.requests[i].service_request_id) != -1 ) {
+              users_list.add(new Requests.fromJson(CityData().req_resp.requests[i].toJson()));
+              users_to_req_idx.add(i);
+            }
           }
-        }
+        });
       }
       retval = new Expanded(
         child: new ListView.builder (
@@ -153,10 +158,6 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: need to show loading... screen while we wait for data
-    while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
-      sleep(const Duration(seconds: 1));
-    }
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),

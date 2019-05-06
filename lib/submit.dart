@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:image/image.dart' as imagelib;
 import 'package:http/http.dart' as http;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -133,10 +134,14 @@ class SubmitBodyState extends State<SubmitBody> {
         //Parse out url
         S3endpoint s3ep = S3endpoint.fromJson(s3rep.data);
 
-        //Now that we have url, send image
+        //shrink image
+        imagelib.Image img = imagelib.decodeImage(ReportData().image.readAsBytesSync());
+        imagelib.Image shrunk = imagelib.copyResize(img, 1024);
+
+        //Now that we have url and shrunk the input image, send image
         var put_resp = await http.put(
           s3ep.url,
-          body: ReportData().image.readAsBytesSync(),
+          body: imagelib.encodeNamedImage(shrunk, media_url),
           headers: {"Content-Type": "image/" + media_url.split(".").last}
         );
       }
@@ -183,7 +188,6 @@ class SubmitBodyState extends State<SubmitBody> {
         return true;
       }());
       retval = successBody();
-      //Update lists of requests to include latest addition
       getRequests(globals.endpoint311 + "/requests");
     } catch (e) {
       print(e);

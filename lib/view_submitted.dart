@@ -30,25 +30,46 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
   ViewSubmittedBodyState();
 
   Widget _bodyWidget;
+  List<Requests> req_list;
+  List<int> limited_to_req_idx = List();
 
   Future<Widget> getBodyFuture() async {
     while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
       sleep(const Duration(seconds: 1));
     }
-    RequestsResponse req_resp = CityData().req_resp;
-    if (globals.userName == globals.guestName)
-    {
-      req_resp = CityData().limited_req_resp;
-    }
+
+    setState(() {
+      limited_to_req_idx = List();
+      req_list = List();
+      if (globals.userName == globals.guestName) {
+        //Get index of limited to list to total list so when user selects items they get the item they selected
+        for (int j=0; j<CityData().limited_req_resp.requests.length; j++) {
+          for (int i=0; i<CityData().req_resp.requests.length; i++) {
+            if (CityData().req_resp.requests[i].service_request_id == CityData().limited_req_resp.requests[j].service_request_id) {
+              req_list.add(new Requests.fromJson(CityData().limited_req_resp.requests[j].toJson()));
+              limited_to_req_idx.add(i);
+              break;
+            }
+          }
+        }
+      } else {
+        CityData().req_resp.requests.forEach((r) => req_list.add(new Requests.fromJson(r.toJson())));
+      }
+    });
+
     return new Expanded(
       child: new ListView.builder (
-        itemCount: req_resp.requests.length,
+        itemCount: req_list.length,
         itemBuilder: (BuildContext ctxt, int Index) {
           return  new Column( 
             children: [ 
               new ColorSliverButton(
                 onPressed: () {
-                  CityData().prevReqIdx = Index;
+                  if (globals.userName == globals.guestName) {
+                    CityData().prevReqIdx = limited_to_req_idx[Index];
+                  } else {
+                    CityData().prevReqIdx = Index;
+                  }
                   nextPage();
                 },
                 child: Expanded( 
@@ -57,10 +78,10 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                     children: [
                       Column(
                         children: [
-                          Text(req_resp.requests[Index].service_name + " " + getBasicAddress(req_resp.requests[Index].address)),
+                          Text(req_list[Index].service_name + " " + getBasicAddress(req_list[Index].address)),
                           Row(
                             children: [
-                              Text(getTimeString(req_resp.requests[Index].requested_datetime)),
+                              Text(getTimeString(req_list[Index].requested_datetime)),
                               Container(
                                 width: 15.0,
                               ),
@@ -69,12 +90,12 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                                 height: DeviceData().ButtonHeight * 0.4,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                    color: getStatusColor(req_resp.requests[Index].status),
+                                    color: getStatusColor(req_list[Index].status),
                                 ),
                                 child: Column(
                                   children: [
                                     Text(
-                                      req_resp.requests[Index].status,
+                                      req_list[Index].status,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ]
@@ -121,10 +142,6 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: need to show loading... screen while we wait for data
-    while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
-      sleep(const Duration(seconds: 1));
-    }
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),

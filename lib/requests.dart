@@ -75,7 +75,6 @@ class Requests {
     'lon':lon + 0.0,
     'media_url':media_url,
   };
-  
 }
 
 class RequestsResponse {
@@ -92,4 +91,20 @@ class RequestsResponse {
   RequestsResponse.withError(String errorValue)
       : requests = List(),
         error = errorValue;
+}
+
+class RequestsReturn {
+  final String service_request_id;
+  final String service_notice;
+  final String account_id;
+
+  RequestsReturn(
+    this.service_request_id,
+    this.service_notice,
+    this.account_id);
+
+  RequestsReturn.fromJson(Map<String, dynamic> json)
+  : service_request_id = json["service_request_id"],
+    service_notice = json["service_notice"],
+    account_id = json["account_id"];
 }
