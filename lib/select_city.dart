@@ -12,6 +12,7 @@ import "custom_colors.dart";
 import "select_city_common.dart";
 import "bottom_app_bar.dart";
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 
 class SelectCityPage extends Page {
   SelectCityPage() : super(const Icon(Icons.map), APP_NAME);
@@ -111,8 +112,16 @@ class SelectCityBodyState extends State<SelectCityBody> {
       if (globals.userName == null)
       {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        globals.userName = prefs.getString('userName');
-        globals.userPass = prefs.getString('userPass');
+        final String u_encrypted = prefs.getString('userName');
+        final String p_encrypted = prefs.getString('userPass');
+        try {
+          final cryptor = new PlatformStringCryptor();
+          globals.userName = await cryptor.decrypt(u_encrypted, globals.key);
+          globals.userPass = await cryptor.decrypt(p_encrypted, globals.key);
+        } on MacMismatchException {
+          globals.userName = "";
+          globals.userPass = "";
+        }
       }
 
       final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);

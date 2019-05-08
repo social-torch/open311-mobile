@@ -7,6 +7,7 @@ import 'custom_colors.dart';
 import 'custom_widgets.dart';
 import "globals.dart" as globals;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_string_encryption/flutter_string_encryption.dart';
 
 class SettingsPage extends Page {
   SettingsPage() : super(const Icon(Icons.map), APP_NAME);
@@ -68,8 +69,11 @@ class SettingsBodyState extends State<SettingsBody> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (saveCreds) {
       //Save creds into persistent storage
-      await prefs.setString('userName', globals.userName);
-      await prefs.setString('userPass', globals.userPass);
+      final cryptor = new PlatformStringCryptor();
+      final String u_encrypted = await cryptor.encrypt(globals.userName, globals.key);
+      final String p_encrypted = await cryptor.encrypt(globals.userPass, globals.key);
+      await prefs.setString('userName', u_encrypted);
+      await prefs.setString('userPass', p_encrypted);
       await prefs.setBool('autoLogIn', true);
     } else {
       //Remove creds from persistent storage

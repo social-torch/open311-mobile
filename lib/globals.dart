@@ -12,6 +12,7 @@ String userPass;
 String userAccessToken = 'nada';
 String userIdToken = 'nada';
 String userRefreshToken = 'nada';
+String key = '0c2wJPlVWHQO/ElsmUwzCg==:kdHdM0JVNKLMS2rLZG3T4M32tgzBbpRhyWtl4vxGgFM=';
 
 String endpoint311base = 'https://api.socialtorch.org';
 //TODO: variable(s) below needs to be modified when user selects default city and persist after app closes
