@@ -6,6 +6,7 @@ import 'data.dart';
 import 'custom_colors.dart';
 import 'my_homepage.dart';
 import 'custom_widgets.dart';
+import 'ensure_visibile_when_focused.dart';
 
 final userPool = new CognitoUserPool(
     globals.userPoolId, globals.clientPoolId );
@@ -38,6 +39,13 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
 
   final registrationFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  FocusNode _focusNodeUser = new FocusNode();
+  FocusNode _focusNodePass = new FocusNode();
+  FocusNode _focusNodePassVerify = new FocusNode();
+  FocusNode _focusNodeEmail = new FocusNode();
+  FocusNode _focusNodeFirstName = new FocusNode();
+  FocusNode _focusNodeLastName = new FocusNode();
 
   @override
   void dispose() {
@@ -121,107 +129,131 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                           )
                         ),
                         Container(height: 30.0),
-                        TextFormField(
-                          controller: usernameController,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.person),
-                            hintText: 'Username',
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodeUser,
+                          child: new TextFormField(
+                            controller: usernameController,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.person),
+                              hintText: 'Username',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return value.contains('@') ? 'Do not use the @ char.' : null;
+                            },
+                            focusNode: _focusNodeUser,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value.contains('@') ? 'Do not use the @ char.' : null;
-                          },
                         ),
                         Container(
                           height: 10.0
                         ),
-                        TextFormField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.lock),
-                            hintText: 'Password',
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodePass,
+                          child: new TextFormField(
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.lock),
+                              hintText: 'Password',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return value == passwordAgainController.text ? null : "Passwords must match.";
+                            },
+                            focusNode: _focusNodePass,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value == passwordAgainController.text ? null : "Passwords must match.";
-                          },
                         ),
                         Container(
                           height: 10.0
                         ),
-                        TextFormField(
-                          controller: passwordAgainController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.lock),
-                            hintText: 'Password (Repeat)',
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodePassVerify,
+                          child: new TextFormField(
+                            controller: passwordAgainController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.lock),
+                              hintText: 'Password (Repeat)',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return value == passwordController.text ? null : "Passwords must match.";
+                            },
+                            focusNode: _focusNodePassVerify,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value == passwordController.text ? null : "Passwords must match.";
-                          },
                         ),
                         Container(
                           height: 10.0
                         ),
-                        TextFormField (
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.people),
-                            hintText: 'E-mail',
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodeEmail,
+                          child: new TextFormField (
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.people),
+                              hintText: 'E-mail',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return value.length > 5 && value.contains("@") ? null: "Invalid email";
+                            },
+                            focusNode: _focusNodeEmail,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value.length > 5 && value.contains("@") ? null: "Invalid email";
-                          },
                         ),
                         Container(
                           height: 10.0
                         ),
                         //Number special character upper and lowercase letter, 8 characters minimum
-                        TextFormField (
-                          controller: givenNameController,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.people),
-                            hintText: 'First Name',
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodeFirstName,
+                          child: new TextFormField (
+                            controller: givenNameController,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.people),
+                              hintText: 'First Name',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return value.length < 1 ? "First name must not be empty" : null;
+                            },
+                            focusNode: _focusNodeFirstName,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value.length < 1 ? "First name must not be empty" : null;
-                          },
                         ),
                         Container(
                           height: 10.0
                         ),
-                        TextFormField(
-                          controller: familyNameController,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.people),
-                            hintText: 'Last Name',
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodeLastName,
+                          child: new TextFormField(
+                            controller: familyNameController,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.people),
+                              hintText: 'Last Name',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return value.length < 1 ? "Last name must not be empty" : null;
+                            },
+                            focusNode: _focusNodeLastName,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value.length < 1 ? "Last name must not be empty" : null;
-                          },
                         ),
                         Container(
                           height: 30.0,

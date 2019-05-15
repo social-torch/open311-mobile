@@ -7,6 +7,7 @@ import 'globals.dart' as globals;
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
+import 'ensure_visibile_when_focused.dart';
 
 final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);
@@ -34,6 +35,8 @@ class ResetPasswordPageBodyState extends State<ResetPasswordPageBody> {
 
   final registrationFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  FocusNode _focusNodeUser = new FocusNode();
 
   @override
   void dispose() {
@@ -107,19 +110,23 @@ class ResetPasswordPageBodyState extends State<ResetPasswordPageBody> {
                           )
                       ),
                       Container(height: 30.0),
-                      TextFormField(
-                        controller: usernameController,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.person),
-                          hintText: 'Username',
-                          ),
-                        onSaved: (String value) {
-                        // This optional block of code can be used to run
-                        // code when the user saves the form.
-                        },
-                        validator: (String value) {
-                          return value.contains('@') ? 'Do not use the @ char.' : null;
-                        },
+                      new EnsureVisibleWhenFocused(
+                        focusNode: _focusNodeUser,
+                        child: new TextFormField(
+                          controller: usernameController,
+                          decoration: const InputDecoration(
+                            icon: Icon(Icons.person),
+                            hintText: 'Username',
+                            ),
+                          onSaved: (String value) {
+                          // This optional block of code can be used to run
+                          // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return value.contains('@') ? 'Do not use the @ char.' : null;
+                          },
+                          focusNode: _focusNodeUser,
+                        ),
                       ),
                       Container(
                         height: 15.0,

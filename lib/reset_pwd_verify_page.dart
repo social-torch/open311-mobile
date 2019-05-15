@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
+import 'ensure_visibile_when_focused.dart';
 
 class ConfirmResetPasswordPage extends Page {
   final CognitoUser cognitoUser;
@@ -30,6 +31,10 @@ class ConfirmResetPasswordPageBodyState extends State<ConfirmResetPasswordPageBo
 
   final registrationFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  FocusNode _focusNodeNewPass = new FocusNode();
+  FocusNode _focusNodeNewPassVerify = new FocusNode();
+  FocusNode _focusNodeConfCode = new FocusNode();
 
   @override
   void dispose() {
@@ -81,49 +86,61 @@ class ConfirmResetPasswordPageBodyState extends State<ConfirmResetPasswordPageBo
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget> [
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'New Password',
+              new EnsureVisibleWhenFocused(
+                focusNode: _focusNodeNewPass,
+                child: new TextFormField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'New Password',
                   ),
-                onSaved: (String value) {
-                // This optional block of code can be used to run
-                // code when the user saves the form.
-                },
-                validator: (String value) {
-                  return value == passwordVerifyController.text ? null : "Passwords must match.";
-                },
-              ),
-              TextFormField(
-                controller: passwordVerifyController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'New Password (Verify)',
+                  onSaved: (String value) {
+                    // This optional block of code can be used to run
+                    // code when the user saves the form.
+                  },
+                  validator: (String value) {
+                    return value == passwordVerifyController.text ? null : "Passwords must match.";
+                  },
+                  focusNode: _focusNodeNewPass,
                 ),
-                onSaved: (String value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
-                },
-                validator: (String value) {
-                  return value == passwordController.text ? null : "Passwords must match.";
-                },
               ),
-              TextFormField(
-                controller: confirmCodeController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'Confirmation Code',
+              new EnsureVisibleWhenFocused(
+                focusNode: _focusNodeNewPassVerify,
+                child: new TextFormField(
+                  controller: passwordVerifyController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'New Password (Verify)',
+                  ),
+                  onSaved: (String value) {
+                    // This optional block of code can be used to run
+                    // code when the user saves the form.
+                  },
+                  validator: (String value) {
+                    return value == passwordController.text ? null : "Passwords must match.";
+                  },
+                  focusNode: _focusNodeNewPassVerify,
                 ),
-                onSaved: (String value) {
-                  // This optional block of code can be used to run
-                  // code when the user saves the form.
-                },
-                validator: (String value) {
-                  return value.contains('@') ? 'Do not use the @ char.' : null;
-                },
+              ),
+              new EnsureVisibleWhenFocused(
+                focusNode: _focusNodeConfCode,
+                child: new TextFormField(
+                  controller: confirmCodeController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'Confirmation Code',
+                  ),
+                  onSaved: (String value) {
+                    // This optional block of code can be used to run
+                    // code when the user saves the form.
+                  },
+                  validator: (String value) {
+                    return value.contains('@') ? 'Do not use the @ char.' : null;
+                  },
+                  focusNode: _focusNodeConfCode,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
