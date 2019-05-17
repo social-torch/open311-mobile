@@ -37,7 +37,7 @@ class AuthPageBody extends StatefulWidget {
 class AuthPageBodyState extends State<AuthPageBody> {
   AuthPageBodyState();
 
-  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   final registrationFormKey = GlobalKey<FormState>();
@@ -51,15 +51,15 @@ class AuthPageBodyState extends State<AuthPageBody> {
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
 
   void authenticate() async {
-    final cognitoUser = new CognitoUser(usernameController.text, userPool);
+    final cognitoUser = new CognitoUser(emailController.text, userPool);
     final authDetails = new AuthenticationDetails(
-        username: usernameController.text, password:
+        username: emailController.text, password:
     passwordController.text);
     CognitoUserSession session;
     try {
@@ -73,7 +73,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userAccessToken = session.getAccessToken().getJwtToken();
       globals.userIdToken = session.getIdToken().getJwtToken();
       globals.userRefreshToken = session.getRefreshToken().getToken();
-      globals.userName = usernameController.text;
+      globals.userName = emailController.text;
       globals.userPass = passwordController.text;
 
       //Save creds into persistent storage
@@ -186,17 +186,14 @@ class AuthPageBodyState extends State<AuthPageBody> {
                       new EnsureVisibleWhenFocused(
                         focusNode: _focusNodeUser,
                         child: new TextFormField(
-                          controller: usernameController,
+                          controller: emailController,
                           decoration: const InputDecoration(
                             icon: Icon(Icons.person),
-                            hintText: 'Username',
+                            hintText: 'Email',
                           ),
                           onSaved: (String value) {
                             // This optional block of code can be used to run
                             // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return value.contains('@') ? 'Do not use the @ char.' : null;
                           },
                           onFieldSubmitted: (value) {
                             _focusNodeUser.unfocus();
