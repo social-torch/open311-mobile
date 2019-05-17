@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
 import 'globals.dart' as globals;
+import 'ensure_visible_when_focused.dart';
 
 final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);
@@ -29,6 +30,8 @@ class ResendConfirmPageBodyState extends State<ResendConfirmPageBody> {
 
   final registrationFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  FocusNode _focusNodeUser = new FocusNode();
 
   @override
   void dispose() {
@@ -70,19 +73,23 @@ class ResendConfirmPageBodyState extends State<ResendConfirmPageBody> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget> [
-              TextFormField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'Username',
+              new EnsureVisibleWhenFocused(
+                focusNode: _focusNodeUser,
+                child: new TextFormField(
+                  controller: usernameController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    hintText: 'Username',
                   ),
-                onSaved: (String value) {
-                // This optional block of code can be used to run
-                // code when the user saves the form.
-                },
-                validator: (String value) {
-                  return value.contains('@') ? 'Do not use the @ char.' : null;
-                },
+                  onSaved: (String value) {
+                  // This optional block of code can be used to run
+                  // code when the user saves the form.
+                  },
+                  validator: (String value) {
+                    return value.contains('@') ? 'Do not use the @ char.' : null;
+                  },
+                  focusNode: _focusNodeUser,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),

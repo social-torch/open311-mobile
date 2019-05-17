@@ -221,7 +221,11 @@ class LocationUiBodyState extends State<LocationUiBody> {
                   controller: addrController,
                   labelText: 'Enter a location',
                   onEditingComplete: () {
-                    _addressToLatLng(addrController.text);
+                    if ( addrController.text != "" ) {
+                      _addressToLatLng(addrController.text);
+                    } else {
+                      FocusScope.of(context).detach();
+                    }
                   },
                 ),
                 Flexible( 

@@ -32,6 +32,7 @@ Future<int> getUsers(endpoint) async {
       print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
+    sleep(const Duration(seconds: 1));
     getUsers(endpoint).then((cnt) { retval += cnt; });
   }
   return retval;
@@ -57,6 +58,7 @@ Future<int> getServices(endpoint) async {
       print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
+    sleep(const Duration(seconds: 1));
     getServices(endpoint).then((cnt) { retval += cnt; });
   }
   return retval;
@@ -98,6 +100,7 @@ Future<int> getRequests(endpoint) async {
       print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
+    sleep(const Duration(seconds: 1));
     getRequests(endpoint).then((cnt) { retval += cnt; });
   }
 }
