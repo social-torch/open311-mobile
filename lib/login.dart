@@ -136,21 +136,20 @@ class AuthPageBodyState extends State<AuthPageBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(APP_NAME),
         backgroundColor: CustomColors.appBarColor,
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: commonBottomBar(context),
-      body: Row (
-        children: [
-          Container(
-            width: 36.0,
-          ),
-          Expanded(
-            child: ListView(
+      key: _scaffoldKey,
+      body: SafeArea(
+        top: false,
+        bottom: false,
+        child: Form(
+          child: new SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 36.0),
+            child: Column(
               children: [
                 Form(
                   key: registrationFormKey,
@@ -275,10 +274,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
               ],
             ),
           ),
-          Container(
-            width: 36.0,
-          ),
-        ]
+        ),
       ),
     );
   }

@@ -139,7 +139,12 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                     validator: (String value) {
                       return value.contains('@') ? 'Do not use the @ char.' : null;
                     },
+                    onFieldSubmitted: (value) {
+                      _focusNodeUser.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodePass);
+                    },
                     focusNode: _focusNodeUser,
+                    textInputAction: TextInputAction.next,
                   ),
                 ),
                 Container(
@@ -161,7 +166,12 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                     validator: (String value) {
                       return value == passwordAgainController.text ? null : "Passwords must match.";
                     },
+                    onFieldSubmitted: (value) {
+                      _focusNodePass.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodePassVerify);
+                    },
                     focusNode: _focusNodePass,
+                    textInputAction: TextInputAction.next,
                   ),
                 ),
                 Container(
@@ -183,7 +193,12 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                     validator: (String value) {
                       return value == passwordController.text ? null : "Passwords must match.";
                     },
+                    onFieldSubmitted: (value) {
+                      _focusNodePassVerify.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodeEmail);
+                    },
                     focusNode: _focusNodePassVerify,
+                    textInputAction: TextInputAction.next,
                   ),
                 ),
                 Container(
@@ -204,7 +219,12 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                     validator: (String value) {
                       return value.length > 5 && value.contains("@") ? null: "Invalid email";
                     },
+                    onFieldSubmitted: (value) {
+                      _focusNodeEmail.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodeFirstName);
+                    },
                     focusNode: _focusNodeEmail,
+                    textInputAction: TextInputAction.next,
                   ),
                 ),
                 Container(
@@ -226,7 +246,12 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                     validator: (String value) {
                       return value.length < 1 ? "First name must not be empty" : null;
                     },
+                    onFieldSubmitted: (value) {
+                      _focusNodeFirstName.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodeLastName);
+                    },
                     focusNode: _focusNodeFirstName,
+                    textInputAction: TextInputAction.next,
                   ),
                 ),
                 Container(
