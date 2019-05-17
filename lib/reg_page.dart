@@ -6,7 +6,7 @@ import 'data.dart';
 import 'custom_colors.dart';
 import 'my_homepage.dart';
 import 'custom_widgets.dart';
-import 'ensure_visibile_when_focused.dart';
+import 'ensure_visible_when_focused.dart';
 
 final userPool = new CognitoUserPool(
     globals.userPoolId, globals.clientPoolId );

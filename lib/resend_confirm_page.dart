@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
 import 'globals.dart' as globals;
-import 'ensure_visibile_when_focused.dart';
+import 'ensure_visible_when_focused.dart';
 
 final userPool = new CognitoUserPool(
   globals.userPoolId, globals.clientPoolId);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'page.dart';
-import 'ensure_visibile_when_focused.dart';
+import 'ensure_visible_when_focused.dart';
 
 class ConfirmResetPasswordPage extends Page {
   final CognitoUser cognitoUser;

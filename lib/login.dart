@@ -12,7 +12,7 @@ import 'globals.dart' as globals;
 import 'custom_colors.dart';
 import 'my_homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'ensure_visibile_when_focused.dart';
+import 'ensure_visible_when_focused.dart';
 
 
 final userPool = new CognitoUserPool(
@@ -196,7 +196,12 @@ class AuthPageBodyState extends State<AuthPageBody> {
                           validator: (String value) {
                             return value.contains('@') ? 'Do not use the @ char.' : null;
                           },
+                          onFieldSubmitted: (value) {
+                            _focusNodeUser.unfocus();
+                            FocusScope.of(context).requestFocus(_focusNodePass);
+                          },
                           focusNode: _focusNodeUser,
+                          textInputAction: TextInputAction.next,
                         ),
                       ),
                       Container(
