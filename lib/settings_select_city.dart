@@ -66,6 +66,7 @@ class SettingsSelectCityBodyState extends State<SettingsSelectCityBody> {
         print("Exception occured: $error stackTrace: $stacktrace");
         return true;
       }());
+      sleep(const Duration(seconds: 1));
       getBodyText().then((wdgt) {
         retval = wdgt;
       });
