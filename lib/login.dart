@@ -46,6 +46,8 @@ class AuthPageBodyState extends State<AuthPageBody> {
   FocusNode _focusNodeUser = new FocusNode();
   FocusNode _focusNodePass = new FocusNode();
 
+  bool authenticating = false;
+
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
@@ -233,7 +235,8 @@ class AuthPageBodyState extends State<AuthPageBody> {
                         onPressed: () {
                           // Validate will return true if the form is valid, or false if
                           // the form is invalid.
-                          if (registrationFormKey.currentState.validate()) {
+                          if ( !authenticating && registrationFormKey.currentState.validate()) {
+                            authenticating = true;
                             authenticate();
                           }
                         },
