@@ -191,17 +191,19 @@ class AllReportsBodyState extends State<AllReportsBody> {
   //Given a service code find its index in the list of total service codes and
   //  and derive a color from it.  Try and handle as many colors as possible
   //  to enable future service codes.
-  Color _getColorOfService(String service_code)
+  
+  Color _getColorOfService(String serviceName)
   {
     Color retval = Colors.orange;
     int i = 0;
     for (i=0; i<CityData().serv_resp.services.length; i++)
     {
-      if (CityData().serv_resp.services[i].service_code == service_code)
+      if (CityData().serv_resp.services[i].service_name == serviceName)
       {
-        break; //Found our index break now so we can derive a color from the index
+        break;
       }
     }
+
     //We only have so many primaries, use shades for indices that go over
     if (i >= Colors.primaries.length) {
       int shadeIdx = ( i / Colors.primaries.length ).toInt();
@@ -209,7 +211,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
         shadeIdx++; //500 is a primary switch to 600
       } else if (shadeIdx > 9) {
         shadeIdx = 9; //We have run out of colors eek!
-        print("Need to update color selection code we have run out of colors");
+        print("Need to udate color selection code we have run out of colors");
       }
       int primaryIdx = i % Colors.primaries.length;
       retval = Colors.primaries[primaryIdx][shadeIdx];
@@ -242,7 +244,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
             builder: (ctx) => new Container(
               child: new GestureDetector(
                 child: new IconButton(
-                  icon: new Icon(Icons.place, color: Colors.orange),
+                  icon: new Icon(Icons.place, color: _getColorOfService(req_list[i].service_name)),
                   highlightColor: CustomColors.salmon,
                   onPressed: () {
                     CityData().prevReqIdx = users_to_req_idx[i];
@@ -266,7 +268,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
             builder: (ctx) => new Container(
               child: new GestureDetector(
                 child: new IconButton(
-                  icon: new Icon(Icons.place, color: Colors.orange),
+                  icon: new Icon(Icons.place, color: _getColorOfService(req_list[i].service_name),),
                   highlightColor: CustomColors.salmon,
                   onPressed: () {
                     CityData().prevReqIdx = i;
@@ -304,7 +306,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
     if (_markerLoc == null) {
       _markerLoc = _defaultLoc;
     }
-   
+
     final fm = FlutterMap(
       mapController: _mapController,
       options: new MapOptions(
@@ -331,9 +333,9 @@ class AllReportsBodyState extends State<AllReportsBody> {
         backgroundColor: CustomColors.appBarColor,
       ),
       bottomNavigationBar: commonBottomBar(context),
-      body: new Column( 
+      body: new Column(
         children: [
-          new Flexible( 
+          new Flexible(
             child: Stack(
               children: [
                 fm,
