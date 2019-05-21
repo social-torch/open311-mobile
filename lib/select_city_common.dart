@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'data.dart';
@@ -32,8 +33,10 @@ Future<int> getUsers(endpoint) async {
       print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
-    sleep(const Duration(seconds: 1));
-    getUsers(endpoint).then((cnt) { retval += cnt; });
+    //This is a poor mans threadish way to doing processing on the side without deadlocking async
+    compute(sleepThread, 1).then((num) { 
+      getUsers(endpoint).then((cnt) { retval += cnt; });
+    });
   }
   return retval;
 }
@@ -58,8 +61,10 @@ Future<int> getServices(endpoint) async {
       print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
-    sleep(const Duration(seconds: 1));
-    getServices(endpoint).then((cnt) { retval += cnt; });
+    //This is a poor mans threadish way to doing processing on the side without deadlocking async
+    compute(sleepThread, 1).then((num) { 
+      getServices(endpoint).then((cnt) { retval += cnt; });
+    });
   }
   return retval;
 }
@@ -100,16 +105,15 @@ Future<int> getRequests(endpoint) async {
       print("Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
-    sleep(const Duration(seconds: 1));
-    getRequests(endpoint).then((cnt) { retval += cnt; });
+
+    //This is a poor mans threadish way to doing processing on the side without deadlocking async
+    compute(sleepThread, 1).then((num) {
+      getRequests(endpoint).then((cnt) { retval += cnt; });
+    });
   }
 }
 
 Widget setMyCity(BuildContext context, String nextPage) {
-  //TODO: verify the sleep below is no longer needed
-  while (CityData().cities_resp == null) {
-    sleep(const Duration(seconds: 1));
-  }
   return Expanded( 
     child: new ListView.builder (
       itemCount: CityData().cities_resp.cities.length,

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:amazon_cognito_identity_dart/cognito.dart';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'page.dart';
 import 'data.dart';
 import 'login.dart';
 import "cities.dart";
+import "utils.dart";
 import "globals.dart" as globals;
 import "custom_widgets.dart";
 import "custom_colors.dart";
 import "select_city_common.dart";
 import "bottom_app_bar.dart";
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SelectCityPage extends Page {
   SelectCityPage() : super(const Icon(Icons.map), APP_NAME);
@@ -53,9 +53,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
   }
 
   Future<Widget> getBodyText() async {
-    
     Widget retval;
-    await authenticate();
     final Dio dio = Dio();
     try {
       Response response = await dio.get(
@@ -81,9 +79,11 @@ class SelectCityBodyState extends State<SelectCityBody> {
         print("Exception occured: $error stackTrace: $stacktrace");
         return true;
       }());
-      sleep(const Duration(seconds: 1));
-      getBodyText().then((wdgt) {
-        retval = wdgt;
+      //This is a poor mans threadish way to doing processing on the side without deadlocking async
+      compute(sleepThread, 1).then((num) {
+        getBodyText().then((wdgt) {
+          retval = wdgt;
+        });
       });
     }
 
@@ -105,67 +105,6 @@ class SelectCityBodyState extends State<SelectCityBody> {
     }
   }
 
-  void authenticate() async {
-    try {
-
-      //First attempt to pull user/pass from persistent data, unless user is guest
-      if (globals.userName == null)
-      {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        globals.userName = prefs.getString('userName');
-        globals.userPass = prefs.getString('userPass');
-      }
-
-      final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
-      final cognitoUser = new CognitoUser(globals.userName, userPool);
-      final authDetails = new AuthenticationDetails(
-        username: globals.userName,
-        password: globals.userPass);
-      CognitoUserSession session = await cognitoUser.authenticateUser(authDetails);
-      globals.userAccessToken = session.getAccessToken().getJwtToken();
-      globals.userIdToken = session.getIdToken().getJwtToken();
-      globals.userRefreshToken = session.getRefreshToken().getToken();
-      assert(() {
-        if (false) {
-          //Using assert here for debug only prints
-          print("userAccessToken:");
-          print(globals.userAccessToken);
-          print("userIdToken:");
-          print(globals.userIdToken);
-          print("userRefreshToken:");
-          print(globals.userRefreshToken);
-        }
-        return true;
-      }());
-    } on CognitoUserNewPasswordRequiredException catch (e) {
-      // handle New Password challenge
-      print(e);
-    } on CognitoUserMfaRequiredException catch (e) {
-      // handle SMS_MFA challenge
-      print(e);
-    } on CognitoUserSelectMfaTypeException catch (e) {
-      // handle SELECT_MFA_TYPE challenge
-      print(e);
-    } on CognitoUserMfaSetupException catch (e) {
-      // handle MFA_SETUP challenge
-      print(e);
-    } on CognitoUserTotpRequiredException catch (e) {
-      // handle SOFTWARE_TOKEN_MFA challenge
-      print(e);
-    } on CognitoUserCustomChallengeException catch (e) {
-      // handle CUSTOM_CHALLENGE challenge
-      print(e);
-    } on CognitoUserConfirmationNecessaryException catch (e) {
-      // handle User Confirmation Necessary
-      print(e);
-    } catch (e) {
-      //If saved user/pass is for whatever reason invalid, login using guest
-      print(e);
-      globals.userName = globals.guestName;
-      globals.userPass = globals.guestPass;
-      await authenticate();
-    }
-  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold (

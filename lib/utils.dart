@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'custom_colors.dart';
+import 'dart:io';
 
 Color getStatusColor(status) {
   var retval = CustomColors.salmon;
@@ -54,4 +55,9 @@ String getLatestDateString(datestr1, datestr2) {
   }
 
   return retval;
+}
+
+int sleepThread(int input) {
+  sleep(const Duration(seconds: 1));
+  return input;
 }

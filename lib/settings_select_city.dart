@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'page.dart';
 import 'data.dart';
+import 'utils.dart';
 import 'cities.dart';
 import "custom_widgets.dart";
 import "custom_colors.dart";
@@ -66,9 +68,11 @@ class SettingsSelectCityBodyState extends State<SettingsSelectCityBody> {
         print("Exception occured: $error stackTrace: $stacktrace");
         return true;
       }());
-      sleep(const Duration(seconds: 1));
-      getBodyText().then((wdgt) {
-        retval = wdgt;
+      //This is a poor mans threadish way to doing processing on the side without deadlocking async
+      compute(sleepThread, 1).then((num) {
+        getBodyText().then((wdgt) {
+          retval = wdgt;
+        });
       });
     }
     return retval;

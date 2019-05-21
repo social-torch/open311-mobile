@@ -25,6 +25,8 @@ import "globals.dart" as globals;
 import "reset_pwd_page.dart";
 import "reg_page.dart";
 import "confirm_page.dart";
+import 'authenticate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:io';
 
@@ -72,6 +74,7 @@ class _MyAppState extends State<MyApp> {
   //Initialize App Device data
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
+  authenticate();
 
   return new SplashScreen(
       seconds: 3,

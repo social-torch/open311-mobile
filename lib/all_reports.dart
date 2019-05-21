@@ -9,6 +9,7 @@ import 'package:latlong/latlong.dart';
 import 'package:geocoder/geocoder.dart';
 import 'page.dart';
 import 'data.dart';
+import 'utils.dart';
 import 'requests.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
@@ -181,11 +182,6 @@ class AllReportsBodyState extends State<AllReportsBody> {
       });
       _mapController.move(_markerLoc, _defaultZoom);
     }
-  }
-
-  static int sleepThread(int input) {
-    sleep(const Duration(seconds: 1));
-    return input;
   }
 
   //Given a service code find its index in the list of total service codes and

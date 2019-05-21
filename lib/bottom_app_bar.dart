@@ -6,6 +6,7 @@ import 'settings.dart';
 import 'custom_colors.dart';
 import 'globals.dart' as globals;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'authenticate.dart';
 
 String navPage = "nada";
 String basePage = "/nada"; //No base page, but maybe someday there will be?
@@ -163,6 +164,9 @@ Widget commonBottomBar(context) {
 
                       //Remove saved info from persistent store
                       resetPersistentData();
+
+                      //Login as guest
+                      authenticate();
 
                       Navigator.of(context).pushReplacementNamed('/select_city');
                     } else {
