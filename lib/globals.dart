@@ -1,6 +1,7 @@
 library open311.globals;
 
 import 'package:camera/camera.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 List<CameraDescription> cameras;
 String userPoolId = 'us-east-1_NeYs2Npv8';
@@ -12,6 +13,8 @@ String userPass;
 String userAccessToken = 'nada';
 String userIdToken = 'nada';
 String userRefreshToken = 'nada';
+
+final key = encrypt.Key.fromUtf8('0c2wJPlVWHQO/ElsmUwzCg==:kdHdM0JVNKLMS2rLZG3T4M32tgzBbpRhyWtl4vxGgFM=');
 
 String endpoint311base = 'https://api.socialtorch.org';
 //TODO: variable(s) below needs to be modified when user selects default city and persist after app closes

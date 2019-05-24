@@ -25,7 +25,7 @@ import "globals.dart" as globals;
 import "reset_pwd_page.dart";
 import "reg_page.dart";
 import "confirm_page.dart";
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 Future<void> main() async {
@@ -73,6 +73,11 @@ class _MyAppState extends State<MyApp> {
   DeviceData().ButtonHeight = MediaQuery.of(context).size.height * 0.08;
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
 
+  
+  // see if there's persistent data, if so update global.dart
+  getSavedPrefs();
+  
+
   return new SplashScreen(
       seconds: 3,
       navigateAfterSeconds: SelectCityPage(),
@@ -93,4 +98,10 @@ class _MyAppState extends State<MyApp> {
       loaderColor: Colors.red
     );
   }
+}
+getSavedPrefs() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String userName = prefs.getString('userName') ?? ''; 
+  String userPass = prefs.getString('userPass') ?? '';  
+  String endpoint311 = prefs.getString('endpoint311') ?? 'nada';
 }

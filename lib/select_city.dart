@@ -12,6 +12,7 @@ import "custom_colors.dart";
 import "select_city_common.dart";
 import "bottom_app_bar.dart";
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 class SelectCityPage extends Page {
   SelectCityPage() : super(const Icon(Icons.map), APP_NAME);
@@ -111,8 +112,14 @@ class SelectCityBodyState extends State<SelectCityBody> {
       if (globals.userName == null)
       {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        globals.userName = prefs.getString('userName');
-        globals.userPass = prefs.getString('userPass');
+
+	// encryption shiz
+  	final encryptedUid = prefs.getString('userName');
+  	final encryptedPass = prefs.getString('userPass');
+	final iv = encrypt.IV.fromLength(16);
+  	final encrypter = encrypt.Encrypter(encrypt.AES(globals.key));
+	globals.userName = encrypter.decrypt64(encryptedUid, iv: iv);
+ 	globals.userPass = encrypter.decrypt64(encryptedPass, iv: iv);
       }
 
       final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
@@ -205,5 +212,3 @@ class SelectCityBodyState extends State<SelectCityBody> {
     );
   }
 }
-
-

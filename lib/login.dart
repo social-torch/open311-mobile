@@ -13,6 +13,7 @@ import 'custom_colors.dart';
 import 'my_homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ensure_visibile_when_focused.dart';
+import 'package:encrypt/encrypt.dart';
 
 
 final userPool = new CognitoUserPool(
@@ -74,10 +75,17 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userName = usernameController.text;
       globals.userPass = passwordController.text;
 
+      final iv = IV.fromLength(16);
+      final encrypter = Encrypter(AES(globals.key));
+      final encryptedUid = encrypter.encrypt(globals.userName, iv: iv);
+      final encryptedPwd = encrypter.encrypt(globals.userPass, iv: iv);
+
       //Save creds into persistent storage
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userName', globals.userName);
-      await prefs.setString('userPass', globals.userPass);
+      await prefs.setString('userName', encryptedUid.toString());
+      await prefs.setString('userPass', encryptedPwd.toString());
+
+
       bool autoLogIn = prefs.getBool('autoLogIn');
       //Default to auto log in unless user has specified otherwise previously
       if (autoLogIn == null) {
