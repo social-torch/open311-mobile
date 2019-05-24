@@ -84,19 +84,31 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   Widget _getImg() {
     Widget retval = new Stack(
       children: [
-        Container(
+        new GestureDetector(
+          onTap: () {
+            CityData().itemSelected = true; 
+            Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
+          },
+          child: Container(
           height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
           width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
           decoration: BoxDecoration(
             color: Colors.white,
           ),
         ),
+        ),
         Positioned(
           bottom: ((MediaQuery.of(context).size.width * 0.5) - 39.0)/2.0,
           child: Text("No image available"),
         ),
         Positioned(
-          child: _getValidImg(context),
+          child: GestureDetector(
+            onTap: () {
+              CityData().itemSelected = true;
+              Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
+            },
+            child:  _getValidImg(context),
+          ),
         ),
       ]
     );

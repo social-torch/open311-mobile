@@ -251,6 +251,12 @@ class AllReportsBodyState extends State<AllReportsBody> {
             ),
           ),
         );
+        if ( (CityData().itemSelected != null) && CityData().itemSelected && (CityData().prevReqIdx == users_to_req_idx[i]) ) {
+          _mapController.move(LatLng(CityData().req_resp.requests[CityData().prevReqIdx].lat, 
+                                     CityData().req_resp.requests[CityData().prevReqIdx].lon),
+                              _mapController.zoom);
+          CityData().itemSelected = false;
+        }
       }
     } else {
       req_list = List();
@@ -275,6 +281,12 @@ class AllReportsBodyState extends State<AllReportsBody> {
             ),
           ),
         );
+        if ( (CityData().itemSelected != null) && CityData().itemSelected && (CityData().prevReqIdx == i) ) {
+          _mapController.move(LatLng(CityData().req_resp.requests[CityData().prevReqIdx].lat, 
+                                     CityData().req_resp.requests[CityData().prevReqIdx].lon),
+                              _mapController.zoom);
+          CityData().itemSelected = false;
+        }
       }
     }
     if (_currentLocation != null) {
