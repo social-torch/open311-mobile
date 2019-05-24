@@ -82,7 +82,13 @@ class SelectCityBodyState extends State<SelectCityBody> {
       //This is a poor mans threadish way to doing processing on the side without deadlocking async
       compute(sleepThread, 1).then((num) {
         getBodyText().then((wdgt) {
-          retval = wdgt;
+          //This is a bit odd, but since this is part of compute it will never return,
+          // but we can set state and get the effect we want anyway.
+          if (wdgt != null) {
+            setState(() {
+              _bodyWidget = wdgt;
+            });
+          }
         });
       });
     }

@@ -31,7 +31,9 @@ class NewReportBodyState extends State<NewReportBody> {
   NewReportBodyState();
 
   void getImage(ImageSource source) async {
-    await ImagePicker.pickImage(source: source).then((img) {
+    await ImagePicker.pickImage(source: source,
+                                maxWidth: 640,
+                                maxHeight: 480).then((img) {
       ReportData().image = img;
     });
     locPage();

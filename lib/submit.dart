@@ -135,13 +135,14 @@ class SubmitBodyState extends State<SubmitBody> {
         S3endpoint s3ep = S3endpoint.fromJson(s3rep.data);
 
         //shrink image
-        imagelib.Image img = imagelib.decodeImage(ReportData().image.readAsBytesSync());
-        imagelib.Image shrunk = imagelib.copyResize(img, 1024);
+        //imagelib.Image img = imagelib.decodeImage(ReportData().image.readAsBytesSync());
+        //imagelib.Image shrunk = imagelib.copyResize(img, 1024);
+          //body: imagelib.encodeNamedImage(shrunk, media_url),
 
         //Now that we have url and shrunk the input image, send image
         var put_resp = await http.put(
           s3ep.url,
-          body: imagelib.encodeNamedImage(shrunk, media_url),
+          body: ReportData().image.readAsBytesSync(),
           headers: {"Content-Type": "image/" + media_url.split(".").last}
         );
       }
