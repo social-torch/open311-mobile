@@ -91,9 +91,17 @@ class AllReportsBodyState extends State<AllReportsBody> {
   void delayedProcessing() {
     compute(sleepThread, 1).then((num) {
       if ((CityData().req_resp != null) && (CityData().limited_req_resp != null) && (CityData().serv_resp != null) ) {
-        setState(() {
-          _getMarkers();
-        });
+        try {
+          setState(() {
+            _getMarkers();
+          });
+        } catch (e) {
+          assert(() {
+            //Using assert here for debug only prints
+            print("User switched menu's before markers loaded, ignoring");
+            return true;
+          }());
+        }
       }
       else
       {

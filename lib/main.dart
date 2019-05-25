@@ -26,7 +26,6 @@ import "reset_pwd_page.dart";
 import "reg_page.dart";
 import "confirm_page.dart";
 import 'authenticate.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:io';
 

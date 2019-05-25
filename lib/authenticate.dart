@@ -1,6 +1,7 @@
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "globals.dart" as globals;
+import 'package:encrypt/encrypt.dart' as encrypt;
 
 void authenticate() async {
   try {
@@ -9,8 +10,17 @@ void authenticate() async {
     if (globals.userName == null)
     { 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      globals.userName = prefs.getString('userName');
-      globals.userPass = prefs.getString('userPass');
+      final encryptedUid = prefs.getString('userName');
+      final encryptedPass = prefs.getString('userPass');
+      if ( (encryptedUid == null) || (encryptedUid == "") || (encryptedUid == globals.guestName) ) {
+        globals.userName = globals.guestName;
+        globals.userPass = globals.guestPass;
+      } else {
+        final iv = encrypt.IV.fromLength(16);
+        final encrypter = encrypt.Encrypter(encrypt.AES(globals.key));
+        globals.userName = encrypter.decrypt16(encryptedUid, iv: iv);
+        globals.userPass = encrypter.decrypt16(encryptedPass, iv: iv);
+      }
     }
     
     final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
