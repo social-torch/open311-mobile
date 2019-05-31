@@ -2,6 +2,32 @@ import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import "globals.dart" as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
+import 'dart:async';
+
+CognitoUserSession _cog_user_session;
+CognitoUser _cog_user;
+
+void startRefreshTokTimer() async {
+  const duration = const Duration(seconds: 3600);
+  if ( (globals.refresh_tok_timer != null) && (globals.refresh_tok_timer.isActive) ) {
+    globals.refresh_tok_timer.cancel();
+  }
+  globals.refresh_tok_timer = new Timer.periodic(
+    duration,
+    (timer) {
+      try {
+        _cog_user.refreshSession(CognitoRefreshToken(globals.userRefreshToken)).then((cus) {
+          _cog_user_session = cus;
+          globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
+          globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+          globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
+  );
+}
 
 void authenticate() async {
   try {
@@ -24,14 +50,14 @@ void authenticate() async {
     }
     
     final userPool = new CognitoUserPool(globals.userPoolId, globals.clientPoolId);
-    final cognitoUser = new CognitoUser(globals.userName, userPool);
+    _cog_user = new CognitoUser(globals.userName, userPool);
     final authDetails = new AuthenticationDetails(
       username: globals.userName,
       password: globals.userPass);
-    CognitoUserSession session = await cognitoUser.authenticateUser(authDetails);
-    globals.userAccessToken = session.getAccessToken().getJwtToken();
-    globals.userIdToken = session.getIdToken().getJwtToken();
-    globals.userRefreshToken = session.getRefreshToken().getToken();
+    _cog_user_session = await _cog_user.authenticateUser(authDetails);
+    globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
+    globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+    globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
     assert(() {
       if (false) {
         //Using assert here for debug only prints
@@ -44,6 +70,7 @@ void authenticate() async {
       }
       return true;
     }());
+    startRefreshTokTimer();
   } on CognitoUserNewPasswordRequiredException catch (e) {
     // handle New Password challenge
     print(e);

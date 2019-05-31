@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:amazon_cognito_identity_dart/cognito.dart';
 import 'dart:io';
+import 'dart:async';
 import 'page.dart';
 import 'data.dart';
 import 'custom_widgets.dart';
@@ -15,6 +16,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ensure_visible_when_focused.dart';
 import 'package:encrypt/encrypt.dart';
 
+CognitoUserSession _cog_user_session;
+CognitoUser _cog_user;
 
 final userPool = new CognitoUserPool(
     globals.userPoolId, globals.clientPoolId);
@@ -57,23 +60,44 @@ class AuthPageBodyState extends State<AuthPageBody> {
     super.dispose();
   }
 
+  void startRefreshTokTimer() async {
+    const duration = const Duration(seconds: 3600);
+    if ( (globals.refresh_tok_timer != null) && (globals.refresh_tok_timer.isActive) ) {
+      globals.refresh_tok_timer.cancel();
+    }
+    globals.refresh_tok_timer = new Timer.periodic(
+      duration,
+      (timer) {
+        try {
+          _cog_user.refreshSession(CognitoRefreshToken(globals.userRefreshToken)).then((cus) {
+            _cog_user_session = cus;
+            globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
+            globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+            globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
+          });
+        } catch (e) {
+          print(e);
+        }
+      }
+    );
+  }
+
   void authenticate() async {
-    final cognitoUser = new CognitoUser(emailController.text, userPool);
+    _cog_user = new CognitoUser(emailController.text, userPool);
     final authDetails = new AuthenticationDetails(
         username: emailController.text, password:
     passwordController.text);
-    CognitoUserSession session;
     try {
-      session = await cognitoUser.authenticateUser(authDetails);
+      _cog_user_session = await _cog_user.authenticateUser(authDetails);
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
           content: new Text('Authenticated!'),
           duration: new Duration(seconds: 5),
         ),
       );
-      globals.userAccessToken = session.getAccessToken().getJwtToken();
-      globals.userIdToken = session.getIdToken().getJwtToken();
-      globals.userRefreshToken = session.getRefreshToken().getToken();
+      globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
+      globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+      globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
       globals.userName = emailController.text;
       globals.userPass = passwordController.text;
 
@@ -104,6 +128,8 @@ class AuthPageBodyState extends State<AuthPageBody> {
         }
         return true;
       }());
+
+      startRefreshTokTimer();
 
       //This is a bit of a hack but force bottom app bar to change color appropriately
       navPage = "/all_reports";
