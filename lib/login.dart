@@ -133,7 +133,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
 
       //This is a bit of a hack but force bottom app bar to change color appropriately
       navPage = "/all_reports";
-      Navigator.of(context).pushReplacementNamed('/all_reports');
+      Navigator.of(context).pushNamedAndRemoveUntil('/all_reports', ModalRoute.withName('/nada'));
     } on CognitoUserNewPasswordRequiredException catch (e) {
       // handle New Password challenge
       print(e);
@@ -169,6 +169,20 @@ class AuthPageBodyState extends State<AuthPageBody> {
 
   @override
   Widget build(BuildContext context) {
+
+    if (globals.popupMsg != "") {
+      Timer(Duration(seconds: 1), () {
+        _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            backgroundColor: CustomColors.salmon,
+            content: new Text(globals.popupMsg),
+            duration: new Duration(seconds: 5),
+          ),
+        );
+        globals.popupMsg = "";
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(APP_NAME),

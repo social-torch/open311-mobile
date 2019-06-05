@@ -30,32 +30,29 @@ class RegistrationPageBody extends StatefulWidget {
 class RegistrationPageBodyState extends State<RegistrationPageBody> {
   RegistrationPageBodyState();
 
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final passwordAgainController = TextEditingController();
   final givenNameController = TextEditingController();
   final familyNameController = TextEditingController();
   final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordAgainController = TextEditingController();
 
   final registrationFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  FocusNode _focusNodeUser = new FocusNode();
-  FocusNode _focusNodePass = new FocusNode();
-  FocusNode _focusNodePassVerify = new FocusNode();
-  FocusNode _focusNodeEmail = new FocusNode();
   FocusNode _focusNodeFirstName = new FocusNode();
   FocusNode _focusNodeLastName = new FocusNode();
+  FocusNode _focusNodeEmail = new FocusNode();
+  FocusNode _focusNodePass = new FocusNode();
+  FocusNode _focusNodePassVerify = new FocusNode();
 
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
-    usernameController.dispose();
-    passwordController.dispose();
-    passwordAgainController.dispose();
     familyNameController.dispose();
     givenNameController.dispose();
     emailController.dispose();
+    passwordController.dispose();
+    passwordAgainController.dispose();
     super.dispose();
   }
 
@@ -66,7 +63,12 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
         new AttributeArg(name: 'family_name', value: familyNameController.text),
         new AttributeArg(name: 'email', value: emailController.text),
       ];
-      await userPool.signUp(usernameController.text, passwordController.text,
+   
+      //Pass new username to confirm page via globals, not perfect but meh.
+      globals.usernameSignup = emailController.text.split("@")[0];
+
+      //Attempt signup with info user provided.
+      await userPool.signUp(emailController.text.split("@")[0], passwordController.text,
           userAttributes: userAttributes);
       //_scaffoldKey.currentState.showSnackBar(
       //  SnackBar(
@@ -125,31 +127,76 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                 ),
                 Container(height: 30.0),
                 new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeUser,
-                  child: new TextFormField(
-                    controller: usernameController,
+                  focusNode: _focusNodeFirstName,
+                  child: new TextFormField (
+                    controller: givenNameController,
                     decoration: const InputDecoration(
-                      icon: Icon(Icons.person),
-                      hintText: 'Username',
+                      icon: Icon(Icons.people),
+                      hintText: 'First Name',
                     ),
                     onSaved: (String value) {
                       // This optional block of code can be used to run
                       // code when the user saves the form.
                     },
                     validator: (String value) {
-                      return value.contains('@') ? 'Do not use the @ char.' : null;
+                      return value.length < 1 ? "First name must not be empty" : null;
                     },
                     onFieldSubmitted: (value) {
-                      _focusNodeUser.unfocus();
-                      FocusScope.of(context).requestFocus(_focusNodePass);
+                      _focusNodeFirstName.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodeLastName);
                     },
-                    focusNode: _focusNodeUser,
+                    focusNode: _focusNodeFirstName,
                     textInputAction: TextInputAction.next,
                   ),
                 ),
-                Container(
-                  height: 10.0
+                Container(height: 10.0),
+                new EnsureVisibleWhenFocused(
+                  focusNode: _focusNodeLastName,
+                  child: new TextFormField(
+                    controller: familyNameController,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.people),
+                      hintText: 'Last Name',
+                    ),
+                    onSaved: (String value) {
+                      // This optional block of code can be used to run
+                      // code when the user saves the form.
+                    },
+                    validator: (String value) {
+                      return value.length < 1 ? "Last name must not be empty" : null;
+                    },
+                    onFieldSubmitted: (value) {
+                      _focusNodeFirstName.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodeEmail);
+                    },
+                    focusNode: _focusNodeLastName,
+                    textInputAction: TextInputAction.next,
+                  ),
                 ),
+                new EnsureVisibleWhenFocused(
+                  focusNode: _focusNodeEmail,
+                  child: new TextFormField (
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.people),
+                      hintText: 'E-mail',
+                    ),
+                    onSaved: (String value) {
+                      // This optional block of code can be used to run
+                      // code when the user saves the form.
+                    },
+                    validator: (String value) {
+                      return value.length > 5 && value.contains("@") ? null: "Invalid email";
+                    },
+                    onFieldSubmitted: (value) {
+                      _focusNodeEmail.unfocus();
+                      FocusScope.of(context).requestFocus(_focusNodePass);
+                    },
+                    focusNode: _focusNodeEmail,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ),
+                Container(height: 10.0),
                 new EnsureVisibleWhenFocused(
                   focusNode: _focusNodePass,
                   child: new TextFormField(
@@ -193,86 +240,7 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
                     validator: (String value) {
                       return value == passwordController.text ? null : "Passwords must match.";
                     },
-                    onFieldSubmitted: (value) {
-                      _focusNodePassVerify.unfocus();
-                      FocusScope.of(context).requestFocus(_focusNodeEmail);
-                    },
                     focusNode: _focusNodePassVerify,
-                    textInputAction: TextInputAction.next,
-                  ),
-                ),
-                Container(
-                  height: 10.0
-                ),
-                new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeEmail,
-                  child: new TextFormField (
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.people),
-                      hintText: 'E-mail',
-                    ),
-                    onSaved: (String value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
-                    validator: (String value) {
-                      return value.length > 5 && value.contains("@") ? null: "Invalid email";
-                    },
-                    onFieldSubmitted: (value) {
-                      _focusNodeEmail.unfocus();
-                      FocusScope.of(context).requestFocus(_focusNodeFirstName);
-                    },
-                    focusNode: _focusNodeEmail,
-                    textInputAction: TextInputAction.next,
-                  ),
-                ),
-                Container(
-                  height: 10.0
-                ),
-                //Number special character upper and lowercase letter, 8 characters minimum
-                new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeFirstName,
-                  child: new TextFormField (
-                    controller: givenNameController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.people),
-                      hintText: 'First Name',
-                    ),
-                    onSaved: (String value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
-                    validator: (String value) {
-                      return value.length < 1 ? "First name must not be empty" : null;
-                    },
-                    onFieldSubmitted: (value) {
-                      _focusNodeFirstName.unfocus();
-                      FocusScope.of(context).requestFocus(_focusNodeLastName);
-                    },
-                    focusNode: _focusNodeFirstName,
-                    textInputAction: TextInputAction.next,
-                  ),
-                ),
-                Container(
-                  height: 10.0
-                ),
-                new EnsureVisibleWhenFocused(
-                  focusNode: _focusNodeLastName,
-                  child: new TextFormField(
-                    controller: familyNameController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.people),
-                      hintText: 'Last Name',
-                    ),
-                    onSaved: (String value) {
-                      // This optional block of code can be used to run
-                      // code when the user saves the form.
-                    },
-                    validator: (String value) {
-                      return value.length < 1 ? "Last name must not be empty" : null;
-                    },
-                    focusNode: _focusNodeLastName,
                   ),
                 ),
                 Container(

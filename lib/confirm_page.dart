@@ -29,7 +29,6 @@ class ConfirmPageBody extends StatefulWidget {
 class ConfirmPageBodyState extends State<ConfirmPageBody> {
   ConfirmPageBodyState();
 
-  final usernameController = TextEditingController();
   final codeController = TextEditingController();
 
   final registrationFormKey = GlobalKey<FormState>();
@@ -38,14 +37,13 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
-    usernameController.dispose();
     codeController.dispose();
     super.dispose();
   }
 
   void confirm() async {
     try {
-      final cognitoUser = new CognitoUser(usernameController.text, userPool);
+      final cognitoUser = new CognitoUser(globals.usernameSignup, userPool);
       await cognitoUser.confirmRegistration(codeController.text);
       _scaffoldKey.currentState.showSnackBar(
         SnackBar(
@@ -53,6 +51,7 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
           duration: new Duration(seconds: 5),
         ),
       );
+      globals.popupMsg = "Registration Complete, please log in";
       Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
       _scaffoldKey.currentState.showSnackBar(
@@ -99,20 +98,6 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
                     textScaleFactor: 1.0,
                   )
                 )
-              ),
-              TextFormField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.person),
-                  hintText: 'Username',
-                  ),
-                onSaved: (String value) {
-                // This optional block of code can be used to run
-                // code when the user saves the form.
-                },
-                validator: (String value) {
-                  return value.contains('@') ? 'Do not use the @ char.' : null;
-                },
               ),
               TextFormField(
                 controller: codeController,

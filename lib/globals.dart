@@ -14,6 +14,10 @@ String userPass;
 String userAccessToken = 'nada';
 String userIdToken = 'nada';
 String userRefreshToken = 'nada';
+String usernameSignup = 'nada';
+
+//Global info for popup messages, if string has data then next page that loads should show it
+String popupMsg = "";
 
 final key = encrypt.Key.fromUtf8('afahefa674qio62i2nfazf2hgqlc9g74');
 
