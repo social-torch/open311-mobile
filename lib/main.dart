@@ -26,6 +26,7 @@ import "reset_pwd_page.dart";
 import "reg_page.dart";
 import "confirm_page.dart";
 import 'authenticate.dart';
+import 'request_new_city.dart';
 
 import 'dart:io';
 
@@ -57,6 +58,7 @@ Future<void> main() async {
     '/registration': (context) => RegistrationPage(),
     '/confirm': (context) => ConfirmPage(),
     '/select_city': (context) => SelectCityPage(),
+    '/request_new_city': (context) => RequestNewCityPage(),
   },
   ));
 }

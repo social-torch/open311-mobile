@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
@@ -137,6 +138,21 @@ class SelectCityBodyState extends State<SelectCityBody> {
                       textScaleFactor: 2.0,
                     ),
                   ),
+                ),
+                Container(height: 30.0),
+                RichText(
+                  text: new TextSpan (
+                    children: [
+                      new TextSpan(
+                        text: "Don't see your city?",
+                        style: new TextStyle(color: Colors.blue),
+                        recognizer: new TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushNamed('/request_new_city');
+                        },
+                      ),
+                    ],
+                  )
                 ),
                 Container(height: 30.0),
                 _getBody(context),
