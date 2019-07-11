@@ -7,7 +7,7 @@ import 'ensure_visible_when_focused.dart';
 import 'us_states.dart';
 import 'package:dio/dio.dart';
 import "globals.dart" as globals;
-
+import 'cities.dart';
 
 class RequestNewCityPage extends Page {
   RequestNewCityPage() : super(const Icon(Icons.map), APP_NAME);
@@ -45,11 +45,29 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
   FocusNode _focusNodeComment = new FocusNode();
 
   void submitRequest() {
-    //setState(() {
-   //   ReportData().description = descController.text;
-   // });
- 
-   // Navigator.of(context).pushNamedAndRemoveUntil('/submit', ModalRoute.withName('/login'));
+    String rac_city;
+    String rac_state;
+    String rac_first_name;
+    String rac_last_name;
+    String rac_email;
+    String rac_feedback;
+
+    setState(() {
+      rac_city = cityController.text;
+      rac_state = state;
+      rac_first_name = firstnameController.text ?? "";
+      rac_last_name = lastnameController.text ?? "";
+      rac_email = emailController.text ?? "";
+      rac_feedback = commentController.text ?? "";
+    });
+
+    RequestAddCity rac = RequestAddCity( rac_city, rac_state, rac_first_name, rac_last_name, rac_email, rac_feedback);
+
+    print(rac.toJson());
+
+   //TODO: send via Dio
+   
+    Navigator.of(context).pop();
   }
 
   @override
@@ -104,6 +122,10 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
                         Text("   State: "), 
                         DropdownButton<String>(
                         value: state,
+                        style: new TextStyle(
+                          color: CustomColors.salmon,
+                          fontWeight: FontWeight.bold,
+                        ),
                         onChanged: (String newValue) {
                           setState(() {
                             state = newValue;
