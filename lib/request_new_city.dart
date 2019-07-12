@@ -61,13 +61,9 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
       rac_feedback = commentController.text ?? "";
     });
 
-    RequestAddCity rac = RequestAddCity( rac_city, rac_state, rac_first_name, rac_last_name, rac_email, rac_feedback);
+    CityData().rac_resp = RequestAddCity( rac_city, rac_state, rac_first_name, rac_last_name, rac_email, rac_feedback);
 
-    print(rac.toJson());
-
-   //TODO: send via Dio
-   
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed("/submit_new_city");
   }
 
   @override
@@ -154,7 +150,7 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
                             // code when the user saves the form.
                           },
                           validator: (String value) {
-                            return value.length < 1 ? "City must not be empty" : null;
+                            return value.length < 2 || value.length > 100 ? "City must be between 2 and 100 characters" : null;
                           },
                           onFieldSubmitted: (value) {
                             _focusNodeCity.unfocus();
@@ -176,6 +172,9 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
                             // This optional block of code can be used to run
                             // code when the user saves the form.
                           },
+                          validator: (String value) {
+                            return value.length > 100 ? "Name must be less than 100 characters" : null;
+                          },
                           onFieldSubmitted: (value) {
                             _focusNodeFirstname.unfocus();
                             FocusScope.of(context).requestFocus(_focusNodeLastname);
@@ -196,6 +195,9 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
                             // This optional block of code can be used to run
                             // code when the user saves the form.
                           },
+                          validator: (String value) {
+                            return value.length > 100 ? "Name must be less than 100 characters" : null;
+                          },
                           onFieldSubmitted: (value) {
                             _focusNodeLastname.unfocus();
                             FocusScope.of(context).requestFocus(_focusNodeEmail);
@@ -215,6 +217,9 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
                           onSaved: (String value) {
                             // This optional block of code can be used to run
                             // code when the user saves the form.
+                          },
+                          validator: (String value) {
+                            return (value.length == 0 || (value.length > 5 && value.contains("@"))) ? null : "Invalid Email";
                           },
                           onFieldSubmitted: (value) {
                             _focusNodeEmail.unfocus();

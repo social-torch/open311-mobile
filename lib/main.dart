@@ -27,6 +27,7 @@ import "reg_page.dart";
 import "confirm_page.dart";
 import 'authenticate.dart';
 import 'request_new_city.dart';
+import 'submit_new_city.dart';
 
 import 'dart:io';
 
@@ -59,6 +60,7 @@ Future<void> main() async {
     '/confirm': (context) => ConfirmPage(),
     '/select_city': (context) => SelectCityPage(),
     '/request_new_city': (context) => RequestNewCityPage(),
+    '/submit_new_city': (context) => SubmitNewCityPage(),
   },
   ));
 }

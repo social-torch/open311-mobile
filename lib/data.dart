@@ -64,6 +64,7 @@ class CityData{
   RequestsResponse req_resp;
   RequestsResponse limited_req_resp;
   Users users_resp;
+  RequestAddCity rac_resp;
   int prevReqIdx; /*Hack, should pass this as part of view_submitted_item.dart constructor*/
   bool itemSelected;
 
