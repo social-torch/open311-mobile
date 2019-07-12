@@ -139,7 +139,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
                     ),
                   ),
                 ),
-                Container(height: 30.0),
+                Container(height: 10.0),
                 RichText(
                   text: new TextSpan (
                     children: [
@@ -154,7 +154,7 @@ class SelectCityBodyState extends State<SelectCityBody> {
                     ],
                   )
                 ),
-                Container(height: 30.0),
+                Container(height: 10.0),
                 _getBody(context),
               ]
             ),
