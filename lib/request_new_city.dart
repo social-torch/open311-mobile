@@ -114,26 +114,26 @@ class RequestNewCityBodyState extends State<RequestNewCityBody> {
                         width: double.infinity,
                         child: Row(
                           children: [
-                        Icon(Icons.business), 
-                        Text("   State: "), 
-                        DropdownButton<String>(
-                        value: state,
-                        style: new TextStyle(
-                          color: CustomColors.salmon,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            state = newValue;
-                          });
-                        },
-                        items: us_states.map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
+                            Icon(Icons.business), 
+                            Text("   State: "), 
+                            DropdownButton<String>(
+                              value: state,
+                              style: new TextStyle(
+                                color: CustomColors.salmon,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  state = newValue;
+                                });
+                              },
+                              items: us_states.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
                           ]
                         ),
                       ),

@@ -70,6 +70,8 @@ Positioned __guestRestrictionMessage() {
 class AllReportsBodyState extends State<AllReportsBody> {
   AllReportsBodyState();
  
+  String filterItem = "Loading";
+
   final addrController = TextEditingController();
   //Map variables
   var _defaultLoc = LatLng(42.8137, -73.9398);
@@ -86,6 +88,12 @@ class AllReportsBodyState extends State<AllReportsBody> {
   var _markers = List<Marker>();
   List<Requests> req_list;
   List<int> users_to_req_idx = List();
+  List<DropdownMenuItem<String>> req_type_filter_dd = [
+    DropdownMenuItem(
+      value: 'Loading',
+      child: Text('Loading...')
+    ),
+  ];
 
   //This is a poor mans threadish way to doing processing on the side without deadlocking async
   void delayedProcessing() {
@@ -93,6 +101,31 @@ class AllReportsBodyState extends State<AllReportsBody> {
       if ((CityData().req_resp != null) && (CityData().limited_req_resp != null) && (CityData().serv_resp != null) ) {
         try {
           setState(() {
+            req_type_filter_dd = CityData().serv_resp.services.map((srv) {
+              return DropdownMenuItem<String>(
+                value: srv.service_name,
+                child: Row(
+                  children: [
+                    //Icon(Icons.filter, color: Colors.white),
+                    SizedBox(width: DeviceData().DeviceWidth/2.5, child: Text(" " + srv.service_name)),
+                  ]
+                ),
+              );
+            }).toList();
+            if (filterItem == "Loading") {
+              filterItem = "All";
+              req_type_filter_dd.insert(0,
+                DropdownMenuItem<String>(
+                  value: filterItem,
+                  child: Row(
+                    children: [
+                      //Icon(Icons.filter, color: Colors.white),
+                      SizedBox(width: DeviceData().DeviceWidth/2.5, child:  Text(" " + filterItem)),
+                    ]
+                  ),
+                )
+              );
+            }
             _getMarkers();
           });
         } catch (e) {
@@ -226,6 +259,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
   }
 
   void _getMarkers() {
+    _markers = List<Marker>();
     if (globals.userName == globals.guestName) {
       users_to_req_idx = List();
       req_list = List();
@@ -240,25 +274,27 @@ class AllReportsBodyState extends State<AllReportsBody> {
         }
       }
       for (var i=0; i<req_list.length; i++) {
-        _markers.add(
-          new Marker(
-            width: 40.0,
-            height: 40.0,
-            point: LatLng(req_list[i].lat, req_list[i].lon),
-            builder: (ctx) => new Container(
-              child: new GestureDetector(
-                child: new IconButton(
-                  icon: new Icon(Icons.place, color: _getColorOfService(req_list[i].service_name)),
-                  highlightColor: CustomColors.salmon,
-                  onPressed: () {
-                    CityData().prevReqIdx = users_to_req_idx[i];
-                    Navigator.of(context).pushNamed('/view_submitted_item');
-                  }
+        if ( (filterItem == "All") || (filterItem == req_list[i].service_name) ) { 
+          _markers.add(
+            new Marker(
+              width: 40.0,
+              height: 40.0,
+              point: LatLng(req_list[i].lat, req_list[i].lon),
+              builder: (ctx) => new Container(
+                child: new GestureDetector(
+                  child: new IconButton(
+                    icon: new Icon(Icons.place, color: _getColorOfService(req_list[i].service_name)),
+                    highlightColor: CustomColors.salmon,
+                    onPressed: () {
+                      CityData().prevReqIdx = users_to_req_idx[i];
+                      Navigator.of(context).pushNamed('/view_submitted_item');
+                    }
+                  ),
                 ),
               ),
             ),
-          ),
-        );
+          );
+        }
         if ( (CityData().itemSelected != null) && CityData().itemSelected && (CityData().prevReqIdx == users_to_req_idx[i]) ) {
           _mapController.move(LatLng(CityData().req_resp.requests[CityData().prevReqIdx].lat, 
                                      CityData().req_resp.requests[CityData().prevReqIdx].lon),
@@ -270,25 +306,27 @@ class AllReportsBodyState extends State<AllReportsBody> {
       req_list = List();
       CityData().req_resp.requests.forEach((r) => req_list.add(new Requests.fromJson(r.toJson())));
       for (var i=0; i<req_list.length; i++) {
-        _markers.add(
-          new Marker(
-            width: 40.0,
-            height: 40.0,
-            point: LatLng(req_list[i].lat, req_list[i].lon),
-            builder: (ctx) => new Container(
-              child: new GestureDetector(
-                child: new IconButton(
-                  icon: new Icon(Icons.place, color: _getColorOfService(req_list[i].service_name),),
-                  highlightColor: CustomColors.salmon,
-                  onPressed: () {
-                    CityData().prevReqIdx = i;
-                    Navigator.of(context).pushNamed('/view_submitted_item');
-                  }
+        if ( (filterItem == "All") || (filterItem == req_list[i].service_name) ) { 
+          _markers.add(
+            new Marker(
+              width: 40.0,
+              height: 40.0,
+              point: LatLng(req_list[i].lat, req_list[i].lon),
+              builder: (ctx) => new Container(
+                child: new GestureDetector(
+                  child: new IconButton(
+                    icon: new Icon(Icons.place, color: _getColorOfService(req_list[i].service_name),),
+                    highlightColor: CustomColors.salmon,
+                    onPressed: () {
+                      CityData().prevReqIdx = i;
+                      Navigator.of(context).pushNamed('/view_submitted_item');
+                    }
+                  ),
                 ),
               ),
             ),
-          ),
-        );
+          );
+        }
         if ( (CityData().itemSelected != null) && CityData().itemSelected && (CityData().prevReqIdx == i) ) {
           _mapController.move(LatLng(CityData().req_resp.requests[CityData().prevReqIdx].lat, 
                                      CityData().req_resp.requests[CityData().prevReqIdx].lon),
@@ -385,24 +423,55 @@ class AllReportsBodyState extends State<AllReportsBody> {
                   ),
                 ),
                 Positioned(
-                   top: 5.0,
-                  child: new Container (
-                    width: DeviceData().DeviceWidth,
-                    alignment: Alignment(0.0, 0.0),
-                    child: FlatButton(
+                  right: 5.0,
+                  top: 5.0,
+                  child: Container(
+                    decoration: new BoxDecoration(
                       color: CustomColors.appBarColor,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
-                      onPressed:() {
-                        Navigator.push (
-                          context,
-                          MaterialPageRoute(builder: (context) => ViewSubmittedPage()),
-                        );
-                      },
-                      child: new Text(
-                        "List View",
-                        textScaleFactor: 2.0,
+                      borderRadius: new BorderRadius.circular(9.0),
+                    ),
+                    child: new Theme(
+                      data: Theme.of(context).copyWith(
+                        canvasColor: CustomColors.appBarColor,
+                      ), 
+                      child: DropdownButtonHideUnderline(
+                        child: ButtonTheme(
+                          alignedDropdown: true,
+                          child: DropdownButton<String>(
+                            value: filterItem,
+                            style: new TextStyle(
+                              color: CustomColors.salmon,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                filterItem = newValue;
+                                _getMarkers();
+                              });
+                            },
+                            items: req_type_filter_dd,
+                          ),
+                        ),
                       ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 5.0,
+                  left: 5.0,
+                  child: FlatButton(
+                    color: CustomColors.appBarColor,
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
+                    onPressed:() {
+                      Navigator.push (
+                        context,
+                        MaterialPageRoute(builder: (context) => ViewSubmittedPage()),
+                      );
+                    },
+                    child: new Text(
+                      "List View",
+                      textScaleFactor: 2.0,
                     ),
                   ),
                 ),
