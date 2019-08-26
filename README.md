@@ -2,15 +2,21 @@
 
 The Open311 Project.
 
-## Getting Started
+## Building
 
-This project is a starting point for a Flutter application.
+First define required environment variables, values below are bogus:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+export OPEN311_COGNITO_USER_POOL="X"
+export OPEN311_COGNITO_CLIENT_POOL="Y"
+export OPEN311_GUEST_USERNAME="Z"
+export OPEN311_GUEST_PASSWORD="A"
+export OPEN311_ENCRYPT_KEY="B"
+export OPEN311_BASE_URL="C"
+```
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+then build using our build script which wraps the standard `flutter` executable:
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```bash
+./flutter_it.sh run
+```
