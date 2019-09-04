@@ -224,7 +224,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
                     if ( addrController.text != "" ) {
                       _addressToLatLng(addrController.text);
                     } else {
-                      FocusScope.of(context).detach();
+                      FocusScope.of(context).unfocus();
                     }
                   },
                 ),
