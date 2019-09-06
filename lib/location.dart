@@ -109,18 +109,26 @@ class LocationUiBodyState extends State<LocationUiBody> {
   }
 
   void _addressToLatLng(String address) async {
-    var addresses = await Geocoder.local.findAddressesFromQuery(address);
-    if (addresses.length > 0) {
-      var first = addresses.first;
+    try {
+      var addresses = await Geocoder.local.findAddressesFromQuery(address);
+      if (addresses.length > 0) {
+        var first = addresses.first;
+        assert(() {
+          //Using assert here for debug only prints
+          print("${first.featureName} : ${first.coordinates}");
+          return true;
+        } ());
+        setState(() {
+          _markerLoc = LatLng(first.coordinates.latitude, first.coordinates.longitude);
+        });
+        _mapController.move(_markerLoc, _defaultZoom);
+      }
+    } catch (error, stacktrace) {
       assert(() {
         //Using assert here for debug only prints
-        print("${first.featureName} : ${first.coordinates}");
+        print("_addressToLatLng Exception occured: $error stackTrace: $stacktrace");
         return true;
-      } ());
-      setState(() {
-        _markerLoc = LatLng(first.coordinates.latitude, first.coordinates.longitude);
-      });
-      _mapController.move(_markerLoc, _defaultZoom);
+      }());
     }
   }
 
