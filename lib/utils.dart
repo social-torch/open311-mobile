@@ -15,13 +15,17 @@ String getTimeString(timestr) {
   var tsdt = DateTime.parse(timestr);
   var timestr_local = tsdt.toLocal().toString();
   var timeAmPm = "12:00am";
-  if (int.tryParse(timestr_local.substring(11,13)) > 12)
+  if (int.tryParse(timestr_local.substring(11,13)) >= 12)
   {
-    timeAmPm = (int.tryParse(timestr_local.substring(11,13)) - 12).toString() + ":" + timestr_local.substring(14,16) + "pm";
+    var hours_pm = (int.tryParse(timestr_local.substring(11,13)) - 12).toString();
+    if (hours_pm == "0") { hours_pm = "12"; }
+    timeAmPm = hours_pm + ":" + timestr_local.substring(14,16) + "pm";
   }
   else
   {
-    timeAmPm = timestr_local.substring(11,13) + ":" + timestr_local.substring(14,16) + "am";
+    var hours_am = timestr_local.substring(11,13);
+    if (hours_am == "00") { hours_am = "12"; }
+    timeAmPm = hours_am + ":" + timestr_local.substring(14,16) + "am";
   }
   retval = timestr_local.substring(0,4) + "/" + timestr_local.substring(5,7) + "/" + timestr_local.substring(8,10) + ", " + timeAmPm;
   return retval;

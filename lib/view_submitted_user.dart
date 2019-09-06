@@ -75,6 +75,7 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
           }
         });
       }
+      if (users_list == null) { users_list = List(); }
       retval = new Expanded(
         child: new ListView.builder (
           itemCount: users_list.length,
