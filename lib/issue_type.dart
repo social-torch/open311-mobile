@@ -45,7 +45,7 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
                   ReportData().type_code = CityData().serv_resp.services[Index].service_code;
                   descPage();
                 },
-                child: Expanded( child: Column(children: [ Text(CityData().serv_resp.services[Index].service_name) ] ),),
+                child: Expanded( child: Column(children: [ Tooltip(message: CityData().serv_resp.services[Index].description, child: Text(CityData().serv_resp.services[Index].service_name)) ] ),),
               ),
               Container(height: 15.0),
             ]
