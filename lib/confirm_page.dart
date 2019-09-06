@@ -75,6 +75,7 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: SingleChildScrollView (
+        padding: const EdgeInsets.symmetric(horizontal: 36.0),
         child: Form(
           key: registrationFormKey,
           child: Column(
@@ -100,6 +101,7 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
                 )
               ),
               TextFormField(
+                keyboardType: TextInputType.number,
                 controller: codeController,
                 decoration: const InputDecoration(
                   icon: Icon(Icons.lock),
@@ -110,7 +112,7 @@ class ConfirmPageBodyState extends State<ConfirmPageBody> {
                   // code when the user saves the form.
                 },
                 validator: (String value) {
-                  return null;
+                  return ( (value.length < 1) || (num.tryParse(value) == null) ) ? "Please enter a valid registration code" : null;
                 },
               ),
               Padding(
