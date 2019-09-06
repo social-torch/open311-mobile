@@ -495,9 +495,8 @@ class AllReportsBodyState extends State<AllReportsBody> {
                       onEditingComplete: () {
                         if (addrController.text != "" ) {
                           _addressToLatLng(addrController.text);
-                        } else {
-                          FocusScope.of(context).unfocus();
                         }
+                        FocusScope.of(context).unfocus();
                       },
                     ),
                   ),
