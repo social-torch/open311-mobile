@@ -11,6 +11,7 @@ import 'custom_widgets.dart';
 import 'custom_icons.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
+import 'globals.dart' as globals;
 
 class LocationUiPage extends Page {
   LocationUiPage() : super(const Icon(Icons.map), APP_NAME);
@@ -37,6 +38,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
   LatLng _markerLoc = null;
   var _defaultZoom = 15.0;
   MapController _mapController = MapController();
+  bool usingDevLoc = true;
 
   //Location variables
   Map<String, double> _currentLocation;
@@ -48,9 +50,15 @@ class LocationUiBodyState extends State<LocationUiBody> {
   @override
   void initState() {
     initPlatformState();
+    getLocFromCitySelection();
     _locationSubscription = _location.onLocationChanged().listen((Map<String,double> result) {
       setState(() {
         _currentLocation = result;
+        if (!usingDevLoc) {
+          var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
+          _mapController.move(latlng, _mapController.zoom);
+          usingDevLoc = true;
+        }
         assert(() {
           //Using assert here for debug only prints
           print(_currentLocation["latitude"]);
@@ -73,6 +81,46 @@ class LocationUiBodyState extends State<LocationUiBody> {
     super.dispose();
   }
 
+    getLocFromCitySelection() async {
+    Map<String, double> location;
+
+    //Try location from base city
+    try { 
+      var addresses = await Geocoder.local.findAddressesFromQuery(CityData().cities_resp.cities[globals.cityIdx].city_name);
+      if (addresses.length > 0) {
+        var first = addresses.first;
+        assert(() {
+          //Using assert here for debug only prints
+          print("${first.featureName} : ${first.coordinates}");
+          return true;
+        } ());
+        setState(() {
+          location = Map<String,double>();
+          location["latitude"] = first.coordinates.latitude;
+          location["longitude"] = first.coordinates.longitude;
+        });
+      }
+    } catch (error, stacktrace) {
+      assert(() {
+        //Using assert here for debug only prints
+        print("Exception occured: $error stackTrace: $stacktrace");
+        return true;
+      }());
+    }
+
+    if (_currentLocation == null) {
+      var latlng = LatLng(location["latitude"], location["longitude"]);
+      setState(() {
+        _currentLocation = location;
+        _markerLoc = latlng;
+      });
+      if (_mapController != null) {
+        usingDevLoc = false;
+        _mapController.move(latlng, _defaultZoom);
+      }
+    }
+  }
+
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
     Map<String, double> location;
@@ -89,17 +137,24 @@ class LocationUiBodyState extends State<LocationUiBody> {
         error = 'Permission denied - please ask the user to enable it from the app settings';
       }
       //Default location to center on schenectady, ny
-      location["latitude"] = _defaultLoc.latitude;
-      location["longitude"] = _defaultLoc.longitude;
+      if (location == null) {
+        location = Map<String,double>();
+        location["latitude"] = _defaultLoc.latitude;
+        location["longitude"] = _defaultLoc.longitude;
+      }
     }
 
-    var latlng = LatLng(location["latitude"], location["longitude"]);
-    setState(() {
-      _currentLocation = location;
-      _markerLoc = latlng;
-    });
-    _mapController.move(latlng, _defaultZoom);
-    
+    if (_currentLocation == null) {
+      var latlng = LatLng(location["latitude"], location["longitude"]);
+      setState(() {
+        _currentLocation = location;
+        _markerLoc = latlng;
+      });
+      if (_mapController != null) {
+        usingDevLoc = false;
+        _mapController.move(latlng, _defaultZoom);
+      }
+    }
   }
 
   void _handleTap(LatLng latlng) {

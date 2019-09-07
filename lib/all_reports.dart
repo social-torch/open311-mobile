@@ -240,6 +240,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
     //If we still don't have a location then use base default
     if (location == null) {
       //Default location to center on schenectady, ny
+      location = Map<String,double>();
       location["latitude"] = _defaultLoc.latitude;
       location["longitude"] = _defaultLoc.longitude;
     }
