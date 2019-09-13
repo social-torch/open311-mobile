@@ -33,6 +33,17 @@ if [ -z "${OPEN311_BASE_URL}" ]; then
   exit 6
 fi
 
+CREATE_KEY_PROPERTIES=true
+if [ -z "${OPEN311_KEY_STORE_PW}" ]; then
+  echo "OPEN311_KEY_STORE_PW not set, ignoring..."
+  CREATE_KEY_PROPERTIES=false
+fi
+
+if [ -z "${OPEN311_KEY_STORE_FILE}" ]; then
+  echo "OPEN311_KEY_STORE_FILE not set, ignoring..."
+  CREATE_KEY_PROPERTIES=false
+fi
+
 cat > ${HERE}/lib/auto_gen.dart << EOF
 import 'package:encrypt/encrypt.dart' as encrypt;
 String userPoolId = '${OPEN311_COGNITO_USER_POOL}';
@@ -42,3 +53,15 @@ String guestPass = '${OPEN311_GUEST_PASSWORD}';
 final key = encrypt.Key.fromUtf8('${OPEN311_ENCRYPT_KEY}');
 String endpoint311base = '${OPEN311_BASE_URL}';
 EOF
+
+if ${CREATE_KEY_PROPERTIES}; then
+cat > ${HERE}/android/key.properties << EOF
+storePassword=${OPEN311_KEY_STORE_PW}
+keyPassword=${OPEN311_KEY_STORE_PW}
+keyAlias=key
+storeFile=${OPEN311_KEY_STORE_FILE}
+EOF
+fi
+
+
+
