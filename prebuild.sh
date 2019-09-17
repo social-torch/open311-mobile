@@ -33,15 +33,14 @@ if [ -z "${OPEN311_BASE_URL}" ]; then
   exit 6
 fi
 
-CREATE_KEY_PROPERTIES=true
 if [ -z "${OPEN311_KEY_STORE_PW}" ]; then
-  echo "OPEN311_KEY_STORE_PW not set, ignoring..."
-  CREATE_KEY_PROPERTIES=false
+  echo "WARNING:  OPEN311_KEY_STORE_PW not set, using bogus value..."
+  OPEN311_KEY_STORE_PW=bogus
 fi
 
 if [ -z "${OPEN311_KEY_STORE_FILE}" ]; then
-  echo "OPEN311_KEY_STORE_FILE not set, ignoring..."
-  CREATE_KEY_PROPERTIES=false
+  echo "WARNING:  OPEN311_KEY_STORE_FILE not set, using bogus value..."
+  OPEN311_KEY_STORE_FILE=${HERE}/prebuild.sh
 fi
 
 cat > ${HERE}/lib/auto_gen.dart << EOF
@@ -54,14 +53,12 @@ final key = encrypt.Key.fromUtf8('${OPEN311_ENCRYPT_KEY}');
 String endpoint311base = '${OPEN311_BASE_URL}';
 EOF
 
-if ${CREATE_KEY_PROPERTIES}; then
 cat > ${HERE}/android/key.properties << EOF
 storePassword=${OPEN311_KEY_STORE_PW}
 keyPassword=${OPEN311_KEY_STORE_PW}
 keyAlias=key
 storeFile=${OPEN311_KEY_STORE_FILE}
 EOF
-fi
 
 
 

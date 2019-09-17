@@ -28,6 +28,7 @@ import "confirm_page.dart";
 import 'authenticate.dart';
 import 'request_new_city.dart';
 import 'submit_new_city.dart';
+import 'user_data_rights.dart';
 
 import 'dart:io';
 
@@ -61,6 +62,7 @@ Future<void> main() async {
     '/select_city': (context) => SelectCityPage(),
     '/request_new_city': (context) => RequestNewCityPage(),
     '/submit_new_city': (context) => SubmitNewCityPage(),
+    '/user_data_rights': (context) => UserDataRightsPage(),
   },
   ));
 }
@@ -81,7 +83,7 @@ class _MyAppState extends State<MyApp> {
 
   return new SplashScreen(
       seconds: 3,
-      navigateAfterSeconds: SelectCityPage(),
+      navigateAfterSeconds: UserDataRightsPage(),
       title: new Text('Social Torch',
       style: new TextStyle(
         fontWeight: FontWeight.bold,

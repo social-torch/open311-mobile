@@ -3,9 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import "globals.dart" as globals;
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'dart:async';
+import 'dart:io';
 
 CognitoUserSession _cog_user_session;
 CognitoUser _cog_user;
+bool firstTime = true;
 
 void startRefreshTokTimer() async {
   const duration = const Duration(seconds: 3600);
@@ -95,6 +97,12 @@ void authenticate() async {
   } catch (e) {
     //If saved user/pass is for whatever reason invalid, login using guest
     print(e);
+    // first time try guest, else delay a bit before trying again, don't spam on network error
+    if(firstTime) {
+      firstTime = false;
+    } else {
+      sleep(const Duration(seconds: 1));
+    }
     globals.userName = globals.guestName;
     globals.userPass = globals.guestPass;
     await authenticate();
