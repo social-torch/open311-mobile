@@ -13,6 +13,10 @@ export OPEN311_GUEST_USERNAME="Z"
 export OPEN311_GUEST_PASSWORD="A"
 export OPEN311_ENCRYPT_KEY="B"
 export OPEN311_BASE_URL="C"
+
+#The following are only required for android release
+export OPEN311_KEY_STORE_PW="D"
+export OPEN311_KEY_STORE_FILE="E"
 ```
 
 then build using our build script which wraps the standard `flutter` executable:
