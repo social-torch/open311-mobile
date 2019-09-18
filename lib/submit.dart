@@ -40,6 +40,23 @@ class SubmitBodyState extends State<SubmitBody> {
 
   Widget _bodyWidget;
 
+  Widget submitAnotherRequest() {
+    return RichText(
+      text: new TextSpan (
+        children: [
+          new TextSpan(
+            text: "Report another issue",
+            style: new TextStyle(color: Colors.blue),
+            recognizer: new TapGestureRecognizer()
+            ..onTap = () {
+              Navigator.of(context).pushNamed('/new_report');
+            },
+          ),
+        ],
+      )
+    );
+  }
+
   Widget successBody() {
     return new Expanded(
       child: Column(
@@ -71,6 +88,8 @@ class SubmitBodyState extends State<SubmitBody> {
               ),
             ),
           ),
+          Container(height: 30.0),
+          submitAnotherRequest(),
         ]
       ),
     );
@@ -107,6 +126,8 @@ class SubmitBodyState extends State<SubmitBody> {
               ),
             ),
           ),
+          Container(height: 30.0),
+          submitAnotherRequest(),
         ]
       ),
     );
