@@ -7,7 +7,7 @@ description: The Open311 Project.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.0+3
+version: 1.0.0+4
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
@@ -19,7 +19,7 @@ dependencies:
   flutter_launcher_icons: "^0.7.0"
 
 
-  camera: ^0.2.6
+  camera: ^0.5.4+3
 
   amazon_cognito_identity_dart:
      git:
