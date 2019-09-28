@@ -1,11 +1,9 @@
 library open311.globals;
 
-import 'package:camera/camera.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'dart:async';
 import 'auto_gen.dart' as autogen;
 
-List<CameraDescription> cameras;
 String userPoolId = autogen.userPoolId;
 String clientPoolId = autogen.clientPoolId;
 String guestName = autogen.guestName;

@@ -36,7 +36,10 @@ class NewReportBodyState extends State<NewReportBody> {
                                 maxHeight: 480).then((img) {
       ReportData().image = img;
     });
-    locPage();
+    if (ReportData().image != null)
+    {
+      locPage();
+    }
   }
 
   @override

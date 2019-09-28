@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -33,11 +32,9 @@ import 'user_data_rights.dart';
 import 'dart:io';
 
 Future<void> main() async {
-  // Fetch the available cameras before initializing the app.
   try {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    globals.cameras = await availableCameras();
-  } on CameraException catch (e) {
+  } catch (e) {
     print('Error: $e.code\nError Message: $e.descrption');
   }
   runApp(MaterialApp(
