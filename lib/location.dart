@@ -41,8 +41,8 @@ class LocationUiBodyState extends State<LocationUiBody> {
   bool usingDevLoc = true;
 
   //Location variables
-  Map<String, double> _currentLocation;
-  StreamSubscription<Map<String, double>> _locationSubscription;
+  LocationData _currentLocation;
+  StreamSubscription<LocationData> _locationSubscription;
   Location _location = new Location();
   bool _permission = false;
   String error;
@@ -51,22 +51,22 @@ class LocationUiBodyState extends State<LocationUiBody> {
   void initState() {
     initPlatformState();
     getLocFromCitySelection();
-    _locationSubscription = _location.onLocationChanged().listen((Map<String,double> result) {
+    _locationSubscription = _location.onLocationChanged().listen((LocationData result) {
       setState(() {
         _currentLocation = result;
         if (!usingDevLoc) {
-          var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
+          var latlng = LatLng(_currentLocation.latitude, _currentLocation.longitude);
           _mapController.move(latlng, _mapController.zoom);
           usingDevLoc = true;
         }
         assert(() {
           //Using assert here for debug only prints
-          print(_currentLocation["latitude"]);
-          print(_currentLocation["longitude"]);
-          print(_currentLocation["accuracy"]);
-          print(_currentLocation["altitude"]);
-          print(_currentLocation["speed"]);
-          print(_currentLocation["speed_accuracy"]); // Will always be 0 on iOS
+          print(_currentLocation.latitude);
+          print(_currentLocation.longitude);
+          print(_currentLocation.accuracy);
+          print(_currentLocation.altitude);
+          print(_currentLocation.speed);
+          print(_currentLocation.speedAccuracy); // Will always be 0 on iOS
           return true;
         }());
       });
@@ -82,7 +82,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
   }
 
     getLocFromCitySelection() async {
-    Map<String, double> location;
+    LocationData location;
 
     //Try location from base city
     try { 
@@ -95,9 +95,17 @@ class LocationUiBodyState extends State<LocationUiBody> {
           return true;
         } ());
         setState(() {
-          location = Map<String,double>();
-          location["latitude"] = first.coordinates.latitude;
-          location["longitude"] = first.coordinates.longitude;
+          Map<String, double> locData = new Map<String, double>();
+          locData["latitude"] = first.coordinates.latitude;
+          locData["longitude"] = first.coordinates.longitude;
+          locData["accuracy"] = 1;
+          locData["altitude"] = 100;
+          locData["speed"] = 0;
+          locData["speed_accuracy"] = 1;
+          locData["heading"] = 0;
+          locData["time"] = 1;
+
+          location = LocationData.fromMap(locData);
         });
       }
     } catch (error, stacktrace) {
@@ -109,7 +117,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
     }
 
     if (_currentLocation == null) {
-      var latlng = LatLng(location["latitude"], location["longitude"]);
+      var latlng = LatLng(location.latitude, location.longitude);
       setState(() {
         _currentLocation = location;
         _markerLoc = latlng;
@@ -123,7 +131,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   initPlatformState() async {
-    Map<String, double> location;
+    LocationData location;
     // Platform messages may fail, so we use a try/catch PlatformException.
 
     try {
@@ -138,14 +146,23 @@ class LocationUiBodyState extends State<LocationUiBody> {
       }
       //Default location to center on schenectady, ny
       if (location == null) {
-        location = Map<String,double>();
-        location["latitude"] = _defaultLoc.latitude;
-        location["longitude"] = _defaultLoc.longitude;
+        Map<String, double> locData;
+        locData["latitude"] = _defaultLoc.latitude;
+        locData["longitude"] = _defaultLoc.longitude;
+        locData["accuracy"] = 1;
+        locData["altitude"] = 100;
+        locData["speed"] = 0;
+        locData["speed_accuracy"] = 1;
+        locData["heading"] = 0;
+        locData["time"] = 1;
+
+        location = LocationData.fromMap(locData);
+
       }
     }
 
     if (_currentLocation == null) {
-      var latlng = LatLng(location["latitude"], location["longitude"]);
+      var latlng = LatLng(location.latitude, location.longitude);
       setState(() {
         _currentLocation = location;
         _markerLoc = latlng;
@@ -216,7 +233,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
         new Marker(
           width: 40.0,
           height: 40.0,
-          point: LatLng(_currentLocation["latitude"], _currentLocation["longitude"]),
+          point: LatLng(_currentLocation.latitude, _currentLocation.longitude),
           builder: (ctx) => new Container(
             child: new GestureDetector(
               child: new Icon(
@@ -315,7 +332,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
                           onPressed: () {
                             setState(() {
                               if (_currentLocation != null) {
-                                var latlng = LatLng(_currentLocation["latitude"], _currentLocation["longitude"]);
+                                var latlng = LatLng(_currentLocation.latitude, _currentLocation.longitude);
                                 _markerLoc = latlng;
                                 _mapController.move(latlng, _mapController.zoom);
                               }

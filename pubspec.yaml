@@ -22,7 +22,7 @@ dependencies:
      git:
        url: git://github.com/jonsaw/amazon-cognito-identity-dart
 
-  location: ^1.4.1
+  location: ^2.3.5
 
   geocoder: 0.2.1
 
