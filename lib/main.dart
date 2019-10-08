@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'page.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 import "cities.dart";
@@ -31,12 +33,17 @@ import 'user_data_rights.dart';
 
 import 'dart:io';
 
+bool showRights = true;
+
 Future<void> main() async {
   try {
     await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   } catch (e) {
     print('Error: $e.code\nError Message: $e.descrption');
   }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  showRights = prefs.getBool("ShowDataRights") ?? true;
+
   runApp(MaterialApp(
     home: MyApp(),
     routes: {
@@ -78,9 +85,20 @@ class _MyAppState extends State<MyApp> {
   DeviceData().DeviceWidth= MediaQuery.of(context).size.width;
   authenticate();
 
+  // Check if user has already agreed to the User Data Rights
+  // To clear this for debugging, go to the phone's settings, Apps, Storage, then clear app data.
+  Page nextPage;
+  if (showRights) {
+    nextPage = UserDataRightsPage();
+    print("Need to show user data rights");
+  } else {
+    nextPage = SelectCityPage();
+    print("User data rights were shown, skipping");
+  }
+
   return new SplashScreen(
       seconds: 3,
-      navigateAfterSeconds: UserDataRightsPage(),
+      navigateAfterSeconds: nextPage,
       title: new Text('Social Torch',
       style: new TextStyle(
         fontWeight: FontWeight.bold,

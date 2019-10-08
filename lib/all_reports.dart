@@ -147,6 +147,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
   void initState() {
     initPlatformState();
     getLocFromCitySelection();
+    print("All reports init");
     _locationSubscription = _location.onLocationChanged().listen((LocationData result) {
       setState(() {
         _currentLocation = result;
@@ -157,12 +158,9 @@ class AllReportsBodyState extends State<AllReportsBody> {
         }
         assert(() {
           //Using assert here for debug only prints
-          print(_currentLocation.latitude);
-          print(_currentLocation.longitude);
-          print(_currentLocation.accuracy);
-          print(_currentLocation.altitude);
-          print(_currentLocation.speed);
-          print(_currentLocation.speedAccuracy); // Will always be 0 on iOS
+          print("Pos: ${_currentLocation.latitude}, ${_currentLocation.longitude} @ ${_currentLocation.altitude}");
+          print("Acc: ${_currentLocation.accuracy}, ${_currentLocation.speed}, [${_currentLocation.speedAccuracy}]");
+          // speedAccuracy) Will always be 0 on iOS
           return true;
         }());
       });
@@ -175,6 +173,13 @@ class AllReportsBodyState extends State<AllReportsBody> {
   @override
   void dispose() {
     //If user backs out remove address, they may choose lat/long instead
+    print("All reports disposed");
+    // Cancel the location callback as it will continue to trigger after the page is disposed.
+    // TODO: Also, this will throw if we try to cancel twice, which happens if you go to Map, then List View, then
+    // select a request, then click on the image to get back to map view. At that point we dispose and cancel
+    // the callback. THEN, if you click off of map, we double dispose somehow.
+    _locationSubscription.cancel();
+
     ReportData().latlng = null;
     addrController.dispose();
     super.dispose();
