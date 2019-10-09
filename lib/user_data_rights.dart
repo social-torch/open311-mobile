@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'page.dart';
 import 'data.dart';
 import "globals.dart" as globals;
@@ -63,7 +64,9 @@ class UserDataRightsBodyState extends State<UserDataRightsBody> {
                 Text("User data provided to Social Torch such as images, descriptions, locations and email addresses will only be used to provide localities with information related to issue reporting."),
                 Container(height: 30.0),
                 ColorSliverButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool("ShowDataRights", false);
                     Navigator.of(context).pushNamed('/select_city');
                   },
                   child: Text("Understood"),
