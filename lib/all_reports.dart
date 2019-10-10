@@ -149,21 +149,23 @@ class AllReportsBodyState extends State<AllReportsBody> {
     getLocFromCitySelection();
     print("All reports init");
     _locationSubscription = _location.onLocationChanged().listen((LocationData result) {
-      setState(() {
-        _currentLocation = result;
-        if (!usingDevLoc) {
-          var latlng = LatLng(_currentLocation.latitude, _currentLocation.longitude);
-          _mapController.move(latlng, _mapController.zoom);
-          usingDevLoc = true;
-        }
-        assert(() {
-          //Using assert here for debug only prints
-          print("Pos: ${_currentLocation.latitude}, ${_currentLocation.longitude} @ ${_currentLocation.altitude}");
-          print("Acc: ${_currentLocation.accuracy}, ${_currentLocation.speed}, [${_currentLocation.speedAccuracy}]");
-          // speedAccuracy) Will always be 0 on iOS
-          return true;
-        }());
-      });
+      if (this.mounted) {
+        setState(() {
+          _currentLocation = result;
+          if (!usingDevLoc) {
+            var latlng = LatLng(_currentLocation.latitude, _currentLocation.longitude);
+            _mapController.move(latlng, _mapController.zoom);
+            usingDevLoc = true;
+          }
+          assert(() {
+            //Using assert here for debug only prints
+            print("Pos: ${_currentLocation.latitude}, ${_currentLocation.longitude} @ ${_currentLocation.altitude}");
+            print("Acc: ${_currentLocation.accuracy}, ${_currentLocation.speed}, [${_currentLocation.speedAccuracy}]");
+            // speedAccuracy) Will always be 0 on iOS
+            return true;
+          }());
+        });
+      }
     });
 
     delayedProcessing();

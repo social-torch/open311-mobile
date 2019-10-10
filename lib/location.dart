@@ -52,24 +52,26 @@ class LocationUiBodyState extends State<LocationUiBody> {
     initPlatformState();
     getLocFromCitySelection();
     _locationSubscription = _location.onLocationChanged().listen((LocationData result) {
-      setState(() {
-        _currentLocation = result;
-        if (!usingDevLoc) {
-          var latlng = LatLng(_currentLocation.latitude, _currentLocation.longitude);
-          _mapController.move(latlng, _mapController.zoom);
-          usingDevLoc = true;
-        }
-        assert(() {
-          //Using assert here for debug only prints
-          print(_currentLocation.latitude);
-          print(_currentLocation.longitude);
-          print(_currentLocation.accuracy);
-          print(_currentLocation.altitude);
-          print(_currentLocation.speed);
-          print(_currentLocation.speedAccuracy); // Will always be 0 on iOS
-          return true;
-        }());
-      });
+      if (this.mounted) {
+        setState(() {
+          _currentLocation = result;
+          if (!usingDevLoc) {
+            var latlng = LatLng(_currentLocation.latitude, _currentLocation.longitude);
+            _mapController.move(latlng, _mapController.zoom);
+            usingDevLoc = true;
+          }
+          assert(() {
+            //Using assert here for debug only prints
+            print(_currentLocation.latitude);
+            print(_currentLocation.longitude);
+            print(_currentLocation.accuracy);
+            print(_currentLocation.altitude);
+            print(_currentLocation.speed);
+            print(_currentLocation.speedAccuracy); // Will always be 0 on iOS
+            return true;
+          }());
+        });
+      }
     });
     super.initState();
   }
