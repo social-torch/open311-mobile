@@ -84,28 +84,50 @@ $HERE/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png,76 \
 $HERE/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png,152 \
 $HERE/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png,167 \
 "
-if [ -d /Applications/GIMP-2.10.app/Contents/MacOS ]; then
-  ln -sf ${HERE}/gimp/batch-resize.scm /Applications/GIMP-2.10.app/Contents/Resources/share/gimp/2.0/scripts/
-  GEN_EM=true
-  GEN_MD5="$HERE/.gen-images-md5"
-  if [ -f $GEN_MD5 ]; then
-    if [ "$(md5 -q $TEMPLATE_IMG)" = "$(cat $GEN_MD5)" ]; then
-      GEN_EM=false
-    fi
-  fi
-  echo $(md5 -q $TEMPLATE_IMG) > $GEN_MD5
-  if $GEN_EM; then
-    (
-    cd /Applications/GIMP-2.10.app/Contents/MacOS
-    for f in $GEN_IMAGES; do
-      IMG=$(echo $f | cut -d',' -f1)
-      SZ=$(echo $f | cut -d',' -f2)
-      cp $TEMPLATE_IMG $IMG
-      ./gimp -i -b "(batch-resize \"$IMG\" $SZ $SZ)" -b '(gimp-quit 0)'
-    done
-    )
-  fi
-else
-  echo "GIMP not found, or linux machine and we need to update script"
+# md5 or md5sum? Git Bash on Windows uses md5sum
+MD5CMD="md5 -q"
+if [ -z `command -v md5` ]; then 
+    MD5CMD=md5sum # My Git bash on Windows uses md5sum, not md5
 fi
 
+# Determine if we've already generated the image by checking the template
+# image's MD5 against a cached version. If the MD5 cache doesn't exist, or 
+# it's different, generate the image
+GEN_EM=true
+GEN_MD5="$HERE/.gen-images-md5"
+if [ -f $GEN_MD5 ]; then
+    if [ "$($MD5CMD $TEMPLATE_IMG)" = "$(cat $GEN_MD5)" ]; then
+        echo "Skipping image icon generation"
+        GEN_EM=false
+    fi
+fi
+
+# Determined we need to gen the image
+if $GEN_EM; then
+  # Save the template logo image hash
+  echo $($MD5CMD $TEMPLATE_IMG) > $GEN_MD5
+  # Try GIMP first
+  if [ -d /Applications/GIMP-2.10.app/Contents/MacOS ]; then
+    ln -sf ${HERE}/gimp/batch-resize.scm /Applications/GIMP-2.10.app/Contents/Resources/share/gimp/2.0/scripts/
+      (
+      cd /Applications/GIMP-2.10.app/Contents/MacOS
+      for f in $GEN_IMAGES; do
+        IMG=$(echo $f | cut -d',' -f1)
+        SZ=$(echo $f | cut -d',' -f2)
+        cp $TEMPLATE_IMG $IMG
+        ./gimp -i -b "(batch-resize \"$IMG\" $SZ $SZ)" -b '(gimp-quit 0)'
+      done
+      )
+  elif [ `command -v gm` ]; then
+    # Ok, fine, try Graphicsmagick
+    (
+      for f in $GEN_IMAGES; do
+        IMG=$(echo $f | cut -d',' -f1)
+        SZ=$(echo $f | cut -d',' -f2)
+        gm convert $TEMPLATE_IMG -size $SZx$SZ $IMG
+      done
+    )
+  else
+    echo "GIMP not found, Graphicsmagick not found or we need to update script"
+  fi
+fi
