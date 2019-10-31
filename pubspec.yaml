@@ -79,13 +79,13 @@ flutter:
    - images/library.png
    - images/no_photo.png
    - images/settings.png
+   - images/settings_info.png
    - images/map.png
    - images/add new.png
    - images/add view requests.png
    - images/login.png
    - images/failed.png
    - images/guest_reports.png
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

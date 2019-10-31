@@ -150,6 +150,13 @@ class SettingsBodyState extends State<SettingsBody> {
                 ),
                 Container(height: 15.0),
                 _getAutoLogInWidget(),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/feedback');
+                  },
+                  child: Text("Send Us Feedback")
+                )
               ]
             ),
           ),
