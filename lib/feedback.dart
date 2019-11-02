@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'page.dart';
 import 'data.dart';
+import 'requests.dart';
 import 'login.dart';
 import "cities.dart";
 import "utils.dart";
@@ -32,10 +34,76 @@ class FeedbackBody extends StatefulWidget {
 
 class FeedbackBodyState extends State<FeedbackBody> {
   FeedbackBodyState();
+  TextField feedbackText;
+  TextEditingController feedbackCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    feedbackText = TextField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: 'Enter your feedback'
+      ),
+      controller: feedbackCtrl,
+      minLines: 4,
+      maxLines: 10,
+      maxLength: 1024
+    );
+
+  }
+
+  @override
+  void dispose() {
+    feedbackCtrl.dispose();
+    super.dispose();
+  }
+
+  void handleSendFeedback(String feedback) async {
+    Dio dio = new Dio();
+
+    print("USER FEEDBACK:"+feedback);
+    feedbackCtrl.text = 'Thank you for your feedback';
+
+    Requests req = new Requests(
+        "",
+        "",
+        "",
+        "USERFEEDBACK",
+        "SC-8a28ff0d-b954-4f56-aad0-83397db49a4e",
+        "FEEDBACK:"+feedback,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        45.0,
+        70.0,
+        "feedback lane");
+
+    //Send post of user feedback to backend
+    var endpoint = globals.endpoint311 + "/request";
+    try {
+      Response response;
+      response = await dio.post(
+        endpoint,
+        data: req.toJson(),
+        options: Options(
+          headers: {
+            HttpHeaders.authorizationHeader: globals.userIdToken,
+            HttpHeaders.fromHeader: globals.userName
+          },
+        ),
+      );
+    } catch(e) {
+      print(e);
+      feedbackCtrl.text = 'Unable to send request, try again later';
+    }
+
   }
 
   @override
@@ -66,19 +134,11 @@ class FeedbackBodyState extends State<FeedbackBody> {
                   ),
                 ),
                 Container(height: 10.0),
-              TextField(
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter some feedback'
-                ),
-                minLines: 4,
-                maxLines: 10,
-                maxLength: 1024,
-              ),
+              feedbackText,
                 Container(height: 10.0),
                 ColorSliverButton(
                   onPressed: () {
-                    print('Would send user response');
+                    handleSendFeedback(feedbackCtrl.text);
                   },
                     child:Text("Send"))
               ]
