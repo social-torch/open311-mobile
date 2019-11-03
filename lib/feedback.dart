@@ -16,6 +16,36 @@ import "custom_colors.dart";
 import "select_city_common.dart";
 import "bottom_app_bar.dart";
 
+class FeedbackInfo {
+  final String type;
+  final String username;
+  final String description;
+  final double lat;
+  final double lon;
+  final int timestamp;
+
+  FeedbackInfo(
+      this.type,
+      this.username,
+      this.description,
+      this.lat,
+      this.lon,
+      this.timestamp
+      );
+
+  Map<String, dynamic> toJson() =>
+  {
+    'type': type,
+    'username': username,
+    'description': description,
+    'lat':lat+0.0,
+    'lon':lon+0.0,
+    'timestamp': timestamp
+  };
+
+  String toString() => "type: $type username: $username loc: ($lat $lon) time:$timestamp\ndescription: $description";
+}
+
 class FeedbackPage extends Page {
   FeedbackPage() : super(const Icon(Icons.email), APP_NAME);
 
@@ -66,29 +96,19 @@ class FeedbackBodyState extends State<FeedbackBody> {
     print("USER FEEDBACK:"+feedback);
     feedbackCtrl.text = 'Thank you for your feedback';
 
-    Requests req = new Requests(
-        "",
-        "",
-        "",
+    FeedbackInfo req = new FeedbackInfo(
         "USERFEEDBACK",
-        "SC-8a28ff0d-b954-4f56-aad0-83397db49a4e",
-        "FEEDBACK:"+feedback,
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        0,
+        globals.userName,
+        feedback,
         45.0,
         70.0,
-        "feedback lane");
+        new DateTime.now().millisecondsSinceEpoch ~/ 1000);
 
     //Send post of user feedback to backend
-    var endpoint = globals.endpoint311 + "/request";
+    var endpoint = globals.endpoint311 + "/feedback";
     try {
       Response response;
+      print(req.toJson());
       response = await dio.post(
         endpoint,
         data: req.toJson(),
