@@ -17,33 +17,21 @@ import "select_city_common.dart";
 import "bottom_app_bar.dart";
 
 class FeedbackInfo {
-  final String type;
-  final String username;
+  final String account_id;
   final String description;
-  final double lat;
-  final double lon;
-  final int timestamp;
 
   FeedbackInfo(
-      this.type,
-      this.username,
-      this.description,
-      this.lat,
-      this.lon,
-      this.timestamp
+      this.account_id,
+      this.description
       );
 
   Map<String, dynamic> toJson() =>
   {
-    'type': type,
-    'username': username,
-    'description': description,
-    'lat':lat+0.0,
-    'lon':lon+0.0,
-    'timestamp': timestamp
+    'account_id': account_id,
+    'description': description
   };
 
-  String toString() => "type: $type username: $username loc: ($lat $lon) time:$timestamp\ndescription: $description";
+  String toString() => "account_id: $account_id\ndescription: $description";
 }
 
 class FeedbackPage extends Page {
@@ -65,6 +53,8 @@ class FeedbackBody extends StatefulWidget {
 class FeedbackBodyState extends State<FeedbackBody> {
   FeedbackBodyState();
   TextField feedbackText;
+  final SnackBar successSnackBar = SnackBar(content: Text('Thank you for your feedback'));
+  final SnackBar failureSnackBar = SnackBar(content: Text('Unable to send feedback. Try again later.'));
   TextEditingController feedbackCtrl = TextEditingController();
 
   @override
@@ -90,40 +80,40 @@ class FeedbackBodyState extends State<FeedbackBody> {
     super.dispose();
   }
 
-  void handleSendFeedback(String feedback) async {
+  void handleSendFeedback(BuildContext context, String feedback) async {
     Dio dio = new Dio();
 
     print("USER FEEDBACK:"+feedback);
-    feedbackCtrl.text = 'Thank you for your feedback';
 
     FeedbackInfo req = new FeedbackInfo(
-        "USERFEEDBACK",
         globals.userName,
-        feedback,
-        45.0,
-        70.0,
-        new DateTime.now().millisecondsSinceEpoch ~/ 1000);
+        feedback
+    );
 
     //Send post of user feedback to backend
     var endpoint = globals.endpoint311 + "/feedback";
     try {
       Response response;
       print(req.toJson());
-      response = await dio.post(
-        endpoint,
-        data: req.toJson(),
-        options: Options(
-          headers: {
-            HttpHeaders.authorizationHeader: globals.userIdToken,
-            HttpHeaders.fromHeader: globals.userName
-          },
-        ),
-      );
+      if (feedback.length > 0) {
+        response = await dio.post(
+          endpoint,
+          data: req.toJson(),
+          options: Options(
+            headers: {
+              HttpHeaders.authorizationHeader: globals.userIdToken,
+              HttpHeaders.fromHeader: globals.userName
+            },
+          ),
+        );
+        Scaffold.of(context).showSnackBar(successSnackBar);
+      } else {
+        print("No feedback entered");
+      }
     } catch(e) {
       print(e);
-      feedbackCtrl.text = 'Unable to send request, try again later';
+      Scaffold.of(context).showSnackBar(failureSnackBar);
     }
-
   }
 
   @override
@@ -156,11 +146,13 @@ class FeedbackBodyState extends State<FeedbackBody> {
                 Container(height: 10.0),
               feedbackText,
                 Container(height: 10.0),
-                ColorSliverButton(
-                  onPressed: () {
-                    handleSendFeedback(feedbackCtrl.text);
-                  },
-                    child:Text("Send"))
+                new Builder(builder:(context) {
+                  return new ColorSliverButton(
+                      onPressed: () {
+                        handleSendFeedback(context, feedbackCtrl.text);
+                      },
+                      child:Text("Send"));
+                })
               ]
             ),
           ),
