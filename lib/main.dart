@@ -30,6 +30,7 @@ import 'authenticate.dart';
 import 'request_new_city.dart';
 import 'submit_new_city.dart';
 import 'user_data_rights.dart';
+import 'feedback.dart';
 
 import 'dart:io';
 
@@ -67,6 +68,7 @@ Future<void> main() async {
     '/request_new_city': (context) => RequestNewCityPage(),
     '/submit_new_city': (context) => SubmitNewCityPage(),
     '/user_data_rights': (context) => UserDataRightsPage(),
+      '/feedback': (context) => FeedbackPage()
   },
   ));
 }

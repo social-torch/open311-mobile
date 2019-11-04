@@ -7,6 +7,7 @@ import 'custom_colors.dart';
 import 'custom_widgets.dart';
 import "globals.dart" as globals;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class SettingsPage extends Page {
   SettingsPage() : super(const Icon(Icons.map), APP_NAME);
@@ -27,6 +28,7 @@ class SettingsBody extends StatefulWidget {
 class SettingsBodyState extends State<SettingsBody> {
   SettingsBodyState();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isSwitched = true;
 
   Future<bool> _getInitialAutoLogInState() async {
@@ -106,12 +108,26 @@ class SettingsBodyState extends State<SettingsBody> {
 
   @override
   Widget build(BuildContext context) {
+    if (globals.popupMsg != "") {
+      Timer(Duration(milliseconds: 300), () {
+        _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            backgroundColor: CustomColors.salmon,
+            content: new Text(globals.popupMsg),
+            duration: new Duration(seconds: 5),
+          ),
+        );
+        globals.popupMsg = "";
+      });
+    }
+
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
         backgroundColor: CustomColors.appBarColor,
       ),
       bottomNavigationBar: commonBottomBar(context),
+      key: _scaffoldKey,
       body: Row (
         children: [
           Container(
@@ -150,6 +166,13 @@ class SettingsBodyState extends State<SettingsBody> {
                 ),
                 Container(height: 15.0),
                 _getAutoLogInWidget(),
+                Container(height: 15.0),
+                ColorSliverButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/feedback');
+                  },
+                  child: Text("Send Us Feedback")
+                )
               ]
             ),
           ),

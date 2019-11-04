@@ -124,7 +124,7 @@ Widget commonBottomBar(context) {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                  icon: Image.asset("images/settings.png", color: _currentPageColor("/settings")),
+                  icon: Image.asset("images/settings_info.png", color: _currentPageColor("/settings")),
                   color: _currentPageColor("/settings"),
                   highlightColor: CustomColors.salmon,
                   tooltip: 'View your current settings',
@@ -137,7 +137,7 @@ Widget commonBottomBar(context) {
                   }
               ),
               Text(
-                "Settings",
+                "Settings & Help",
                 style: TextStyle(
                   color: _currentPageColor("/settings"),
                   fontWeight: _currentPageBold("/settings"),
