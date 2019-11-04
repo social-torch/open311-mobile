@@ -53,8 +53,6 @@ class FeedbackBody extends StatefulWidget {
 class FeedbackBodyState extends State<FeedbackBody> {
   FeedbackBodyState();
   TextField feedbackText;
-  final SnackBar successSnackBar = SnackBar(content: Text('Thank you for your feedback'));
-  final SnackBar failureSnackBar = SnackBar(content: Text('Unable to send feedback. Try again later.'));
   TextEditingController feedbackCtrl = TextEditingController();
 
   @override
@@ -83,7 +81,11 @@ class FeedbackBodyState extends State<FeedbackBody> {
   void handleSendFeedback(BuildContext context, String feedback) async {
     Dio dio = new Dio();
 
-    print("USER FEEDBACK:"+feedback);
+    assert(() {
+      //Using assert here for debug only prints
+      print("USER FEEDBACK:"+feedback);
+      return true;
+    }());
 
     FeedbackInfo req = new FeedbackInfo(
         globals.userName,
@@ -94,7 +96,11 @@ class FeedbackBodyState extends State<FeedbackBody> {
     var endpoint = globals.endpoint311 + "/feedback";
     try {
       Response response;
-      print(req.toJson());
+      assert(() {
+        //Using assert here for debug only prints
+        print(req.toJson());
+        return true;
+      }());
       if (feedback.length > 0) {
         response = await dio.post(
           endpoint,
@@ -106,13 +112,19 @@ class FeedbackBodyState extends State<FeedbackBody> {
             },
           ),
         );
-        Scaffold.of(context).showSnackBar(successSnackBar);
+        globals.popupMsg = "Thank you for your feedback.";
+        Navigator.of(context).pop();
       } else {
-        print("No feedback entered");
+        assert(() {
+          //Using assert here for debug only prints
+          print("No feedback entered");
+          return true;
+        }());
       }
     } catch(e) {
       print(e);
-      Scaffold.of(context).showSnackBar(failureSnackBar);
+      globals.popupMsg = "Unable to send feedback. Try again later.";
+      Navigator.of(context).pop();
     }
   }
 
@@ -122,7 +134,6 @@ class FeedbackBodyState extends State<FeedbackBody> {
       appBar: AppBar(
         title: Text(APP_NAME),
         backgroundColor: CustomColors.appBarColor,
-        automaticallyImplyLeading: false,
       ),
       body: Row (
         children: [
