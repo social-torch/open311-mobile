@@ -75,3 +75,4 @@ lib/auto_gen.dart
 android/key.properties
 ios/Flutter/flutter_export_environment.sh
 .gen-images-md5
+images/logo_512x512.jpg

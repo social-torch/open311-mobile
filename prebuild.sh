@@ -63,6 +63,7 @@ EOF
 #Generate Icons/Images
 TEMPLATE_IMG="$HERE/images/logo_512x512.png"
 GEN_IMAGES=" \
+$HERE/images/logo_512x512.jpg,512 \
 $HERE/android/app/src/main/res/mipmap-hdpi/launcher_icon.png,72 \
 $HERE/android/app/src/main/res/mipmap-mdpi/launcher_icon.png,48 \
 $HERE/android/app/src/main/res/mipmap-xhdpi/launcher_icon.png,96 \
@@ -106,28 +107,16 @@ fi
 if $GEN_EM; then
   # Save the template logo image hash
   echo $($MD5CMD $TEMPLATE_IMG) > $GEN_MD5
-  # Try GIMP first
-  if [ -d /Applications/GIMP-2.10.app/Contents/MacOS ]; then
-    ln -sf ${HERE}/gimp/batch-resize.scm /Applications/GIMP-2.10.app/Contents/Resources/share/gimp/2.0/scripts/
-      (
-      cd /Applications/GIMP-2.10.app/Contents/MacOS
-      for f in $GEN_IMAGES; do
-        IMG=$(echo $f | cut -d',' -f1)
-        SZ=$(echo $f | cut -d',' -f2)
-        cp $TEMPLATE_IMG $IMG
-        ./gimp -i -b "(batch-resize \"$IMG\" $SZ $SZ)" -b '(gimp-quit 0)'
-      done
-      )
-  elif [ `command -v gm` ]; then
+  if [ `command -v gm` ]; then
     # Ok, fine, try Graphicsmagick
     (
       for f in $GEN_IMAGES; do
         IMG=$(echo $f | cut -d',' -f1)
         SZ=$(echo $f | cut -d',' -f2)
-        gm convert $TEMPLATE_IMG -size $SZx$SZ $IMG
+        gm convert -resize ${SZ}x${SZ} $TEMPLATE_IMG $IMG
       done
     )
   else
-    echo "GIMP not found, Graphicsmagick not found or we need to update script"
+    echo "Graphicsmagick not found or we need to update script"
   fi
 fi

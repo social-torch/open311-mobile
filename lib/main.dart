@@ -46,6 +46,7 @@ Future<void> main() async {
   showRights = prefs.getBool("ShowDataRights") ?? true;
 
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: MyApp(),
     routes: {
     '/my_homepage': (context) => HomePage(),
