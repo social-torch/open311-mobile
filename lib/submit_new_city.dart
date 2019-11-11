@@ -112,9 +112,13 @@ class SubmitNewCityBodyState extends State<SubmitNewCityBody> {
     try {
       Dio dio = new Dio();
 
-      print(CityData().rac_resp.toJson());
+      assert(() {
+        // Inside assert for debug only printing
+        print(CityData().rac_resp.toJson());
+      }());
+
       //Send post of user request to backend
-      var endpoint = globals.endpoint311base + "/city/onboard";
+      var endpoint = globals.endpoint311base + "/feedback";
       Response response;
       response = await dio.post(
         endpoint,

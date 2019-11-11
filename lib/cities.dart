@@ -52,6 +52,7 @@ class RequestAddCity {
 
   Map<String, dynamic> toJson() =>
   {
+    'type':'cityrequest',
     'city':city,
     'state':state,
     'first_name':first_name,
