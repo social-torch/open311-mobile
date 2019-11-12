@@ -183,146 +183,153 @@ class AuthPageBodyState extends State<AuthPageBody> {
       });
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(APP_NAME),
-        backgroundColor: CustomColors.appBarColor,
-        automaticallyImplyLeading: false,
-      ),
-      bottomNavigationBar: commonBottomBar(context),
-      key: _scaffoldKey,
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Form(
-          child: new SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 36.0),
-            child: Column(
-              children: [
-                Form(
-                  key: registrationFormKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget> [
-                      Container(
-                        width: 36.0,
-                      ),
-                      Text (
-                        'Log In',
-                        textAlign: TextAlign.center,
-                        textScaleFactor: 2.0,
-                      ),
-                      Container(height: 30.0),
-                      SizedBox (
-                        width: 2 * DeviceData().ButtonHeight,
-                        child: Image.asset('images/logo.png'),
-                      ),
-                      Container(height: 30.0),
-                      SizedBox(
-                          width: double.infinity,
-                          child: Container(
-                              child: Text(
-                                'Log in below or click \"Sign Up\" to create an account',
-                                textAlign: TextAlign.center,
-                                textScaleFactor: 1.0,
-                              )
-                          )
-                      ),
-                      Container(height: 30.0),
-                      new EnsureVisibleWhenFocused(
-                        focusNode: _focusNodeUser,
-                        child: new TextFormField(
-                          controller: emailController,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.person),
-                            hintText: 'Email',
-                          ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          onFieldSubmitted: (value) {
-                            _focusNodeUser.unfocus();
-                            FocusScope.of(context).requestFocus(_focusNodePass);
-                          },
+    return new WillPopScope(
+      onWillPop: () async {
+        navPage = "/all_reports";
+        Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName('/nada'));
+        return false;
+      },
+      child: new Scaffold(
+        appBar: AppBar(
+          title: Text(APP_NAME),
+          backgroundColor: CustomColors.appBarColor,
+          automaticallyImplyLeading: false,
+        ),
+        bottomNavigationBar: commonBottomBar(context),
+        key: _scaffoldKey,
+        body: SafeArea(
+          top: false,
+          bottom: false,
+          child: Form(
+            child: new SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 36.0),
+              child: Column(
+                children: [
+                  Form(
+                    key: registrationFormKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget> [
+                        Container(
+                          width: 36.0,
+                        ),
+                        Text (
+                          'Log In',
+                          textAlign: TextAlign.center,
+                          textScaleFactor: 2.0,
+                        ),
+                        Container(height: 30.0),
+                        SizedBox (
+                          width: 2 * DeviceData().ButtonHeight,
+                          child: Image.asset('images/logo.png'),
+                        ),
+                        Container(height: 30.0),
+                        SizedBox(
+                            width: double.infinity,
+                            child: Container(
+                                child: Text(
+                                  'Log in below or click \"Sign Up\" to create an account',
+                                  textAlign: TextAlign.center,
+                                  textScaleFactor: 1.0,
+                                )
+                            )
+                        ),
+                        Container(height: 30.0),
+                        new EnsureVisibleWhenFocused(
                           focusNode: _focusNodeUser,
-                          textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                      Container(
-                        height: 20.0,
-                      ),
-                      new EnsureVisibleWhenFocused(
-                        focusNode: _focusNodePass,
-                        child: new TextFormField(
-                          controller: passwordController,
-                          obscureText: true,
-                          decoration: const InputDecoration(
-                            icon: Icon(Icons.lock),
-                            hintText: 'Password',
+                          child: new TextFormField(
+                            controller: emailController,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.person),
+                              hintText: 'Email',
+                            ),
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            onFieldSubmitted: (value) {
+                              _focusNodeUser.unfocus();
+                              FocusScope.of(context).requestFocus(_focusNodePass);
+                            },
+                            focusNode: _focusNodeUser,
+                            textInputAction: TextInputAction.next,
                           ),
-                          onSaved: (String value) {
-                            // This optional block of code can be used to run
-                            // code when the user saves the form.
-                          },
-                          validator: (String value) {
-                            return null;
-                          },
-                          focusNode: _focusNodePass,
                         ),
-                      ),
-                      Container(
-                        height: 30.0,
-                      ),
-                      ColorSliverButton(
-                        onPressed: () {
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                          if ( !authenticating && registrationFormKey.currentState.validate()) {
-                            authenticating = true;
-                            authenticate();
-                          }
-                        },
-                        child: Text('Authenticate'),
-                      ),
-                      Container(
-                        height: 20.0,
-                      ),
-                      RichText(
-                        text: new TextSpan (
-                          children: [
-                            new TextSpan(
-                              text: "Forgot Password?",
-                              style: new TextStyle(color: Colors.blue),
-                              recognizer: new TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).pushNamedAndRemoveUntil('/reset_password', ModalRoute.withName('/login'));
-                              },
+                        Container(
+                          height: 20.0,
+                        ),
+                        new EnsureVisibleWhenFocused(
+                          focusNode: _focusNodePass,
+                          child: new TextFormField(
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              icon: Icon(Icons.lock),
+                              hintText: 'Password',
                             ),
-                          ],
-                        )
-                      ),
-                      Container(
-                        height: 20.0,
-                      ),
-                      RichText(
-                        text: new TextSpan (
-                          children: [
-                            new TextSpan(
-                              text: "Sign Up",
-                              style: new TextStyle(color: Colors.blue),
-                              recognizer: new TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).pushNamedAndRemoveUntil('/registration', ModalRoute.withName('/login'));
-                              },
-                            ),
-                          ],
-                        )
-                      ),
-                    ],
+                            onSaved: (String value) {
+                              // This optional block of code can be used to run
+                              // code when the user saves the form.
+                            },
+                            validator: (String value) {
+                              return null;
+                            },
+                            focusNode: _focusNodePass,
+                          ),
+                        ),
+                        Container(
+                          height: 30.0,
+                        ),
+                        ColorSliverButton(
+                          onPressed: () {
+                            // Validate will return true if the form is valid, or false if
+                            // the form is invalid.
+                            if ( !authenticating && registrationFormKey.currentState.validate()) {
+                              authenticating = true;
+                              authenticate();
+                            }
+                          },
+                          child: Text('Authenticate'),
+                        ),
+                        Container(
+                          height: 20.0,
+                        ),
+                        RichText(
+                          text: new TextSpan (
+                            children: [
+                              new TextSpan(
+                                text: "Forgot Password?",
+                                style: new TextStyle(color: Colors.blue),
+                                recognizer: new TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/reset_password', ModalRoute.withName('/login'));
+                                },
+                              ),
+                            ],
+                          )
+                        ),
+                        Container(
+                          height: 20.0,
+                        ),
+                        RichText(
+                          text: new TextSpan (
+                            children: [
+                              new TextSpan(
+                                text: "Sign Up",
+                                style: new TextStyle(color: Colors.blue),
+                                recognizer: new TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushNamedAndRemoveUntil('/registration', ModalRoute.withName('/login'));
+                                },
+                              ),
+                            ],
+                          )
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
