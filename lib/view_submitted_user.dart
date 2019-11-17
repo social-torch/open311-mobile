@@ -159,40 +159,47 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold (
-      appBar: AppBar(
-        title: Text(APP_NAME),
-        backgroundColor: CustomColors.appBarColor,
-      ),
-      bottomNavigationBar: commonBottomBar(context),
-      body: Row (
-        children: [
-          Container(
-            width: 36.0,
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                Container(height: 30.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: Text(
-                      'Submitted Service Requests',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 2.0,
+    return new WillPopScope(
+      onWillPop: () async {
+        navPage = "/all_reports";
+        Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName('/nada'));
+        return false;
+      },
+      child: new Scaffold(
+        appBar: AppBar(
+          title: Text(APP_NAME),
+          backgroundColor: CustomColors.appBarColor,
+        ),
+        bottomNavigationBar: commonBottomBar(context),
+        body: Row (
+          children: [
+            Container(
+              width: 36.0,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Container(height: 30.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      child: Text(
+                        'Submitted Service Requests',
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 2.0,
+                      ),
                     ),
                   ),
-                ),
-                Container(height: 30.0),
-                _getBody(context),
-              ]
+                  Container(height: 30.0),
+                  _getBody(context),
+                ]
+              ),
             ),
-          ),
-          Container(
-            width: 36.0,
-          ),
-        ]
+            Container(
+              width: 36.0,
+            ),
+          ]
+        ),
       ),
     );
   }
