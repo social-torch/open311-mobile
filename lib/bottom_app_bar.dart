@@ -153,22 +153,64 @@ Widget commonBottomBar(context) {
                   color: _currentPageColor("/login"),
                   highlightColor: CustomColors.salmon,
                   tooltip: _logInOrOut(),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_logInOrOut() == "Log Out") {
-                      //Log out user, go back to as if app is first starting.
-                      basePage = 'nada';
-                      navPage = '/nada';
-                      globals.endpoint311 = 'nada';
-                      globals.userName = globals.guestName;
-                      globals.userPass = globals.guestPass;
+                      bool noAskLogout = false;
+                      await showDialog<int>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: new Text("Confirm Logout"),
+                            content: new Column(
+                              children: <Widget>[
+                                Text("Are you sure you want to logout?")
+                                /*,Row( children: <Widget> [
+                                  Text("Don't ask again"),
+                                  CheckboxListTile(
+                                      title: const Text("Don't ask again"),
+                                      value: false,
+                                      onChanged: (bool value) {
+                                        noAskLogout = value;
+                                  })
+                                ]
+                                )*/
+                            ]),
+                            actions: <Widget>[
+                              new FlatButton(
+                                child:new Text("Cancel"),
+                                onPressed: () {
+                                Navigator.of(context).pop(0);
+                              }),
+                              new FlatButton(
+                                child: new Text("Ok"),
+                                onPressed: () {
+                                  Navigator.of(context).pop(1);
+                                }
+                              )
+                            ]
+                          );
+                        }
+                      ).then((shouldLogout) {
+                        print("Don't ask logout: $noAskLogout");
+                        if (shouldLogout == 1) {
+                          //Log out user, go back to as if app is first starting.
+                          basePage = 'nada';
+                          navPage = '/nada';
+                          globals.endpoint311 = 'nada';
+                          globals.userName = globals.guestName;
+                          globals.userPass = globals.guestPass;
 
-                      //Remove saved info from persistent store
-                      resetPersistentData();
+                          //Remove saved info from persistent store
+                          resetPersistentData();
 
-                      //Login as guest
-                      authenticate();
+                          //Login as guest
+                          authenticate();
 
-                      Navigator.of(context).pushReplacementNamed('/select_city');
+                          Navigator.of(context).pushReplacementNamed('/select_city');
+                        }
+                      });
+
+
                     } else {
                       var newPage = "/login";
                       if (navPage != newPage) {
