@@ -18,6 +18,13 @@ class SettingsPage extends Page {
   }
 }
 
+class LogInOutSettings {
+  bool autoLogin;
+  bool askLogout;
+
+  LogInOutSettings({ this.autoLogin = true,  this.askLogout = true });
+}
+
 class SettingsBody extends StatefulWidget {
   const SettingsBody();
 
@@ -29,28 +36,34 @@ class SettingsBodyState extends State<SettingsBody> {
   SettingsBodyState();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool isSwitched = true;
+  LogInOutSettings lioSet = LogInOutSettings();
 
-  Future<bool> _getInitialAutoLogInState() async {
-    bool retval = false;
+  Future<LogInOutSettings> _getInitialAutoLogInOutState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool autoLogIn = prefs.getBool('autoLogIn');
-    if (autoLogIn != null) {
-      retval = autoLogIn;
-    }
-    return retval;
+    bool autoLogIn = prefs.getBool('autoLogIn') ?? true;
+    bool askLogout = prefs.getBool('askLogout') ?? true ;
+    LogInOutSettings lioSettings = LogInOutSettings(autoLogin: autoLogIn, askLogout: askLogout);
+    return lioSettings;
   }
 
   @override
   void initState() {
     super.initState();
-    _getInitialAutoLogInState().then((value) {
+    _getInitialAutoLogInOutState().then((value) {
       setState(() {
-        isSwitched = value;
+        lioSet = value;
       });
     });
   }
 
+  /// Stores the user preference for confirming if the user should logout.
+  void _setAskLogoutSetting(bool askLogout) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("askLogout", askLogout);
+  }
+
+  /// Stores the user preference of automatically logging in and their
+  /// username/password if they do want to auto log in.
   void _setCredsSetting(bool saveCreds) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (saveCreds) {
@@ -89,12 +102,27 @@ class SettingsBodyState extends State<SettingsBody> {
             textScaleFactor: 1.0,
           ),
           Switch(
-            value: isSwitched, 
+            value: lioSet.autoLogin,
             onChanged: (value) {
               setState(() {
-                isSwitched = value;
+                lioSet.autoLogin = value;
               });
               _setCredsSetting(value);
+            },
+            activeTrackColor: CustomColors.salmonAccent,
+            activeColor: CustomColors.salmon,
+          ),
+          Text(
+            'Ask to confirm log out',
+            textScaleFactor: 1.0,
+          ),
+          Switch(
+            value: lioSet.askLogout,
+            onChanged: (value) {
+              setState(() {
+                lioSet.askLogout = value;
+              });
+              _setAskLogoutSetting(value);
             },
             activeTrackColor: CustomColors.salmonAccent,
             activeColor: CustomColors.salmon,
