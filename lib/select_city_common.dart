@@ -30,7 +30,7 @@ Future<int> getUsers(endpoint) async {
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      print("getUsers Exception occured: $error stackTrace: $stacktrace");
+      print("getUsers($endpoint) Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
     //This is a poor mans threadish way to doing processing on the side without deadlocking async
@@ -58,7 +58,7 @@ Future<int> getServices(endpoint) async {
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      print("getServices Exception occured: $error stackTrace: $stacktrace");
+      print("getServices($endpoint) Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
     //This is a poor mans threadish way to doing processing on the side without deadlocking async
@@ -102,7 +102,7 @@ Future<int> getRequests(endpoint) async {
   } catch (error, stacktrace) {
     assert(() {
       //Using assert here for debug only prints
-      print("getRequests Exception occured: $error stackTrace: $stacktrace");
+      print("getRequests($endpoint) Exception occured: $error stackTrace: $stacktrace");
       return true;
     }());
 
