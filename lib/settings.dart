@@ -95,40 +95,45 @@ class SettingsBodyState extends State<SettingsBody> {
     );
 
     if ( globals.userName != globals.guestName ) {
-      retval = Row (
-        children: [
-          Text(
-            'Automatically log in',
-            textScaleFactor: 1.0,
-          ),
-          Switch(
-            value: lioSet.autoLogin,
-            onChanged: (value) {
-              setState(() {
-                lioSet.autoLogin = value;
-              });
-              _setCredsSetting(value);
-            },
-            activeTrackColor: CustomColors.salmonAccent,
-            activeColor: CustomColors.salmon,
-          ),
-          Text(
-            'Ask to confirm log out',
-            textScaleFactor: 1.0,
-          ),
-          Switch(
-            value: lioSet.askLogout,
-            onChanged: (value) {
-              setState(() {
-                lioSet.askLogout = value;
-              });
-              _setAskLogoutSetting(value);
-            },
-            activeTrackColor: CustomColors.salmonAccent,
-            activeColor: CustomColors.salmon,
-          ),
-        ]
-      );
+      retval = Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+                children: [
+                  Text(
+                    'Automatically log in',
+                    textScaleFactor: 1.0,
+                  ),
+                  Switch(
+                    value: lioSet.autoLogin,
+                    onChanged: (value) {
+                      setState(() {
+                        lioSet.autoLogin = value;
+                      });
+                      _setCredsSetting(value);
+                    },
+                    activeTrackColor: CustomColors.salmonAccent,
+                    activeColor: CustomColors.salmon,
+                  )
+                ]),
+            Row(children: [
+              Text(
+                'Ask to confirm log out',
+                textScaleFactor: 1.0,
+              ),
+              Switch(
+                value: lioSet.askLogout,
+                onChanged: (value) {
+                  setState(() {
+                    lioSet.askLogout = value;
+                  });
+                  _setAskLogoutSetting(value);
+                },
+                activeTrackColor: CustomColors.salmonAccent,
+                activeColor: CustomColors.salmon,
+              ),
+            ])
+          ]);
     }
 
     return retval;

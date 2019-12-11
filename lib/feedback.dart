@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-import 'dart:io';
 import 'page.dart';
 import 'data.dart';
 import 'requests.dart';
