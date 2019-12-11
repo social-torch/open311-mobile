@@ -90,13 +90,11 @@ class _LogoutDialogState extends State<LogoutDialog> {
           new FlatButton(
               child: new Text("Cancel"),
               onPressed: () {
-                //print("AskLogout: $askLogout");
                 Navigator.of(context).pop(LogoutResult(false, askLogout));
               }),
           new FlatButton(
               child: new Text("Ok"),
               onPressed: () {
-                //print("AskLogout: $askLogout");
                 Navigator.of(context).pop(LogoutResult(true, askLogout));
               }
           )
@@ -251,6 +249,9 @@ Widget commonBottomBar(context) {
                           if (LOResult.shouldLogout) {
                             _performLogout(context);
                           }
+                          // Negated here because the user is asked "Don't ask again"
+                          // So if don't ask again is "false", ask again is true...
+                          prefs.setBool("askLogout", !LOResult.askLogout);
                         });
                       } else {
                         _performLogout(context);
