@@ -63,7 +63,7 @@ EOF
 #Generate Icons/Images
 TEMPLATE_IMG="$HERE/images/logo_512x512.png"
 GEN_IMAGES=" \
-$HERE/images/logo_512x512.jpg,512,-blur,0x0.75 \
+$HERE/images/logo_512x512.jpg,512,-blur,0x0.95 \
 $HERE/android/app/src/main/res/mipmap-hdpi/launcher_icon.png,72, \
 $HERE/android/app/src/main/res/mipmap-mdpi/launcher_icon.png,48, \
 $HERE/android/app/src/main/res/mipmap-xhdpi/launcher_icon.png,96, \

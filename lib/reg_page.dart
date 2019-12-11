@@ -65,10 +65,10 @@ class RegistrationPageBodyState extends State<RegistrationPageBody> {
       ];
    
       //Pass new username to confirm page via globals, not perfect but meh.
-      globals.usernameSignup = emailController.text.split("@")[0];
+      globals.usernameSignup = emailController.text.split("@")[0]+"AT"+emailController.text.split("@")[1];
 
       //Attempt signup with info user provided.
-      await userPool.signUp(emailController.text.split("@")[0], passwordController.text,
+      await userPool.signUp(globals.usernameSignup, passwordController.text,
           userAttributes: userAttributes);
       //_scaffoldKey.currentState.showSnackBar(
       //  SnackBar(

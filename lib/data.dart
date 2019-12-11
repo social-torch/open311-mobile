@@ -5,7 +5,7 @@ import 'services.dart';
 import 'requests.dart';
 import 'users.dart';
 
-const String APP_NAME = "Social Torch";
+const String APP_NAME = "Social Torch 311";
 
 class AddressData {
   String street;

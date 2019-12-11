@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> {
   return new SplashScreen(
       seconds: 3,
       navigateAfterSeconds: nextPage,
-      title: new Text('Social Torch',
+      title: new Text('Social Torch 311',
       style: new TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 20.0,
