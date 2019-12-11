@@ -54,79 +54,86 @@ class NewReportBodyState extends State<NewReportBody> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold (
-      appBar: AppBar(
-        title: Text(APP_NAME),
-        backgroundColor: CustomColors.appBarColor,
-      ),
-      bottomNavigationBar: commonBottomBar(context),
-      body: Row (
-        children: [ 
-          Container(
-            width: 36.0,
-          ),
-          Expanded( 
-            child: Column(
-              children: [
-                Container(height: 30.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: Text(
-                      'Select an Image',
-                      textAlign: TextAlign.left,
-                      textScaleFactor: 2.0,
+    return new WillPopScope(
+      onWillPop: () async {
+        navPage = "/all_reports";
+        Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName('/nada'));
+        return false;
+      },
+      child: new Scaffold(
+        appBar: AppBar(
+          title: Text(APP_NAME),
+          backgroundColor: CustomColors.appBarColor,
+        ),
+        bottomNavigationBar: commonBottomBar(context),
+        body: Row (
+          children: [ 
+            Container(
+              width: 36.0,
+            ),
+            Expanded( 
+              child: Column(
+                children: [
+                  Container(height: 30.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      child: Text(
+                        'Select an Image',
+                        textAlign: TextAlign.left,
+                        textScaleFactor: 2.0,
+                      ),
                     ),
                   ),
-                ),
-                Container(height: 30.0),
-                ProgressDots(
-                  stage: 0,
-                  numStages: 4,
-                ),
-                Container(height: 30.0),
-                ColorSliverButton(
-                  onPressed: () { getImage(ImageSource.camera); },
-                  child: Row(
-                    children: [
-                      Image.asset("images/camera.png", height: 45.0,),
-                      Text("    Camera"),
-                  ],
+                  Container(height: 30.0),
+                  ProgressDots(
+                    stage: 0,
+                    numStages: 4,
                   ),
-                ),
-                Container(height: 15.0),
-                ColorSliverButton(
-                  onPressed: () { getImage(ImageSource.gallery); },
-                  child: Row(
-                    children: [
-                      Image.asset("images/library.png", height: 45.0,),
-                      Text("    Photo Library"),
+                  Container(height: 30.0),
+                  ColorSliverButton(
+                    onPressed: () { getImage(ImageSource.camera); },
+                    child: Row(
+                      children: [
+                        Image.asset("images/camera.png", height: 45.0,),
+                        Text("    Camera"),
                     ],
+                    ),
                   ),
-                ),
-                Container(height: 15.0),
-                ColorSliverButton(
-                  onPressed: () {
-                    ReportData().image = null;
-                    locPage();
-                  },
-                  child: Row(
-                    children: [
-                      Image.asset("images/no_photo.png", height: 45.0,),
-                      Text("    No Photo"),
-                    ],
+                  Container(height: 15.0),
+                  ColorSliverButton(
+                    onPressed: () { getImage(ImageSource.gallery); },
+                    child: Row(
+                      children: [
+                        Image.asset("images/library.png", height: 45.0,),
+                        Text("    Photo Library"),
+                      ],
+                    ),
                   ),
-                ),
-              ]
+                  Container(height: 15.0),
+                  ColorSliverButton(
+                    onPressed: () {
+                      ReportData().image = null;
+                      locPage();
+                    },
+                    child: Row(
+                      children: [
+                        Image.asset("images/no_photo.png", height: 45.0,),
+                        Text("    No Photo"),
+                      ],
+                    ),
+                  ),
+                ]
+              ),
             ),
-          ),
-          Container(
-            width: 36.0,
-          ),
-        ]
+            Container(
+              width: 36.0,
+            ),
+          ]
+        ),
       ),
     );
   }
 }
-
-
+  
+  

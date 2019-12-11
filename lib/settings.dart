@@ -120,69 +120,75 @@ class SettingsBodyState extends State<SettingsBody> {
         globals.popupMsg = "";
       });
     }
-
-    return new Scaffold (
-      appBar: AppBar(
-        title: Text(APP_NAME),
-        backgroundColor: CustomColors.appBarColor,
-      ),
-      bottomNavigationBar: commonBottomBar(context),
-      key: _scaffoldKey,
-      body: Row (
-        children: [
-          Container(
-            width: 36.0,
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                Container(height: 30.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: Text(
-                      'Settings',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 2.0,
-                    ),
-                  ),
-                ),
-                Container(height: 30.0),
-                SizedBox(
-                  width: double.infinity,
-                  child: Container(
-                    child: Text(
-                      'Select City:',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 1.0,
-                    ),
-                  ),
-                ),
-                ColorSliverButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/settings_select_city');
-                  },
-                  child: Text(CityData().cities_resp.cities[globals.cityIdx].city_name),
-                ),
-                Container(height: 15.0),
-                _getAutoLogInWidget(),
-                Container(height: 15.0),
-                ColorSliverButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed('/feedback');
-                  },
-                  child: Text("Send Us Feedback")
-                )
-              ]
+    return new WillPopScope(
+      onWillPop: () async {
+        navPage = "/all_reports";
+        Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName('/nada'));
+        return false;
+      },
+      child: new Scaffold(
+        appBar: AppBar(
+          title: Text(APP_NAME),
+          backgroundColor: CustomColors.appBarColor,
+        ),
+        bottomNavigationBar: commonBottomBar(context),
+        key: _scaffoldKey,
+        body: Row (
+          children: [
+            Container(
+              width: 36.0,
             ),
-          ),
-          Container(
-            width: 36.0,
-          ),
-        ]
+            Expanded(
+              child: Column(
+                children: [
+                  Container(height: 30.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      child: Text(
+                        'Settings',
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 2.0,
+                      ),
+                    ),
+                  ),
+                  Container(height: 30.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Container(
+                      child: Text(
+                        'Select City:',
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 1.0,
+                      ),
+                    ),
+                  ),
+                  ColorSliverButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/settings_select_city');
+                    },
+                    child: Text(CityData().cities_resp.cities[globals.cityIdx].city_name),
+                  ),
+                  Container(height: 15.0),
+                  _getAutoLogInWidget(),
+                  Container(height: 15.0),
+                  ColorSliverButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/feedback');
+                    },
+                    child: Text("Send Us Feedback")
+                  )
+                ]
+              ),
+            ),
+            Container(
+              width: 36.0,
+            ),
+          ]
+        ),
       ),
     );
   }
 }
-
-
+  
+  
