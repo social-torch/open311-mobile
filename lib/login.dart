@@ -98,7 +98,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
       globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
       globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
-      globals.userName = globals.userName = emailController.text.split("@")[0]+"AT"+emailController.text.split("@")[1];
+      globals.userName = globals.userName = emailController.text.replaceAll('@','AT').replaceAll('+','PLUS');
       globals.userPass = passwordController.text;
 
       //Save creds into persistent storage
