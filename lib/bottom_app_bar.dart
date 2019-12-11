@@ -39,7 +39,89 @@ void resetPersistentData() async {
   await prefs.setString('userPass', "");
 }
 
+class LogoutResult {
+  bool shouldLogout = false;
+  bool askLogout = true;
+
+  LogoutResult(this.shouldLogout, this.askLogout);
+}
+
+class LogoutDialog extends StatefulWidget {
+  @override
+  _LogoutDialogState createState() => new _LogoutDialogState();
+}
+
+class _LogoutDialogState extends State<LogoutDialog> {
+  bool askLogout=true;
+
+  /// Jump through the async/await hoops to get a preference on
+  /// if we should ask the user if they want to logout
+  Future<bool> _getAskLogoutState() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool askLogout = prefs.getBool('askLogout') ?? false;
+    return askLogout;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getAskLogoutState().then((value) {
+      setState(() {
+        askLogout = value;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        title: Text("Confirm Logout"),
+        content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Are you sure you want to logout?"),
+              SwitchListTile(
+                title: Text("Don't ask again"),
+                value: askLogout,
+                onChanged: (bool value) { setState(() {askLogout=value; }); }
+              ),
+            ]),
+        actions: <Widget>[
+          new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop(LogoutResult(false, askLogout));
+              }),
+          new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop(LogoutResult(true, askLogout));
+              }
+          )
+        ]
+    );
+  }
+  }
+
+void _performLogout(BuildContext context) {
+  //Log out user, go back to as if app is first starting.
+  basePage = 'nada';
+  navPage = '/nada';
+  globals.endpoint311 = 'nada';
+  globals.userName = globals.guestName;
+  globals.userPass = globals.guestPass;
+
+  //Remove saved info from persistent store
+  resetPersistentData();
+
+  //Login as guest
+  authenticate();
+
+  Navigator.of(context).pushReplacementNamed('/select_city');
+}
+
 Widget commonBottomBar(context) {
+
   return BottomAppBar(
     child: new Row(
       mainAxisSize: MainAxisSize.max,
@@ -153,22 +235,27 @@ Widget commonBottomBar(context) {
                   color: _currentPageColor("/login"),
                   highlightColor: CustomColors.salmon,
                   tooltip: _logInOrOut(),
-                  onPressed: () {
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    bool askLogout = prefs.getBool("askLogout") ?? true;
                     if (_logInOrOut() == "Log Out") {
-                      //Log out user, go back to as if app is first starting.
-                      basePage = 'nada';
-                      navPage = '/nada';
-                      globals.endpoint311 = 'nada';
-                      globals.userName = globals.guestName;
-                      globals.userPass = globals.guestPass;
-
-                      //Remove saved info from persistent store
-                      resetPersistentData();
-
-                      //Login as guest
-                      authenticate();
-
-                      Navigator.of(context).pushReplacementNamed('/select_city');
+                      if (askLogout) {
+                        await showDialog<LogoutResult>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return LogoutDialog();
+                            }
+                        ).then((LOResult) {
+                          if (LOResult.shouldLogout) {
+                            _performLogout(context);
+                          }
+                          // Negated here because the user is asked "Don't ask again"
+                          // So if don't ask again is "false", ask again is true...
+                          prefs.setBool("askLogout", !LOResult.askLogout);
+                        });
+                      } else {
+                        _performLogout(context);
+                      }
                     } else {
                       var newPage = "/login";
                       if (navPage != newPage) {
