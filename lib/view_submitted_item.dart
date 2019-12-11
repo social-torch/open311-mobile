@@ -86,7 +86,8 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
       children: [
         new GestureDetector(
           onTap: () {
-            CityData().itemSelected = true; 
+            CityData().itemSelected = true;
+            navPage = "/all_reports";
             Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
           },
           child: Container(
