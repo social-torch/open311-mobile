@@ -169,13 +169,15 @@ class SubmitBodyState extends State<SubmitBody> {
       }
 
       //Populate our request with user data
+      var desc = new List.filled(1, Description(ReportData().description, ""));
+      var mu = new List.filled(1, Media(media_url, ""));
       Requests req = new Requests(
         "",
         "",
         "",
         ReportData().type,
         ReportData().type_code,
-        ReportData().description,
+        new Descriptions(desc, ""),
         "",
         "",
         "",
@@ -186,8 +188,7 @@ class SubmitBodyState extends State<SubmitBody> {
         0,
         ReportData().latlng.latitude, 
         ReportData().latlng.longitude, 
-        media_url);
-
+        new Medias(mu, ""));
 
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";

@@ -46,6 +46,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
 
   Future<Widget> _getValidImgAsync() async {
     Widget retval;
+/*
     if (CityData().req_resp.requests[CityData().prevReqIdx].media_url != "") {
       try {
         final Dio dio = Dio();
@@ -69,7 +70,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
       } catch(e) {
         print(e);
       }
-    }
+    }*/
     return retval;
   }
  
@@ -124,11 +125,12 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime));
     date_stat_descript.add("Issue Submitted");
     String desc = "N/A";
+/*
     if (CityData().req_resp.requests[CityData().prevReqIdx].description != "") {
       desc = CityData().req_resp.requests[CityData().prevReqIdx].description;
     }
     date_stat_descript.add("Description: " + desc);
-
+*/
     status.add(new List<String>.from(date_stat_descript));
     
     date_stat_descript.clear();
