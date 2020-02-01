@@ -118,7 +118,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
 
   Widget _getProgressList() {
 
-    //Create progress blurbs from datetime information and status from backend
+    //Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
     List<List<String> > status = new List<List<String> >();
     List<String> date_stat_descript = new List<String>();
     date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime));
@@ -132,9 +132,20 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     status.add(new List<String>.from(date_stat_descript));
     
     date_stat_descript.clear();
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") ) {
+    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
+         ( (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") || 
+           (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") || 
+           (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed")) 
+       ) {
       date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
       date_stat_descript.add("Issue Received");
+      if (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") {
+        String s_notes = "N/A";
+        if (CityData().req_resp.requests[CityData().prevReqIdx].status_notes != "") {
+          s_notes = CityData().req_resp.requests[CityData().prevReqIdx].status_notes;
+        }
+        date_stat_descript.add("Status Notes: " + s_notes);
+      }
       if ( CityData().req_resp.requests[CityData().prevReqIdx].expected_datetime != "" ) {
         date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city and is scheduled to be resolved starting " + getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].expected_datetime) + ".");
       }
@@ -143,7 +154,22 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
         date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city. You will receive a notification when the request has been addressed by the servicing agency.");
       }
     }
-    else if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") ) {
+    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
+         ( (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") || 
+           (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") ) )  {
+      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+      date_stat_descript.add("Issue In Progress");
+      if (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") {
+        String s_notes = "N/A";
+        if (CityData().req_resp.requests[CityData().prevReqIdx].status_notes != "") {
+          s_notes = CityData().req_resp.requests[CityData().prevReqIdx].status_notes;
+        }
+        date_stat_descript.add("Status Notes: " + s_notes);
+      }
+      date_stat_descript.add("This issue resolution is in progress");
+    }
+    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
+         (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") )  {
       date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
       date_stat_descript.add("Issue Resolved");
       date_stat_descript.add("This issue has been resolved. Thank you for your submission.");
@@ -195,6 +221,8 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                     ),
                   ),
                   Text(status[Index].elementAt(2)),
+                  Text(status[Index].length >=4 ? status[Index].elementAt(3) : ""),
+                  Text(status[Index].length >=5 ? status[Index].elementAt(4) : ""),
                 ]  
               ),
             ),
