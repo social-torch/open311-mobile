@@ -1,40 +1,44 @@
-class Description {
-  final String description;
+class AuditEntry{
+  final String change_note;
+  final String account_id;
   final String timestamp;
   
-  Description(
-    this.description,
+  AuditEntry(
+    this.change_note,
+    this.account_id,
     this.timestamp
   );
 
-  Description.fromJson(Map<String, dynamic> json)
-  : description = json["description"],
+  AuditEntry.fromJson(Map<String, dynamic> json)
+  : change_note = json["change_note"],
+    account_id = json["account_id"],
     timestamp = json["timestamp"];
 
   Map<String, dynamic> toJson() =>
   {
-    'description':description,
+    'change_note':change_note,
+    'account_id':account_id,
     'timestamp':timestamp
   };
 }
 
-class Descriptions {
-  final List<Description> descriptions;
+class AuditEntries{
+  final List<AuditEntry> audit_logs;
   final String error;
 
-  Descriptions(this.descriptions, this.error);
+  AuditEntries(this.audit_logs, this.error);
 
-  Descriptions.fromJson(List<dynamic> json)
-  : descriptions = json.map((i) => new Description.fromJson(i)).toList(),
+  AuditEntries.fromJson(List<dynamic> json)
+  : audit_logs = json?.map((i) => new AuditEntry.fromJson(i))?.toList() ?? List(),
     error = "";
 
-  Descriptions.withError(String errorValue)
-  : descriptions = List(),
+  AuditEntries.withError(String errorValue)
+  : audit_logs = List(),
     error = errorValue;
 
   Map<String, dynamic> toJson() =>
   {
-    "descriptions":descriptions.map((i) => i.toJson()).toList()
+    "audit_log":audit_logs.map((i) => i.toJson()).toList()
   };
 }
 
@@ -65,7 +69,7 @@ class Medias {
   Medias(this.medias, this.error);
 
   Medias.fromJson(List<dynamic> json)
-  : medias = json.map((i) => new Media.fromJson(i)).toList(),
+  : medias = json?.map((i) => new Media.fromJson(i))?.toList() ?? List(),
     error = "";
 
   Medias.withError(String errorValue)
@@ -84,7 +88,7 @@ class Requests {
   final String status_notes;
   final String service_name;
   final String service_code;
-  final Descriptions descriptions;
+  final String description;
   final String agency_responsible;
   final String service_notice;
   final String requested_datetime;
@@ -96,6 +100,7 @@ class Requests {
   final double lat;
   final double lon;
   final Medias media_urls;
+  final AuditEntries audit_log;
 
   Requests(
     this.service_request_id,
@@ -103,7 +108,7 @@ class Requests {
     this.status_notes,
     this.service_name,
     this.service_code,
-    this.descriptions,
+    this.description,
     this.agency_responsible,
     this.service_notice,
     this.requested_datetime,
@@ -114,7 +119,8 @@ class Requests {
     this.zipcode,
     this.lat,
     this.lon,
-    this.media_urls);
+    this.media_urls,
+    this.audit_log);
 
   Requests.fromJson(Map<String, dynamic> json)
   : service_request_id = json["service_request_id"],
@@ -122,7 +128,7 @@ class Requests {
     status_notes = json["status_notes"],
     service_name = json["service_name"],
     service_code = json["service_code"],
-    descriptions = Descriptions.fromJson(json["descriptions"]),
+    description = json["description"],
     agency_responsible = json["agency_responsible"],
     service_notice = json["service_notice"],
     requested_datetime = json["requested_datetime"],
@@ -133,7 +139,8 @@ class Requests {
     zipcode = json["zipcode"],
     lat = json["lat"] + 0.0,
     lon = json["lon"] + 0.0,
-    media_urls = Medias.fromJson(json["media_urls"]);
+    media_urls = Medias.fromJson(json["media_urls"]),
+    audit_log = AuditEntries.fromJson(json["audit_log"]);
 
   Map<String, dynamic> toJson() =>
   {
@@ -142,7 +149,7 @@ class Requests {
     'status_notes':status_notes,
     'service_name':service_name,
     'service_code':service_code,
-    'descriptions':descriptions.toJson(),
+    'description':description,
     'agency_responsible':agency_responsible,
     'service_notice':service_notice,
     'requested_datetime':requested_datetime,
@@ -153,7 +160,8 @@ class Requests {
     'zipcode':zipcode,
     'lat':lat + 0.0,
     'lon':lon + 0.0,
-    'media_urls':media_urls.toJson(),
+    'media_urls':media_urls,
+    'audit_log':audit_log.toJson(),
   };
 }
 

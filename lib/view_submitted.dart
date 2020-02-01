@@ -46,6 +46,8 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
         for (int j=0; j<CityData().limited_req_resp.requests.length; j++) {
           for (int i=0; i<CityData().req_resp.requests.length; i++) {
             if (CityData().req_resp.requests[i].service_request_id == CityData().limited_req_resp.requests[j].service_request_id) {
+              print("WOOT 1");
+              print(CityData().limited_req_resp.requests[j].toJson());
               req_list.add(new Requests.fromJson(CityData().limited_req_resp.requests[j].toJson()));
               limited_to_req_idx.add(i);
               break;
@@ -53,6 +55,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
           }
         }
       } else {
+        print("WOOT 2");
         CityData().req_resp.requests.forEach((r) => req_list.add(new Requests.fromJson(r.toJson())));
       }
     });
