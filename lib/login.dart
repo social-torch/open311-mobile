@@ -15,6 +15,7 @@ import 'my_homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ensure_visible_when_focused.dart';
 import 'package:encrypt/encrypt.dart';
+import 'select_city_common.dart';
 
 CognitoUserSession _cog_user_session;
 CognitoUser _cog_user;
@@ -130,6 +131,9 @@ class AuthPageBodyState extends State<AuthPageBody> {
       }());
 
       startRefreshTokTimer();
+
+      //Update requests page to show user's requests
+      getUsers(globals.endpoint311 + "/user/" + globals.userName);
 
       //This is a bit of a hack but force bottom app bar to change color appropriately
       navPage = "/all_reports";

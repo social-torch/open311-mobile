@@ -211,6 +211,7 @@ class SubmitBodyState extends State<SubmitBody> {
       }());
       retval = successBody();
       getRequests(globals.endpoint311 + "/requests");
+      getUsers(globals.endpoint311 + "/user/" + globals.userName);
     } catch (e) {
       print(e);
       retval = failedBody();
