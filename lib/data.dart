@@ -114,3 +114,16 @@ class DeviceData{
   }
   DeviceData._internal();
 }
+
+class UpdateData{
+
+  static final UpdateData _rds = new UpdateData._internal();
+
+  Requests req;
+
+
+  factory UpdateData() {
+    return _rds;
+  }
+  UpdateData._internal();
+}

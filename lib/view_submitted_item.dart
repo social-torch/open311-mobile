@@ -281,20 +281,26 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                             textScaleFactor: 1.0,
                           ),
                           Container(height: 10.0),
-                          Container(
-                            width: DeviceData().ButtonHeight * 1.5,
-                            height: DeviceData().ButtonHeight * 0.4,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  CityData().req_resp.requests[CityData().prevReqIdx].status,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ]
+                          InkWell(
+                            onTap: () {
+                              UpdateData().req = CityData().req_resp.requests[CityData().prevReqIdx];
+                              Navigator.of(context).pushNamed('/update_report');
+                            },
+                            child: Container(
+                              width: DeviceData().ButtonHeight * 1.5,
+                              height: DeviceData().ButtonHeight * 0.4,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                                  color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    CityData().req_resp.requests[CityData().prevReqIdx].status,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ]
+                              ),
                             ),
                           ),
                         ]

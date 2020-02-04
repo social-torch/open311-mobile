@@ -12,6 +12,7 @@ import "select_city.dart";
 import "login.dart";
 import "my_homepage.dart";
 import "new_report.dart";
+import "update_report.dart";
 import "view_submitted.dart";
 import "view_submitted_user.dart";
 import "view_submitted_item.dart";
@@ -53,6 +54,7 @@ Future<void> main() async {
     '/login': (context) => AuthPage(),
     '/reset_password': (context) => ResetPasswordPage(),
     '/new_report': (context) => NewReportPage(),
+    '/update_report': (context) => UpdateReportPage(),
     '/view_submitted': (context) => ViewSubmittedPage(),
     '/view_submitted_user': (context) => ViewSubmittedUserPage(),
     '/view_submitted_item': (context) => ViewSubmittedItemPage(),
