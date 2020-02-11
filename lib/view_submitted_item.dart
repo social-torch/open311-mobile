@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'page.dart';
 import 'data.dart';
+import 'requests.dart';
 import 'description.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
@@ -283,8 +284,8 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                           Container(height: 10.0),
                           InkWell(
                             onTap: () {
-                              UpdateData().req = CityData().req_resp.requests[CityData().prevReqIdx];
-                              Navigator.of(context).pushNamed('/update_report');
+                              UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
+                              Navigator.of(context).pushNamed('/update_report_status');
                             },
                             child: Container(
                               width: DeviceData().ButtonHeight * 1.5,

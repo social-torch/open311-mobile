@@ -1,7 +1,10 @@
+
+List<String> statusTypes = ["open", "accepted", "inProgress", "closed"];
+
 class Requests {
   final String service_request_id;
-  final String status;
-  final String status_notes;
+  String status;
+  String status_notes;
   final String service_name;
   final String service_code;
   final String description;
@@ -15,7 +18,7 @@ class Requests {
   final int zipcode;
   final double lat;
   final double lon;
-  final String media_url;
+  String media_url;
 
   Requests(
     this.service_request_id,
@@ -35,6 +38,8 @@ class Requests {
     this.lat,
     this.lon,
     this.media_url);
+
+  //void set status_notes(String sn) { this.status_notes = sn; } 
 
   Requests.fromJson(Map<String, dynamic> json)
   : service_request_id = json["service_request_id"],
