@@ -87,7 +87,7 @@ class UpdateReportBodyState extends State<UpdateReportBody> {
           headers: {"Content-Type": "image/" + media_url.split(".").last}
         );
       }
-
+      UpdateData().req.status = UpdateData().status;
       UpdateData().req.status_notes = descController.text;
 
       //Send post of user request to backend
@@ -144,6 +144,15 @@ class UpdateReportBodyState extends State<UpdateReportBody> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    child: Text(
+                      'New Status: ' + UpdateData().status,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
                 Container(height: 30.0),
                 ColorSliverTextField(
                   maxLines: 6,
@@ -152,23 +161,13 @@ class UpdateReportBodyState extends State<UpdateReportBody> {
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: () { getImage(ImageSource.camera); },
-                  child: Row(
-                    children: [
-                      Image.asset("images/camera.png", height: 45.0,),
-                      Text("    Camera"),
-                  ],
-                  ),
+                  onPressed: () { Navigator.of(context).pushNamed('/update_report_loc'); },
+                  child: Text("Update Location"),
                 ),
                 Container(height: 15.0),
                 ColorSliverButton(
-                  onPressed: () { getImage(ImageSource.gallery); },
-                  child: Row(
-                    children: [
-                      Image.asset("images/library.png", height: 45.0,),
-                      Text("    Photo Library"),
-                    ],
-                  ),
+                  onPressed: () { Navigator.of(context).pushNamed('/update_report_img'); },
+                  child: Text("Update Photo"),
                 ),
                 Container(height: 15.0),
                 Row(

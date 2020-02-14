@@ -120,7 +120,7 @@ class UpdateData{
   static final UpdateData _rds = new UpdateData._internal();
 
   Requests req;
-
+  String status;
 
   factory UpdateData() {
     return _rds;

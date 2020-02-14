@@ -78,7 +78,7 @@ class UpdateReportStatusBodyState extends State<UpdateReportStatusBody> {
                         children: [ 
                           new ColorSliverButton(
                             onPressed: () {
-                              UpdateData().req.status = statusTypes[Index];
+                              UpdateData().status = statusTypes[Index];
                               nextPage();
                             }, 
                             child: Text(statusTypes[Index]),
