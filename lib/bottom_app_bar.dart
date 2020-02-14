@@ -81,7 +81,7 @@ class _LogoutDialogState extends State<LogoutDialog> {
             children: <Widget>[
               Text("Are you sure you want to logout?"),
               SwitchListTile(
-                title: Text("Don't ask again"),
+                title: Text("Ask to confirm logout"),
                 value: askLogout,
                 onChanged: (bool value) { setState(() {askLogout=value; }); }
               ),
@@ -249,9 +249,8 @@ Widget commonBottomBar(context) {
                           if (LOResult.shouldLogout) {
                             _performLogout(context);
                           }
-                          // Negated here because the user is asked "Don't ask again"
-                          // So if don't ask again is "false", ask again is true...
-                          prefs.setBool("askLogout", !LOResult.askLogout);
+                          // Record if the user wants us to ask to confirm logout
+                          prefs.setBool("askLogout", LOResult.askLogout);
                         });
                       } else {
                         _performLogout(context);
