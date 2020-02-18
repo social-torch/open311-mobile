@@ -86,8 +86,8 @@ class AuthPageBodyState extends State<AuthPageBody> {
   void authenticate() async {
     _cog_user = new CognitoUser(emailController.text, userPool);
     final authDetails = new AuthenticationDetails(
-        username: emailController.text, password:
-    passwordController.text);
+        username: emailController.text,
+        password: passwordController.text);
     try {
       _cog_user_session = await _cog_user.authenticateUser(authDetails);
       _scaffoldKey.currentState.showSnackBar(
@@ -293,7 +293,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
                               authenticate();
                             }
                           },
-                          child: Text('Authenticate'),
+                          child: Text('Sign In'),
                         ),
                         Container(
                           height: 20.0,

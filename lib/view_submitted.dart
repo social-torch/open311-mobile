@@ -161,7 +161,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                   width: double.infinity,
                   child: Container(
                     child: Text(
-                      'Submitted Service Requests',
+                      'All Submitted Requests',
                       textAlign: TextAlign.center,
                       textScaleFactor: 2.0,
                     ),

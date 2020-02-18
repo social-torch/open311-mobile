@@ -46,7 +46,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
 
   Future<Widget> _getValidImgAsync() async {
     Widget retval;
-    if (CityData().req_resp.requests[CityData().prevReqIdx].media_url != "") {
+    if (CityData().req_resp.requests[CityData().prevReqIdx].media_url ?? "" != "") {
       try {
         final Dio dio = Dio();
         Response s3rep = await dio.get(
@@ -74,7 +74,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
  
   Widget _getValidImg(BuildContext context) {
-    Widget retval = new Text("");
+    Widget retval = new Text("Loading...");
     if (_validImg != null) {
       retval = _validImg;
     }
@@ -82,38 +82,54 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
  
   Widget _getImg() {
-    Widget retval = new Stack(
-      children: [
-        new GestureDetector(
-          onTap: () {
-            CityData().itemSelected = true;
-            navPage = "/all_reports";
-            Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
-          },
-          child: Container(
-          height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
-          width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-        ),
-        ),
-        Positioned(
-          bottom: ((MediaQuery.of(context).size.width * 0.5) - 39.0)/2.0,
-          child: Text("No image available"),
-        ),
-        Positioned(
-          child: GestureDetector(
-            onTap: () {
-              CityData().itemSelected = true;
-              Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
-            },
-            child:  _getValidImg(context),
-          ),
-        ),
-      ]
-    );
-    return retval;
+    if (CityData().req_resp.requests[CityData().prevReqIdx].media_url ?? "" == "") {
+      Widget retval = new Stack(
+          children: [
+            new GestureDetector(
+              onTap: () {
+                CityData().itemSelected = true;
+                navPage = "/all_reports";
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    "/all_reports", ModalRoute.withName("/nada"));
+              },
+              child: Container(
+                height: (MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.5) - 39.0,
+                width: (MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.5) - 39.0,
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            Positioned.fill(
+                child: new Column(children: [
+                  Image.asset("images/blank_image.png"),
+                  Text("No image available")])
+            )
+            /*,
+            Positioned(
+              child: GestureDetector(
+                onTap: () {
+                  CityData().itemSelected = true;
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      "/all_reports", ModalRoute.withName("/nada"));
+                },
+                child: _getValidImg(context),
+              ),
+            ),*/
+          ]
+      );
+      return retval;
+    } else {
+      Widget retval = new Stack(children:[Text("Loading")]);
+
+      return retval;
+    }
   }
 
   Widget _getProgressList() {
@@ -254,7 +270,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                   width: double.infinity,
                   child: Container(
                     child: Text(
-                      'Submitted Service Requests',
+                      'Request Details',
                       textAlign: TextAlign.center,
                       textScaleFactor: 2.0,
                     ),
