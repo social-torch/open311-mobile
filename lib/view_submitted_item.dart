@@ -62,7 +62,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
         debugPrint(CityData().req_resp.requests[CityData().prevReqIdx].media_url);
         retval = new Image.network(
           s3ep.url,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
           height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
           width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
           alignment: Alignment.center,
