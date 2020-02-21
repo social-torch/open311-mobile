@@ -54,8 +54,7 @@ Future<int> getServices(endpoint) async {
         },
       ),
     );
-    // TODO: Sort the services ehre because the Dynamo table isn't set up to do it.
-    // and if it was, you'd still need a query with a scanIndexForward param to sort on service name
+
     CityData().serv_resp = ServicesResponse.fromJson(response.data);
   } catch (error, stacktrace) {
     assert(() {

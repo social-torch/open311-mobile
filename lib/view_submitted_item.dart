@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:open311/requests.dart';
 import 'page.dart';
 import 'data.dart';
 import 'description.dart';
@@ -84,72 +85,47 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
  
   Widget _getImg() {
+    Widget contents;
     if ((CityData().req_resp.requests[CityData().prevReqIdx].media_url ?? "") == "") {
-      Widget retval = new Stack(
-          children: [
-            new GestureDetector(
-              onTap: () {
-                CityData().itemSelected = true;
-                navPage = "/all_reports";
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    "/all_reports", ModalRoute.withName("/nada"));
-              },
-              child: Container(
-                height: (MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.5) - 39.0,
-                width: (MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.5) - 39.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  )
-                ),
-                child: new Column(children: [
-                      Image.asset("images/blank_image.png"),
-                      Text("No image available")])
-                )
-              )]
-            );
-      return retval;
+      // If the request has no image, put up a blank image and note.
+      contents = new Column(children: [
+        Image.asset("images/blank_image.png"),
+        Text("No image available")]);
     } else {
-//      Widget retval = new Stack(children:[Text("GetImg: Loading")]);
-      Widget retval = new Stack(
-          children: [
-            new GestureDetector(
-                onTap: () {
-                  CityData().itemSelected = true;
-                  navPage = "/all_reports";
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      "/all_reports", ModalRoute.withName("/nada"));
-                },
-                child: Container(
-                    height: (MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.5) - 39.0,
-                    width: (MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.5) - 39.0,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 2,
-                      )
-                    ),
-                    child: _getValidImg(context)
-                )
-            )]
-      );
-      return retval;
+      // Otherwise, get the image async and show it when ready
+      contents =  _getValidImg(context);
     }
+
+    Widget retval = new Stack(
+      children: [
+        new GestureDetector(
+          onTap: () {
+            CityData().itemSelected = true;
+            navPage = "/all_reports";
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                "/all_reports", ModalRoute.withName("/nada"));
+          },
+          child: Container(
+            height: (MediaQuery
+                .of(context)
+                .size
+                .width * 0.5) - 39.0,
+            width: (MediaQuery
+                .of(context)
+                .size
+                .width * 0.5) - 39.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.black,
+                width: 2,
+              )
+            ),
+            child: contents
+            )
+          )]
+        );
+      return retval;
   }
 
   Widget _getProgressList() {
@@ -269,8 +245,61 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     return retval;
   }
 
+  Widget getRequestTitle(Requests req)
+  {
+    String title;
+    if (CityData().users_resp.submitted_request_ids.indexOf(req.service_request_id) == -1) {
+      title = 'Request Details';
+    } else {
+      title = "Your Request Details";
+    }
+    Widget retval = Text(
+      title,
+      textAlign: TextAlign.center,
+      textScaleFactor: 2.0,
+    );
+    return retval;
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget requestCancellationButton(Requests req) {
+    if (CityData().users_resp.submitted_request_ids.indexOf(req.service_request_id) == -1) {
+      return Container(height:0);
+    } else {
+      return RaisedButton(
+        onPressed: () {
+          _showDialog();
+          }, // TODO: On Cancel, bring up a dialog to confirm and give a reason, like the feedback dialog
+        child: const Text('Cancel Request', style: TextStyle(fontSize: 18)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Requests curReq = CityData().req_resp.requests[CityData().prevReqIdx];
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
@@ -289,11 +318,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                 SizedBox(
                   width: double.infinity,
                   child: Container(
-                    child: Text(
-                      'Request Details',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 2.0,
-                    ),
+                    child: getRequestTitle(curReq),
                   ),
                 ),
                 Container(height: 30.0),
@@ -307,13 +332,13 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                         children: [
                           SizedBox(
                             child: Text(
-                              CityData().req_resp.requests[CityData().prevReqIdx].service_name + " " + getBasicAddress(CityData().req_resp.requests[CityData().prevReqIdx].address),
+                              curReq.service_name + " " + getBasicAddress(curReq.address),
                               textScaleFactor: 1.2,
                             ),
                           ),
                           Container(height: 10.0),
                           Text(
-                            getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime),
+                            getTimeString(curReq.requested_datetime),
                             textScaleFactor: 1.0,
                           ),
                           Container(height: 10.0),
@@ -322,17 +347,18 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                             height: DeviceData().ButtonHeight * 0.4,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
+                                color: getStatusColor(curReq.status),
                             ),
                             child: Column(
                               children: [
                                 Text(
-                                  CityData().req_resp.requests[CityData().prevReqIdx].status,
+                                  curReq.status,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ]
                             ),
                           ),
+                          requestCancellationButton(curReq)
                         ]
                       ),
                     ),
