@@ -128,11 +128,11 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
       return retval;
   }
 
+  /// Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
   Widget _getProgressList() {
-
-    //Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
     List<List<String> > status = new List<List<String> >();
     List<String> date_stat_descript = new List<String>();
+    Requests req = CityData().req_resp.requests[CityData().prevReqIdx];
     date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime));
     date_stat_descript.add("Issue Submitted");
     String desc = "N/A";
@@ -144,45 +144,45 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     status.add(new List<String>.from(date_stat_descript));
     
     date_stat_descript.clear();
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
-         ( (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") || 
-           (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") || 
-           (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed")) 
+    if ( (req.update_datetime != "") &&
+        ( (req.status == "open") || (req.status == "inProgress") || (req.status == "closed"))
        ) {
-      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+      date_stat_descript.add(getTimeString(req.update_datetime));
       date_stat_descript.add("Issue Received");
-      if (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") {
+      if (req.status == "open") {
         String s_notes = "N/A";
-        if (CityData().req_resp.requests[CityData().prevReqIdx].status_notes != "") {
-          s_notes = CityData().req_resp.requests[CityData().prevReqIdx].status_notes;
+        if (req.status_notes != "") {
+          s_notes = req.status_notes;
         }
         date_stat_descript.add("Status Notes: " + s_notes);
       }
-      if ( CityData().req_resp.requests[CityData().prevReqIdx].expected_datetime != "" ) {
-        date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city and is scheduled to be resolved starting " + getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].expected_datetime) + ".");
+      if (req.expected_datetime != "" ) {
+        date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city and is scheduled to be resolved starting " + getTimeString(req.expected_datetime) + ".");
       }
       else
       {
         date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city. You will receive a notification when the request has been addressed by the servicing agency.");
       }
     }
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
-         ( (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") || 
-           (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") ) )  {
-      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+    if ( (req.update_datetime != "") &&
+         ( (req.status == "inProgress") || (req.status == "closed") ) )  {
+      date_stat_descript.add(getTimeString(req.update_datetime));
       date_stat_descript.add("Issue In Progress");
-      if (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") {
+      if (req.status == "inProgress") {
         String s_notes = "N/A";
-        if (CityData().req_resp.requests[CityData().prevReqIdx].status_notes != "") {
-          s_notes = CityData().req_resp.requests[CityData().prevReqIdx].status_notes;
+        if (req.status_notes != "") {
+          s_notes = req.status_notes;
         }
         date_stat_descript.add("Status Notes: " + s_notes);
       }
       date_stat_descript.add("This issue resolution is in progress");
     }
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
-         (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") )  {
-      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+
+    // TODO: Add items from the auditLog here?
+
+    if ( (req.update_datetime != "") &&
+         (req.status == "closed") )  {
+      date_stat_descript.add(getTimeString(req.update_datetime));
       date_stat_descript.add("Issue Resolved");
       date_stat_descript.add("This issue has been resolved. Thank you for your submission.");
     }
@@ -261,37 +261,44 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     return retval;
   }
 
-  void _showDialog() {
-    // flutter defined function
+  /// Shows a dialog to allow the user to cancel an open request of theirs
+  void showRequestCancelConfirmDialog(Requests req) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          title: new Text("Alert Dialog title"),
-          content: new Text("Alert Dialog body"),
+          title: new Text("Request Cancellation"),
+          content: new Text("Are you sure? This can not be undone."),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             new FlatButton(
-              child: new Text("Close"),
+              child: new Text("Yes"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            ),
+            ),new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            )
           ],
         );
       },
     );
   }
 
+  /// Returns a widget if the user is able to cancel a request
+  /// Request needs to have been submitted by the user and it must still be in the "open" state
   Widget requestCancellationButton(Requests req) {
-    if (CityData().users_resp.submitted_request_ids.indexOf(req.service_request_id) == -1) {
+    // If this isn't our request or if it isn't open, don't show the button
+    if (CityData().users_resp.submitted_request_ids.indexOf(req.service_request_id) == -1 ||
+        req.status != "open") {
       return Container(height:0);
     } else {
       return RaisedButton(
         onPressed: () {
-          _showDialog();
-          }, // TODO: On Cancel, bring up a dialog to confirm and give a reason, like the feedback dialog
+          showRequestCancelConfirmDialog(req);
+          },
         child: const Text('Cancel Request', style: TextStyle(fontSize: 18)),
       );
     }
