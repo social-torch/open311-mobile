@@ -36,6 +36,7 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
   //Map variables
   var _defaultLoc = LatLng(42.8137, -73.9398);
   LatLng _markerLoc = null;
+  String _markerLocAddrStr = "";
   var _defaultZoom = 15.0;
   MapController _mapController = MapController();
   bool usingDevLoc = true;
@@ -122,7 +123,6 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
       var latlng = LatLng(location.latitude, location.longitude);
       setState(() {
         _currentLocation = location;
-        _markerLoc = latlng;
       });
       if (_mapController != null) {
         usingDevLoc = false;
@@ -167,7 +167,6 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
       var latlng = LatLng(location.latitude, location.longitude);
       setState(() {
         _currentLocation = location;
-        _markerLoc = latlng;
       });
       if (_mapController != null) {
         usingDevLoc = false;
@@ -179,6 +178,28 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
   void _handleTap(LatLng latlng) {
     setState(() {
       _markerLoc = latlng;
+    });
+  }
+
+  void _confirmedLoc(double lat, double lon, BuildContext context) async{
+    UpdateData().lat = lat;
+    UpdateData().lon = lon;
+    await _latLngToAddress(lat, lon);
+    UpdateData().address = _markerLocAddrStr;
+    assert(() {
+      //Using assert here for debug only prints
+      print(UpdateData().lat);
+      print(UpdateData().lon);
+      print(UpdateData().address);
+      return true;
+    }());
+    Navigator.of(context).pop();
+  }
+
+  void _latLngToAddress(double lat, double lon) async {
+    var addr = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(lat, lon));
+    setState(() {
+      _markerLocAddrStr = addr.first?.addressLine ?? "";
     });
   }
 
@@ -210,7 +231,7 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
   Widget build(BuildContext context) {
 
     if (_markerLoc == null) {
-      _markerLoc = _defaultLoc;
+      _markerLoc = LatLng(UpdateData().req.lat, UpdateData().req.lon);
     }
    
 
@@ -347,15 +368,7 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
                       color: CustomColors.appBarColor,
                       textColor: Colors.white,
                       onPressed: () {
-                        var rp = new ReportData();
-                        rp.latlng = _markerLoc;
-                        rp.addr = "";
-                         assert(() {
-                           //Using assert here for debug only prints
-                           print(rp);
-                           return true;
-                         }());
-                        Navigator.of(context).pop();
+                        _confirmedLoc(_markerLoc.latitude, _markerLoc.longitude, context);
                       },
                       child: Text( "Confirm Location"),
                     ),

@@ -121,6 +121,9 @@ class UpdateData{
 
   Requests req;
   String status;
+  double lat;
+  double lon;
+  String address;
 
   factory UpdateData() {
     return _rds;
