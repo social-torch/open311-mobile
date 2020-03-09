@@ -116,10 +116,6 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                 .width * 0.5) - 39.0,
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(
-                color: Colors.black,
-                width: 2,
-              )
             ),
             child: contents
             )

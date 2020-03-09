@@ -87,6 +87,7 @@ Future<int> getRequests(endpoint) async {
 
     //For guest user we only show latest 25 items, lets filter them out now.
     RequestsResponse req_resp = RequestsResponse.fromJson(response.data);
+    // Sort req_resp using datetime compare, take top 25
     while(req_resp.requests.length > 25)
     {
       var oldestIdx = 0;
