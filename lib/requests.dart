@@ -1,7 +1,54 @@
+
+List<String> statusTypes = ["open", "accepted", "inProgress", "closed"];
+
+class AuditEntry{
+  final String change_note;
+  final String account_id;
+  final String timestamp;
+  
+  AuditEntry(
+    this.change_note,
+    this.account_id,
+    this.timestamp
+  );
+
+  AuditEntry.fromJson(Map<String, dynamic> json)
+  : change_note = json["change_note"],
+    account_id = json["account_id"],
+    timestamp = json["timestamp"];
+
+  Map<String, dynamic> toJson() =>
+  {
+    'change_note':change_note,
+    'account_id':account_id,
+    'timestamp':timestamp
+  };
+}
+
+class AuditEntries{
+  final List<AuditEntry> audit_logs;
+  final String error;
+
+  AuditEntries(this.audit_logs, this.error);
+
+  AuditEntries.fromJson(List<dynamic> json)
+  : audit_logs = json?.map((i) => new AuditEntry.fromJson(i))?.toList() ?? List(),
+    error = "";
+
+  AuditEntries.withError(String errorValue)
+  : audit_logs = List(),
+    error = errorValue;
+
+  Map<String, dynamic> toJson() =>
+  {
+    "audit_log":audit_logs.map((i) => i.toJson()).toList()
+  };
+}
+
 class Requests {
   final String service_request_id;
-  final String status;
-  final String status_notes;
+  String status;
+  String status_notes;
   final String service_name;
   final String service_code;
   final String description;
@@ -15,7 +62,8 @@ class Requests {
   final int zipcode;
   final double lat;
   final double lon;
-  final String media_url;
+  String media_url;
+  AuditEntries audit_log;
 
   Requests(
     this.service_request_id,
@@ -34,7 +82,10 @@ class Requests {
     this.zipcode,
     this.lat,
     this.lon,
-    this.media_url);
+    this.media_url,
+    this.audit_log);
+
+  //void set status_notes(String sn) { this.status_notes = sn; } 
 
   Requests.fromJson(Map<String, dynamic> json)
   : service_request_id = json["service_request_id"],
@@ -53,7 +104,8 @@ class Requests {
     zipcode = json["zipcode"],
     lat = json["lat"] + 0.0,
     lon = json["lon"] + 0.0,
-    media_url = json["media_url"];
+    media_url = json["media_url"],
+    audit_log = AuditEntries.fromJson(json["audit_log"]);
 
   Map<String, dynamic> toJson() =>
   {
@@ -74,6 +126,7 @@ class Requests {
     'lat':lat + 0.0,
     'lon':lon + 0.0,
     'media_url':media_url,
+    'audit_log':audit_log.toJson(),
   };
 }
 

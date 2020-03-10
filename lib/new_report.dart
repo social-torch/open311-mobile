@@ -9,7 +9,8 @@ import 'issue_type.dart';
 import 'bottom_app_bar.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
-
+import "globals.dart" as globals;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NewReportPage extends Page {
   NewReportPage() : super(const Icon(Icons.map), APP_NAME);
@@ -30,6 +31,9 @@ class NewReportBody extends StatefulWidget {
 class NewReportBodyState extends State<NewReportBody> {
   NewReportBodyState();
 
+  bool _disableButtons = true;
+  Timer enable_req_timer;
+  
   void getImage(ImageSource source) async {
     await ImagePicker.pickImage(source: source,
                                 maxWidth: 640,
@@ -42,9 +46,53 @@ class NewReportBodyState extends State<NewReportBody> {
     }
   }
 
+  void checkLastReqTime() async {
+    if ( (enable_req_timer) != null && enable_req_timer.isActive) {
+      enable_req_timer.cancel();
+    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String lastReqTime = prefs.getString('lastReqTime') ?? "";
+    if (lastReqTime == "") { //First request attempt, allow user to progress
+      setState(() {
+        _disableButtons = false;
+      });
+    } else {
+      var ts = DateTime.parse(lastReqTime);
+      var nextValidReqTime = ts.add(Duration(seconds: globals.sequentialReqDelay));
+      if ( nextValidReqTime.isAfter(DateTime.now()) ) { 
+        enable_req_timer = new Timer(nextValidReqTime.difference(DateTime.now()), () {
+          setState(() {
+            _disableButtons = false;
+          });
+        });
+      } else {
+        setState(() {
+          _disableButtons = false;
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
+    if ( globals.userName == globals.guestName ) { //Guest users can only submit after N seconds
+      setState(() {
+        _disableButtons = true; //Default to disabled and allow check to enable buttons
+      });
+      checkLastReqTime();
+    } else {
+      setState(() {
+        _disableButtons = true;
+      });
+    }
     super.initState();
+  }
+ 
+  @override
+  void dispose() {
+    //Kill timer, it will get started again next time page is entered
+    enable_req_timer.cancel();
+    super.dispose();
   }
 
   void locPage() {
@@ -86,13 +134,15 @@ class NewReportBodyState extends State<NewReportBody> {
                     ),
                   ),
                   Container(height: 30.0),
-                  ProgressDots(
-                    stage: 0,
-                    numStages: 4,
-                  ),
+                  _disableButtons ? 
+                    Text("Guest users can only submit new requests every ${(globals.sequentialReqDelay/60).toInt()} minutes please try again later") : 
+                    ProgressDots(
+                      stage: 0,
+                      numStages: 4,
+                    ),
                   Container(height: 30.0),
                   ColorSliverButton(
-                    onPressed: () { getImage(ImageSource.camera); },
+                    onPressed: _disableButtons ? null : () => getImage(ImageSource.camera),
                     child: Row(
                       children: [
                         Image.asset("images/camera.png", height: 45.0,),
@@ -102,7 +152,7 @@ class NewReportBodyState extends State<NewReportBody> {
                   ),
                   Container(height: 15.0),
                   ColorSliverButton(
-                    onPressed: () { getImage(ImageSource.gallery); },
+                    onPressed: _disableButtons ? null : () => getImage(ImageSource.gallery),
                     child: Row(
                       children: [
                         Image.asset("images/library.png", height: 45.0,),
@@ -112,7 +162,7 @@ class NewReportBodyState extends State<NewReportBody> {
                   ),
                   Container(height: 15.0),
                   ColorSliverButton(
-                    onPressed: () {
+                    onPressed: _disableButtons ? null : () {
                       ReportData().image = null;
                       locPage();
                     },

@@ -43,6 +43,12 @@ if [ -z "${OPEN311_KEY_STORE_FILE}" ]; then
   OPEN311_KEY_STORE_FILE=${HERE}/prebuild.sh
 fi
 
+if [ -z "${OPEN311_HELP_URL}" ]; then
+  echo "WARNING:  OPEN311_HELP_URL not set, using default https://socialtorch.org value..."
+  OPEN311_HELP_URL=https://socialtorch.org
+fi
+
+
 cat > ${HERE}/lib/auto_gen.dart << EOF
 import 'package:encrypt/encrypt.dart' as encrypt;
 String userPoolId = '${OPEN311_COGNITO_USER_POOL}';
@@ -51,6 +57,7 @@ String guestName = '${OPEN311_GUEST_USERNAME}';
 String guestPass = '${OPEN311_GUEST_PASSWORD}';
 final key = encrypt.Key.fromUtf8('${OPEN311_ENCRYPT_KEY}');
 String endpoint311base = '${OPEN311_BASE_URL}';
+String helpURL = '$(OPEN311_HELP_URL)';
 EOF
 
 cat > ${HERE}/android/key.properties << EOF

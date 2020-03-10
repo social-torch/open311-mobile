@@ -21,9 +21,13 @@ String popupMsg = "";
 final key = autogen.key;
 
 String endpoint311base = autogen.endpoint311base;
+String helpURL = autogen.helpURL; // URL to the help page for the given app
 //TODO: variable(s) below needs to be modified when user selects default city and persist after app closes
 String endpoint311 = 'nada';
 int cityIdx = 0;
 
 //Refresh token timer, when expired request new token using refresh token
 Timer refresh_tok_timer;
+
+//Guest users can only submit new requests every N seconds
+int sequentialReqDelay = 600;
