@@ -170,7 +170,7 @@ class SubmitBodyState extends State<SubmitBody> {
       }
 
       //Populate our request with user data
-      var ae = new List.filled(1, AuditEntry("Test", "", ""));
+      var ae = new List.filled(1, AuditEntry("Issue Submitted", globals.userName, DateTime.now().toUtc().toString()));
       Requests req = new Requests(
         "",
         "",
@@ -189,8 +189,7 @@ class SubmitBodyState extends State<SubmitBody> {
         ReportData().latlng.latitude, 
         ReportData().latlng.longitude, 
         media_url,
-        new AuditEntries(ae, ""));
-
+        ae);
 
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";

@@ -118,7 +118,6 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
 
   Widget _getProgressList() {
-
     //Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
     List<List<String> > status = new List<List<String> >();
     List<String> date_stat_descript = new List<String>();
@@ -284,8 +283,10 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                           Container(height: 10.0),
                           InkWell(
                             onTap: () {
-                              UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
-                              Navigator.of(context).pushNamed('/update_report_status');
+                              if ( (globals.userGroups != null) && globals.userGroups.contains("admin-"+CityData().cities_resp.cities[globals.cityIdx].city_name.split(",")[0].toLowerCase()) ) {
+                                UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
+                                Navigator.of(context).pushNamed('/update_report_status');
+                              }
                             },
                             child: Container(
                               width: DeviceData().ButtonHeight * 1.5,

@@ -80,9 +80,9 @@ class NewReportBodyState extends State<NewReportBody> {
         _disableButtons = true; //Default to disabled and allow check to enable buttons
       });
       checkLastReqTime();
-    } else {
+    } else { //Non-guest user, allow requests
       setState(() {
-        _disableButtons = true;
+        _disableButtons = false;
       });
     }
     super.initState();
@@ -91,7 +91,9 @@ class NewReportBodyState extends State<NewReportBody> {
   @override
   void dispose() {
     //Kill timer, it will get started again next time page is entered
-    enable_req_timer.cancel();
+    if (enable_req_timer != null) {
+      enable_req_timer.cancel();
+    }
     super.dispose();
   }
 

@@ -22,6 +22,7 @@ void startRefreshTokTimer() async {
           _cog_user_session = cus;
           globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
           globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+          globals.userGroups = new List<String>.from(_cog_user_session.getIdToken().payload['cognito:groups'] ?? [ "nada" ]);
           globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
         });
       } catch (e) {
@@ -46,6 +47,8 @@ void authenticate() async {
       } else {
         final iv = encrypt.IV.fromLength(16);
         final encrypter = encrypt.Encrypter(encrypt.AES(globals.key));
+        print("globals.userName");
+        print(globals.userName);
         globals.userName = encrypter.decrypt16(encryptedUid, iv: iv);
         globals.userPass = encrypter.decrypt16(encryptedPass, iv: iv);
       }
@@ -59,6 +62,7 @@ void authenticate() async {
     _cog_user_session = await _cog_user.authenticateUser(authDetails);
     globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
     globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+    globals.userGroups = new List<String>.from(_cog_user_session.getIdToken().payload['cognito:groups'] ?? [ "nada" ]);
     globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
     assert(() {
       if (false) {
