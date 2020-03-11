@@ -138,7 +138,7 @@ class SettingsBodyState extends State<SettingsBody> {
     }
 
     return retval;
-  }s
+  }
 
   /// Launches the Social Torch help page in the mobile browser
   _launchHelpURL() async {

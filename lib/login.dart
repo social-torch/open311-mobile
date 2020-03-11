@@ -167,6 +167,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
           duration: new Duration(seconds: 5),
         ),
       );
+      authenticating = false;
       print(e);
     }
   }
@@ -255,6 +256,12 @@ class AuthPageBodyState extends State<AuthPageBody> {
                               _focusNodeUser.unfocus();
                               FocusScope.of(context).requestFocus(_focusNodePass);
                             },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter your username';
+                              }
+                              return null;
+                            },
                             focusNode: _focusNodeUser,
                             textInputAction: TextInputAction.next,
                           ),
@@ -276,6 +283,9 @@ class AuthPageBodyState extends State<AuthPageBody> {
                               // code when the user saves the form.
                             },
                             validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Please enter your password';
+                              }
                               return null;
                             },
                             focusNode: _focusNodePass,
@@ -288,7 +298,8 @@ class AuthPageBodyState extends State<AuthPageBody> {
                           onPressed: () {
                             // Validate will return true if the form is valid, or false if
                             // the form is invalid.
-                            if ( !authenticating && registrationFormKey.currentState.validate()) {
+                            bool isValid = registrationFormKey.currentState.validate();
+                            if ( !authenticating && isValid) {
                               authenticating = true;
                               authenticate();
                             }
