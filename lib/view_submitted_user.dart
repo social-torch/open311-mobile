@@ -81,7 +81,15 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
         retval = new Column(
           children: [
             Text("No requests found",
-              textScaleFactor: 1.5)
+              textScaleFactor: 1.5),
+            ColorSliverButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/view_submitted');
+                },
+              child:Expanded(
+                child: Row(children:[Text("Show all requests")])
+              )
+              )
           ]
         );
         return retval;

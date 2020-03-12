@@ -74,6 +74,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
             _cog_user_session = cus;
             globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
             globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+            globals.userGroups = new List<String>.from(_cog_user_session.getIdToken().payload['cognito:groups'] ?? [ "nada" ]);
             globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
           });
         } catch (e) {
@@ -98,6 +99,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       );
       globals.userAccessToken = _cog_user_session.getAccessToken().getJwtToken();
       globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
+      globals.userGroups = new List<String>.from(_cog_user_session.getIdToken().payload['cognito:groups'] ?? [ "nada" ]);
       globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
       globals.userName = globals.userName = emailController.text.replaceAll('@','_AT_').replaceAll('+','_PLUS_');
       globals.userPass = passwordController.text;

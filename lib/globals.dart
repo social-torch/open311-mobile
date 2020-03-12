@@ -14,6 +14,7 @@ String userAccessToken = 'nada';
 String userIdToken = 'nada';
 String userRefreshToken = 'nada';
 String usernameSignup = 'nada';
+List<String> userGroups = [ 'nada' ];
 
 //Global info for popup messages, if string has data then next page that loads should show it
 String popupMsg = "";

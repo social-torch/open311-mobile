@@ -57,6 +57,16 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
       }
     });
 
+    // No requests in the database, return a message to the user
+    // saying that
+    if (req_list.length == 0) {
+      return new Column(
+        children: [
+          Text("No requests found", textScaleFactor: 1.5)
+        ]
+      );
+    }
+
     return new Expanded(
       child: new ListView.builder (
         itemCount: req_list.length,

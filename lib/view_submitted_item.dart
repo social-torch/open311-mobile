@@ -127,6 +127,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
 
   /// Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
   Widget _getProgressList() {
+    //Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
     List<List<String> > status = new List<List<String> >();
     List<String> date_stat_descript = new List<String>();
     Requests req = CityData().req_resp.requests[CityData().prevReqIdx];
@@ -245,7 +246,9 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   Widget getRequestTitle(Requests req)
   {
     String title;
-    if (CityData().users_resp.submitted_request_ids.indexOf(req.service_request_id) == -1) {
+    List reqs = CityData().users_resp.submitted_request_ids;
+    if ( reqs == null ||
+         reqs.indexOf(req.service_request_id) == -1) {
       title = 'Request Details';
     } else {
       title = "Your Request Details";
@@ -288,7 +291,10 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   /// Request needs to have been submitted by the user and it must still be in the "open" state
   Widget requestCancellationButton(Requests req) {
     // If this isn't our request or if it isn't open, don't show the button
-    if (CityData().users_resp.submitted_request_ids.indexOf(req.service_request_id) == -1 ||
+    List reqs = CityData().users_resp.submitted_request_ids;
+
+    if ((reqs != null &&
+         reqs.indexOf(req.service_request_id) == -1 ) ||
         req.status != "open") {
       return Container(height:0);
     } else {
@@ -348,8 +354,10 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                           Container(height: 10.0),
                           InkWell(
                             onTap: () {
-                              UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
-                              Navigator.of(context).pushNamed('/update_report_status');
+                              if ( (globals.userGroups != null) && globals.userGroups.contains("admin-"+CityData().cities_resp.cities[globals.cityIdx].city_name.split(",")[0].toLowerCase()) ) {
+                                UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
+                                Navigator.of(context).pushNamed('/update_report_status');
+                              }
                             },
                             child: Container(
                               width: DeviceData().ButtonHeight * 1.5,
