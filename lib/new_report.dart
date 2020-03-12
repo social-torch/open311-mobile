@@ -82,7 +82,7 @@ class NewReportBodyState extends State<NewReportBody> {
       checkLastReqTime();
     } else {
       setState(() {
-        _disableButtons = true;
+        _disableButtons = false;
       });
     }
     super.initState();
