@@ -75,7 +75,7 @@ class NewReportBodyState extends State<NewReportBody> {
 
   @override
   void initState() {
-    if ( globals.userName == globals.guestName ) { //Guest users can only submit after N seconds
+    if ( globals.isGuestUser()) { //Guest users can only submit after N seconds
       setState(() {
         _disableButtons = true; //Default to disabled and allow check to enable buttons
       });

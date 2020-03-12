@@ -36,7 +36,7 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
 
   Future<Widget> getBodyFuture() async {
     Widget retval;
-    if (globals.userName == globals.guestName) {
+    if (globals.isGuestUser()) {
       retval = new Expanded(
         child: Column(
           children: [

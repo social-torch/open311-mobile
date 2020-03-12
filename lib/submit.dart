@@ -213,7 +213,7 @@ class SubmitBodyState extends State<SubmitBody> {
       }());
       retval = successBody();
       //For guests log request time since we limit how often they can submit
-      if (globals.userName == globals.guestName) {
+      if (globals.isGuestUser()) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('lastReqTime', DateTime.now().toUtc().toString());
       }

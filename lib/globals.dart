@@ -32,3 +32,10 @@ Timer refresh_tok_timer;
 
 //Guest users can only submit new requests every N seconds
 int sequentialReqDelay = 600;
+
+/// Returns if the current user is a guest or not.
+/// Cleans up the string compares and if we ever need
+/// a different method we can replace it here
+bool isGuestUser() {
+  return userName == guestName;
+}

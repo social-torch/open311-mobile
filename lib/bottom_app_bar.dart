@@ -27,7 +27,7 @@ FontWeight _currentPageBold(currentPage) {
 
 String _logInOrOut() {
   String retval = "Log In";
-  if (globals.userName != globals.guestName) {
+  if (!globals.isGuestUser()) {
     retval = "Log Out";
   }
   return retval;

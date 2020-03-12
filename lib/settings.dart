@@ -95,7 +95,7 @@ class SettingsBodyState extends State<SettingsBody> {
       ]
     );
 
-    if ( globals.userName != globals.guestName ) {
+    if ( !globals.isGuestUser()) {
       retval = Column(
           mainAxisSize: MainAxisSize.min,
           children: [

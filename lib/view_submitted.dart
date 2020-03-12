@@ -41,7 +41,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
     setState(() {
       limited_to_req_idx = List();
       req_list = List();
-      if (globals.userName == globals.guestName) {
+      if (globals.isGuestUser()) {
         //Get index of limited to list to total list so when user selects items they get the item they selected
         for (int j=0; j<CityData().limited_req_resp.requests.length; j++) {
           for (int i=0; i<CityData().req_resp.requests.length; i++) {
@@ -75,7 +75,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
             children: [ 
               new ColorSliverButton(
                 onPressed: () {
-                  if (globals.userName == globals.guestName) {
+                  if (globals.isGuestUser()) {
                     CityData().prevReqIdx = limited_to_req_idx[Index];
                   } else {
                     CityData().prevReqIdx = Index;
