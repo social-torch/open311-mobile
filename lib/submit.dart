@@ -18,6 +18,7 @@ import 'custom_widgets.dart';
 import 'custom_colors.dart';
 import 'select_city_common.dart';
 import "globals.dart" as globals;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -169,6 +170,7 @@ class SubmitBodyState extends State<SubmitBody> {
       }
 
       //Populate our request with user data
+      var ae = new List.filled(1, AuditEntry("Issue Submitted", globals.userName, DateTime.now().toUtc().toString()));
       Requests req = new Requests(
         "",
         "",
@@ -186,8 +188,8 @@ class SubmitBodyState extends State<SubmitBody> {
         0,
         ReportData().latlng.latitude, 
         ReportData().latlng.longitude, 
-        media_url);
-
+        media_url,
+        ae);
 
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";
@@ -210,10 +212,16 @@ class SubmitBodyState extends State<SubmitBody> {
         return true;
       }());
       retval = successBody();
+      //For guests log request time since we limit how often they can submit
+      if (globals.isGuestUser()) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('lastReqTime', DateTime.now().toUtc().toString());
+      }
       getRequests(globals.endpoint311 + "/requests");
       getUsers(globals.endpoint311 + "/user/" + globals.userName);
     } catch (e) {
       print(e);
+      print(e.response.data);
       retval = failedBody();
     }
     return retval;

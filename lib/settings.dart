@@ -8,6 +8,7 @@ import 'custom_widgets.dart';
 import "globals.dart" as globals;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends Page {
   SettingsPage() : super(const Icon(Icons.map), APP_NAME);
@@ -94,7 +95,7 @@ class SettingsBodyState extends State<SettingsBody> {
       ]
     );
 
-    if ( globals.userName != globals.guestName ) {
+    if ( !globals.isGuestUser()) {
       retval = Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -137,6 +138,16 @@ class SettingsBodyState extends State<SettingsBody> {
     }
 
     return retval;
+  }
+
+  /// Launches the Social Torch help page in the mobile browser
+  _launchHelpURL() async {
+    String url = globals.helpURL;
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -204,6 +215,11 @@ class SettingsBodyState extends State<SettingsBody> {
                   ),
                   Container(height: 15.0),
                   _getAutoLogInWidget(),
+                  Container(height: 15.0),
+                  ColorSliverButton(
+                    onPressed: _launchHelpURL,
+                    child: Text('Get Help'),
+                  ),
                   Container(height: 15.0),
                   ColorSliverButton(
                     onPressed: () {

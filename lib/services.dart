@@ -32,10 +32,17 @@ class ServicesResponse {
 
   ServicesResponse(this.services, this.error);
 
+  // Takes a json of the services from the Dynamo query,
+  // For each item in the List, turns that into a Services object,
+  // Creates a list from the map of objects
+  // Then sorts the list based on service_name
   ServicesResponse.fromJson(List<dynamic> json)
       : services =
             json.map((i) => new Services.fromJson(i)).toList(),
-        error = "";
+        error = ""
+  {
+    services.sort((a,b) => a.service_name.compareTo(b.service_name));
+  }
 
   ServicesResponse.withError(String errorValue)
       : services = List(),

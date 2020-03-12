@@ -41,7 +41,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
     setState(() {
       limited_to_req_idx = List();
       req_list = List();
-      if (globals.userName == globals.guestName) {
+      if (globals.isGuestUser()) {
         //Get index of limited to list to total list so when user selects items they get the item they selected
         for (int j=0; j<CityData().limited_req_resp.requests.length; j++) {
           for (int i=0; i<CityData().req_resp.requests.length; i++) {
@@ -57,6 +57,16 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
       }
     });
 
+    // No requests in the database, return a message to the user
+    // saying that
+    if (req_list.length == 0) {
+      return new Column(
+        children: [
+          Text("No requests found", textScaleFactor: 1.5)
+        ]
+      );
+    }
+
     return new Expanded(
       child: new ListView.builder (
         itemCount: req_list.length,
@@ -65,7 +75,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
             children: [ 
               new ColorSliverButton(
                 onPressed: () {
-                  if (globals.userName == globals.guestName) {
+                  if (globals.isGuestUser()) {
                     CityData().prevReqIdx = limited_to_req_idx[Index];
                   } else {
                     CityData().prevReqIdx = Index;
@@ -161,7 +171,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                   width: double.infinity,
                   child: Container(
                     child: Text(
-                      'Submitted Service Requests',
+                      'All Submitted Requests',
                       textAlign: TextAlign.center,
                       textScaleFactor: 2.0,
                     ),

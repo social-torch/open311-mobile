@@ -37,7 +37,7 @@ class AllReportsBody extends StatefulWidget {
 
 Positioned __guestRestrictionMessage() {
   String restriction = "Only 25 Events are showing. Login in or sign up to view all events.";
-  if (globals.userName == globals.guestName) {
+  if (globals.isGuestUser()) {
     return new Positioned(
       top: 70,
       left: 25,
@@ -336,7 +336,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
 
   void _getMarkers() {
     _markers = List<Marker>();
-    if (globals.userName == globals.guestName) {
+    if (globals.isGuestUser()) {
       users_to_req_idx = List();
       req_list = List();
       //Get index of limited to list to total list so when user selects items they get the item they selected
@@ -439,7 +439,7 @@ class AllReportsBodyState extends State<AllReportsBody> {
         center: _defaultLoc,
         zoom: _defaultZoom,
         minZoom: 13.0,
-        maxZoom: 19.0,
+        maxZoom: 25.0,
         //swPanBoundary: LatLng(42.761463, -73.986886),
         //nePanBoundary: LatLng(42.844432, -73.886104),
       ),
@@ -447,6 +447,10 @@ class AllReportsBodyState extends State<AllReportsBody> {
         new TileLayerOptions(
           urlTemplate:
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", subdomains: ['a', 'b', 'c']
+            // Can use these other URLS for other map styles
+            //"https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", subdomains: ['a', 'b']
+            //"https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}.png"
+            //"https://api.mapbox.com/styles/v1/ststeve1/ck6lpo63a0blm1iph5bfdfku5/wmts?access_token=pk.eyJ1Ijoic3RzdGV2ZTEiLCJhIjoiY2s2bHBscWdxMGhseTNucGJqejFucGQzeSJ9.lsW32WJFPJWj-9bmODWhHQ"
         ),
         new MarkerLayerOptions(markers: _markers)
       ],

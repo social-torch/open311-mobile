@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:open311/requests.dart';
 import 'page.dart';
 import 'data.dart';
+import 'requests.dart';
 import 'description.dart';
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
@@ -46,7 +48,8 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
 
   Future<Widget> _getValidImgAsync() async {
     Widget retval;
-    if (CityData().req_resp.requests[CityData().prevReqIdx].media_url != "") {
+
+    if ((CityData().req_resp.requests[CityData().prevReqIdx].media_url ?? "") != "") {
       try {
         final Dio dio = Dio();
         Response s3rep = await dio.get(
@@ -61,12 +64,13 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
         debugPrint(CityData().req_resp.requests[CityData().prevReqIdx].media_url);
         retval = new Image.network(
           s3ep.url,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
           height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
           width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
           alignment: Alignment.center,
         );
       } catch(e) {
+        debugPrint(e.toString()+e.response.toString());
         print(e);
       }
     }
@@ -74,7 +78,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
  
   Widget _getValidImg(BuildContext context) {
-    Widget retval = new Text("");
+    Widget retval = new Text("Loading...");
     if (_validImg != null) {
       retval = _validImg;
     }
@@ -82,45 +86,51 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   }
  
   Widget _getImg() {
+    Widget contents;
+    if ((CityData().req_resp.requests[CityData().prevReqIdx].media_url ?? "") == "") {
+      // If the request has no image, put up a blank image and note.
+      contents = new Column(children: [
+        Image.asset("images/blank_image.png"),
+        Text("No image available")]);
+    } else {
+      // Otherwise, get the image async and show it when ready
+      contents =  _getValidImg(context);
+    }
+
     Widget retval = new Stack(
       children: [
         new GestureDetector(
           onTap: () {
             CityData().itemSelected = true;
             navPage = "/all_reports";
-            Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                "/all_reports", ModalRoute.withName("/nada"));
           },
           child: Container(
-          height: (MediaQuery.of(context).size.width * 0.5) - 39.0,
-          width: (MediaQuery.of(context).size.width * 0.5) - 39.0,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-        ),
-        ),
-        Positioned(
-          bottom: ((MediaQuery.of(context).size.width * 0.5) - 39.0)/2.0,
-          child: Text("No image available"),
-        ),
-        Positioned(
-          child: GestureDetector(
-            onTap: () {
-              CityData().itemSelected = true;
-              Navigator.of(context).pushNamedAndRemoveUntil("/all_reports", ModalRoute.withName("/nada"));
-            },
-            child:  _getValidImg(context),
-          ),
-        ),
-      ]
-    );
-    return retval;
+            height: (MediaQuery
+                .of(context)
+                .size
+                .width * 0.5) - 39.0,
+            width: (MediaQuery
+                .of(context)
+                .size
+                .width * 0.5) - 39.0,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            child: contents
+            )
+          )]
+        );
+      return retval;
   }
 
+  /// Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
   Widget _getProgressList() {
-
     //Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
     List<List<String> > status = new List<List<String> >();
     List<String> date_stat_descript = new List<String>();
+    Requests req = CityData().req_resp.requests[CityData().prevReqIdx];
     date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime));
     date_stat_descript.add("Issue Submitted");
     String desc = "N/A";
@@ -132,45 +142,45 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     status.add(new List<String>.from(date_stat_descript));
     
     date_stat_descript.clear();
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
-         ( (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") || 
-           (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") || 
-           (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed")) 
+    if ( (req.update_datetime != "") &&
+        ( (req.status == "open") || (req.status == "inProgress") || (req.status == "closed"))
        ) {
-      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+      date_stat_descript.add(getTimeString(req.update_datetime));
       date_stat_descript.add("Issue Received");
-      if (CityData().req_resp.requests[CityData().prevReqIdx].status == "open") {
+      if (req.status == "open") {
         String s_notes = "N/A";
-        if (CityData().req_resp.requests[CityData().prevReqIdx].status_notes != "") {
-          s_notes = CityData().req_resp.requests[CityData().prevReqIdx].status_notes;
+        if (req.status_notes != "") {
+          s_notes = req.status_notes;
         }
         date_stat_descript.add("Status Notes: " + s_notes);
       }
-      if ( CityData().req_resp.requests[CityData().prevReqIdx].expected_datetime != "" ) {
-        date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city and is scheduled to be resolved starting " + getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].expected_datetime) + ".");
+      if (req.expected_datetime != "" ) {
+        date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city and is scheduled to be resolved starting " + getTimeString(req.expected_datetime) + ".");
       }
       else
       {
         date_stat_descript.add("Thank you for submitting your service request. Your issue has been received by the city. You will receive a notification when the request has been addressed by the servicing agency.");
       }
     }
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
-         ( (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") || 
-           (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") ) )  {
-      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+    if ( (req.update_datetime != "") &&
+         ( (req.status == "inProgress") || (req.status == "closed") ) )  {
+      date_stat_descript.add(getTimeString(req.update_datetime));
       date_stat_descript.add("Issue In Progress");
-      if (CityData().req_resp.requests[CityData().prevReqIdx].status == "inProgress") {
+      if (req.status == "inProgress") {
         String s_notes = "N/A";
-        if (CityData().req_resp.requests[CityData().prevReqIdx].status_notes != "") {
-          s_notes = CityData().req_resp.requests[CityData().prevReqIdx].status_notes;
+        if (req.status_notes != "") {
+          s_notes = req.status_notes;
         }
         date_stat_descript.add("Status Notes: " + s_notes);
       }
       date_stat_descript.add("This issue resolution is in progress");
     }
-    if ( (CityData().req_resp.requests[CityData().prevReqIdx].update_datetime != "") && 
-         (CityData().req_resp.requests[CityData().prevReqIdx].status == "closed") )  {
-      date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].update_datetime));
+
+    // TODO: Add items from the auditLog here?
+
+    if ( (req.update_datetime != "") &&
+         (req.status == "closed") )  {
+      date_stat_descript.add(getTimeString(req.update_datetime));
       date_stat_descript.add("Issue Resolved");
       date_stat_descript.add("This issue has been resolved. Thank you for your submission.");
     }
@@ -233,8 +243,73 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     return retval;
   }
 
+  Widget getRequestTitle(Requests req)
+  {
+    String title;
+    List reqs = CityData().users_resp.submitted_request_ids;
+    if ( reqs == null ||
+         reqs.indexOf(req.service_request_id) == -1) {
+      title = 'Request Details';
+    } else {
+      title = "Your Request Details";
+    }
+    Widget retval = Text(
+      title,
+      textAlign: TextAlign.center,
+      textScaleFactor: 2.0,
+    );
+    return retval;
+  }
+
+  /// Shows a dialog to allow the user to cancel an open request of theirs
+  void showRequestCancelConfirmDialog(Requests req) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Request Cancellation"),
+          content: new Text("Are you sure? This can not be undone."),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),new FlatButton(
+              child: new Text("No"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  /// Returns a widget if the user is able to cancel a request
+  /// Request needs to have been submitted by the user and it must still be in the "open" state
+  Widget requestCancellationButton(Requests req) {
+    // If this isn't our request or if it isn't open, don't show the button
+    List reqs = CityData().users_resp.submitted_request_ids;
+
+    if ((reqs != null &&
+         reqs.indexOf(req.service_request_id) == -1 ) ||
+        req.status != "open") {
+      return Container(height:0);
+    } else {
+      return RaisedButton(
+        onPressed: () {
+          showRequestCancelConfirmDialog(req);
+          },
+        child: const Text('Cancel Request', style: TextStyle(fontSize: 18)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Requests curReq = CityData().req_resp.requests[CityData().prevReqIdx];
     return new Scaffold (
       appBar: AppBar(
         title: Text(APP_NAME),
@@ -253,11 +328,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                 SizedBox(
                   width: double.infinity,
                   child: Container(
-                    child: Text(
-                      'Submitted Service Requests',
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 2.0,
-                    ),
+                    child: getRequestTitle(curReq),
                   ),
                 ),
                 Container(height: 30.0),
@@ -271,32 +342,41 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                         children: [
                           SizedBox(
                             child: Text(
-                              CityData().req_resp.requests[CityData().prevReqIdx].service_name + " " + getBasicAddress(CityData().req_resp.requests[CityData().prevReqIdx].address),
+                              curReq.service_name + " " + getBasicAddress(curReq.address),
                               textScaleFactor: 1.2,
                             ),
                           ),
                           Container(height: 10.0),
                           Text(
-                            getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime),
+                            getTimeString(curReq.requested_datetime),
                             textScaleFactor: 1.0,
                           ),
                           Container(height: 10.0),
-                          Container(
-                            width: DeviceData().ButtonHeight * 1.5,
-                            height: DeviceData().ButtonHeight * 0.4,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  CityData().req_resp.requests[CityData().prevReqIdx].status,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ]
+                          InkWell(
+                            onTap: () {
+                              if ( (globals.userGroups != null) && globals.userGroups.contains("admin-"+CityData().cities_resp.cities[globals.cityIdx].city_name.split(",")[0].toLowerCase()) ) {
+                                UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
+                                Navigator.of(context).pushNamed('/update_report_status');
+                              }
+                            },
+                            child: Container(
+                              width: DeviceData().ButtonHeight * 1.5,
+                              height: DeviceData().ButtonHeight * 0.4,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(Radius.circular(9.0)),
+                                  color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    CityData().req_resp.requests[CityData().prevReqIdx].status,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ]
+                              ),
                             ),
                           ),
+                          requestCancellationButton(curReq)
                         ]
                       ),
                     ),

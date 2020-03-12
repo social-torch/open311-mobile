@@ -36,7 +36,7 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
 
   Future<Widget> getBodyFuture() async {
     Widget retval;
-    if (globals.userName == globals.guestName) {
+    if (globals.isGuestUser()) {
       retval = new Expanded(
         child: Column(
           children: [
@@ -63,7 +63,9 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
       while ((CityData().req_resp == null) || (CityData().limited_req_resp == null)) {
         sleep(const Duration(seconds: 1));
       }
-      if ( (CityData().users_resp != null) && (CityData().users_resp.submitted_request_ids.length > 0) ) {
+      if ( (CityData().users_resp != null) &&
+           (CityData().users_resp.submitted_request_ids != null) &&
+           (CityData().users_resp.submitted_request_ids.length > 0) ) {
         setState(() {
           users_to_req_idx = List();
           users_list = List();
@@ -74,6 +76,23 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
             }
           }
         });
+      } else {
+        // No requests found, show that to the user
+        retval = new Column(
+          children: [
+            Text("No requests found",
+              textScaleFactor: 1.5),
+            ColorSliverButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed('/view_submitted');
+                },
+              child:Expanded(
+                child: Row(children:[Text("Show all requests")])
+              )
+              )
+          ]
+        );
+        return retval;
       }
       if (users_list == null) { users_list = List(); }
       retval = new Expanded(
@@ -184,7 +203,7 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
                     width: double.infinity,
                     child: Container(
                       child: Text(
-                        'Submitted Service Requests',
+                        'Your Submitted Requests',
                         textAlign: TextAlign.center,
                         textScaleFactor: 2.0,
                       ),

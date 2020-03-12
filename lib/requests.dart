@@ -1,7 +1,38 @@
+import 'dart:convert';
+
+List<String> statusTypes = ["open", "accepted", "inProgress", "closed"];
+
+class AuditEntry{
+  final String change_note;
+  final String account_id;
+  final String timestamp;
+  
+  AuditEntry(
+    this.change_note,
+    this.account_id,
+    this.timestamp
+  );
+
+  factory AuditEntry.fromJson(dynamic json) {
+    return AuditEntry(
+      json['change_note'] as String,
+      json['account_id'] as String, 
+      json['timestamp'] as String
+    );
+  }
+
+  Map toJson() =>
+  {
+    'change_note':change_note,
+    'account_id':account_id,
+    'timestamp':timestamp
+  };
+}
+
 class Requests {
   final String service_request_id;
-  final String status;
-  final String status_notes;
+  String status;
+  String status_notes;
   final String service_name;
   final String service_code;
   final String description;
@@ -15,7 +46,8 @@ class Requests {
   final int zipcode;
   final double lat;
   final double lon;
-  final String media_url;
+  String media_url;
+  List<AuditEntry> audit_log;
 
   Requests(
     this.service_request_id,
@@ -34,47 +66,79 @@ class Requests {
     this.zipcode,
     this.lat,
     this.lon,
-    this.media_url);
+    this.media_url,
+    this.audit_log);
 
-  Requests.fromJson(Map<String, dynamic> json)
-  : service_request_id = json["service_request_id"],
-    status = json["status"],
-    status_notes = json["status_notes"],
-    service_name = json["service_name"],
-    service_code = json["service_code"],
-    description = json["description"],
-    agency_responsible = json["agency_responsible"],
-    service_notice = json["service_notice"],
-    requested_datetime = json["requested_datetime"],
-    update_datetime = json["update_datetime"],
-    expected_datetime = json["expected_datetime"],
-    address = json["address"],
-    address_id = json["address_id"],
-    zipcode = json["zipcode"],
-    lat = json["lat"] + 0.0,
-    lon = json["lon"] + 0.0,
-    media_url = json["media_url"];
+  factory Requests.fromJson(dynamic json) {
+    if ( (json['audit_logs'] != null) && (json['audit_logs'] != "[]") ) {
+      var objsJson = json['audit_logs'] as List;
+      List<AuditEntry> _ae = objsJson.map((aeJson) => AuditEntry.fromJson(aeJson)).toList();
+      return Requests(
+        json["service_request_id"] as String,
+        json["status"] as String,
+        json["status_notes"] as String,
+        json["service_name"] as String,
+        json["service_code"] as String,
+        json["description"] as String,
+        json["agency_responsible"] as String,
+        json["service_notice"] as String,
+        json["requested_datetime"] as String,
+        json["update_datetime"] as String,
+        json["expected_datetime"] as String,
+        json["address"] as String,
+        json["address_id"] as String,
+        json["zipcode"] as int,
+        json["lat"] as double,
+        json["lon"] as double,
+        json["media_url"] as String,
+        _ae
+      );
+    } else {
+      return Requests(
+        json["service_request_id"] as String,
+        json["status"] as String,
+        json["status_notes"] as String,
+        json["service_name"] as String,
+        json["service_code"] as String,
+        json["description"] as String,
+        json["agency_responsible"] as String,
+        json["service_notice"] as String,
+        json["requested_datetime"] as String,
+        json["update_datetime"] as String,
+        json["expected_datetime"] as String,
+        json["address"] as String,
+        json["address_id"] as String,
+        json["zipcode"] as int,
+        json["lat"] as double,
+        json["lon"] as double,
+        json["media_url"] as String,
+        List()
+      );
+    }
+  }
 
-  Map<String, dynamic> toJson() =>
-  {
-    'service_request_id':service_request_id,
-    'status':status,
-    'status_notes':status_notes,
-    'service_name':service_name,
-    'service_code':service_code,
-    'description':description,
-    'agency_responsible':agency_responsible,
-    'service_notice':service_notice,
-    'requested_datetime':requested_datetime,
-    'update_datetime':update_datetime,
-    'expected_datetime':expected_datetime,
-    'address':address,
-    'address_id':address_id,
-    'zipcode':zipcode,
-    'lat':lat + 0.0,
-    'lon':lon + 0.0,
-    'media_url':media_url,
-  };
+  Map toJson() {
+    return {
+      'service_request_id':service_request_id,
+      'status':status,
+      'status_notes':status_notes,
+      'service_name':service_name,
+      'service_code':service_code,
+      'description':description,
+      'agency_responsible':agency_responsible,
+      'service_notice':service_notice,
+      'requested_datetime':requested_datetime,
+      'update_datetime':update_datetime,
+      'expected_datetime':expected_datetime,
+      'address':address,
+      'address_id':address_id,
+      'zipcode':zipcode,
+      'lat':lat,
+      'lon':lon,
+      'media_url':media_url,
+      'audit_logs':jsonEncode(audit_log)
+    };
+  }
 }
 
 class RequestsResponse {
