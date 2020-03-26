@@ -62,12 +62,13 @@ class LocationUiBodyState extends State<LocationUiBody> {
           }
           assert(() {
             //Using assert here for debug only prints
-            print(_currentLocation.latitude);
+            /*print(_currentLocation.latitude);
             print(_currentLocation.longitude);
             print(_currentLocation.accuracy);
             print(_currentLocation.altitude);
             print(_currentLocation.speed);
             print(_currentLocation.speedAccuracy); // Will always be 0 on iOS
+            */
             return true;
           }());
         });

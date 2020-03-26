@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:image_picker/image_picker.dart';
 import 'page.dart';
 import 'data.dart';
 import 'bottom_app_bar.dart';
-import 'submit.dart';
+import "globals.dart" as globals;
 import 'custom_widgets.dart';
 import 'custom_colors.dart';
 
@@ -93,8 +95,33 @@ class DescriptionBodyState extends State<DescriptionBody> {
                     ),
                   ]
                 ),
-              ]
+                Container(height:15.0),
+                Container(
+                  child: Row(
+                    children: [
+                      Flexible(
+                      child:
+                       RichText(
+                      text: new TextSpan(
+                        children: [
+                          new TextSpan(
+                            text: 'By clicking submit, you agree to our ',
+                            style: new TextStyle(color: Colors.black),
+                          ),
+                          new TextSpan(
+                            text: 'Terms and Conditions',
+                            style: new TextStyle(color: Colors.blue),
+                            recognizer: new TapGestureRecognizer()
+                              ..onTap = () { launch(globals.termsURL);
+                              },
+                          ),
+                        ],
+                      ),
+                    ))
+                    ],
+              )
             ),
+          ])
           ),
           Container(
             width: 36.0,

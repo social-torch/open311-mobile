@@ -130,7 +130,7 @@ Widget setMyCity(BuildContext context, String nextPage) {
                 globals.cityIdx = Index;
                 getServices(globals.endpoint311 + "/services");
                 getRequests(globals.endpoint311 + "/requests");
-                getUsers(globals.endpoint311 + "/user/" + globals.userName);
+                getUsers(globals.endpoint311 + "/user/" + globals.userCognitoId);
                 Navigator.of(context).pushNamedAndRemoveUntil(nextPage, ModalRoute.withName("/nada"));
               },
             ),

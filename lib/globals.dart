@@ -14,6 +14,7 @@ String userAccessToken = 'nada';
 String userIdToken = 'nada';
 String userRefreshToken = 'nada';
 String usernameSignup = 'nada';
+String userCognitoId = 'nada';
 List<String> userGroups = [ 'nada' ];
 
 //Global info for popup messages, if string has data then next page that loads should show it
@@ -23,6 +24,7 @@ final key = autogen.key;
 
 String endpoint311base = autogen.endpoint311base;
 String helpURL = autogen.helpURL; // URL to the help page for the given app
+String termsURL = autogen.termsURL; // URL to legal terms and conditions
 //TODO: variable(s) below needs to be modified when user selects default city and persist after app closes
 String endpoint311 = 'nada';
 int cityIdx = 0;

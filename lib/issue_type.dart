@@ -30,29 +30,45 @@ class IssueTypeBodyState extends State<IssueTypeBody> {
  Widget _bodyWidget;
 
   Future<Widget> getBodyFuture() async {
-    while (CityData().serv_resp == null) {
+    int checkCount = 0;
+    while (CityData().serv_resp == null &&
+           checkCount < 5) {
+      checkCount++;
       sleep(const Duration(seconds: 1));
-    } 
-    return new Expanded(
-      child: new ListView.builder (
-        itemCount: CityData().serv_resp.services.length,
-        itemBuilder: (BuildContext ctxt, int Index) {
-          return new Column(
-            children: [
-              new ColorSliverButton( 
-                onPressed: () {
-                  ReportData().type = CityData().serv_resp.services[Index].service_name;
-                  ReportData().type_code = CityData().serv_resp.services[Index].service_code;
-                  descPage();
-                },
-                child: Expanded( child: Column(children: [ Tooltip(message: CityData().serv_resp.services[Index].description, child: Text(CityData().serv_resp.services[Index].service_name)) ] ),),
-              ),
-              Container(height: 15.0),
-            ]
-          );
-        }
-      ),
-    );
+    }
+    if (checkCount >=5 ) {
+      return new Expanded(
+        child: new Text("Unable to load services at this time, try again later")
+      );
+    } else {
+      return new Expanded(
+        child: new ListView.builder (
+            itemCount: CityData().serv_resp.services.length,
+            itemBuilder: (BuildContext ctxt, int Index) {
+              return new Column(
+                  children: [
+                    new ColorSliverButton(
+                      onPressed: () {
+                        ReportData().type =
+                            CityData().serv_resp.services[Index].service_name;
+                        ReportData().type_code =
+                            CityData().serv_resp.services[Index].service_code;
+                        descPage();
+                      },
+                      child: Expanded(
+                        child: Column(children: [ Tooltip(message: CityData()
+                            .serv_resp.services[Index].description, child: Text(
+                            CityData()
+                                .serv_resp.services[Index].service_name))
+                        ]),),
+                    ),
+                    Container(height: 15.0),
+                  ]
+              );
+            }
+        ),
+      );
+    }
   }
 
   @override

@@ -63,6 +63,7 @@ void authenticate() async {
     globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
     globals.userGroups = new List<String>.from(_cog_user_session.getIdToken().payload['cognito:groups'] ?? [ "nada" ]);
     globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
+    globals.userCognitoId = _cog_user_session.getIdToken().payload['cognito:username'];
     assert(() {
       if (false) {
         //Using assert here for debug only prints

@@ -47,6 +47,10 @@ if [ -z "${OPEN311_HELP_URL}" ]; then
   echo "WARNING:  OPEN311_HELP_URL not set, using default https://socialtorch.org value..."
   OPEN311_HELP_URL=https://socialtorch.org
 fi
+if [ -z "${OPEN311_TERMS_URL}" ]; then
+  echo "WARNING:  OPEN311_TERMS_URL not set, using default https://socialtorch.org value..."
+  OPEN311_HELP_URL=https://socialtorch.org
+fi
 
 
 cat > ${HERE}/lib/auto_gen.dart << EOF
@@ -57,7 +61,7 @@ String guestName = '${OPEN311_GUEST_USERNAME}';
 String guestPass = '${OPEN311_GUEST_PASSWORD}';
 final key = encrypt.Key.fromUtf8('${OPEN311_ENCRYPT_KEY}');
 String endpoint311base = '${OPEN311_BASE_URL}';
-String helpURL = '$(OPEN311_HELP_URL)';
+String helpURL = '${OPEN311_HELP_URL}';
 EOF
 
 cat > ${HERE}/android/key.properties << EOF

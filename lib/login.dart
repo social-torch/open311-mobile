@@ -103,6 +103,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
       globals.userName = globals.userName = emailController.text.replaceAll('@','_AT_').replaceAll('+','_PLUS_');
       globals.userPass = passwordController.text;
+      globals.userCognitoId = _cog_user_session.getIdToken().payload['cognito:username'];
 
       //Save creds into persistent storage
       final iv = IV.fromLength(16);
@@ -135,7 +136,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       startRefreshTokTimer();
 
       //Update requests page to show user's requests
-      getUsers(globals.endpoint311 + "/user/" + globals.userName);
+      getUsers(globals.endpoint311 + "/user/" + globals.userCognitoId);
 
       //This is a bit of a hack but force bottom app bar to change color appropriately
       navPage = "/all_reports";

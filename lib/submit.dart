@@ -218,7 +218,7 @@ class SubmitBodyState extends State<SubmitBody> {
         await prefs.setString('lastReqTime', DateTime.now().toUtc().toString());
       }
       getRequests(globals.endpoint311 + "/requests");
-      getUsers(globals.endpoint311 + "/user/" + globals.userName);
+      getUsers(globals.endpoint311 + "/user/" + globals.userCognitoId);
     } catch (e) {
       print(e);
       print(e.response.data);
