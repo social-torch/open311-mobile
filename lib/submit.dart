@@ -200,7 +200,7 @@ class SubmitBodyState extends State<SubmitBody> {
         options: Options(
           headers: {
             HttpHeaders.authorizationHeader: globals.userIdToken,
-            HttpHeaders.fromHeader: globals.userName
+            HttpHeaders.fromHeader: globals.userCognitoId
           },
         ),
       );

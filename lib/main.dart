@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:open311/report_inappropriate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'page.dart';
@@ -72,6 +73,7 @@ Future<void> main() async {
     '/description': (context) => DescriptionPage(),
     '/submit': (context) => SubmitPage(),
     '/registration': (context) => RegistrationPage(),
+    '/report_inappropriate': (context) => ReportInappropriatePage(),
     '/confirm': (context) => ConfirmPage(),
     '/select_city': (context) => SelectCityPage(),
     '/request_new_city': (context) => RequestNewCityPage(),

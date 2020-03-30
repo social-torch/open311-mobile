@@ -292,17 +292,20 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
   Widget requestCancellationButton(Requests req) {
     // If this isn't our request or if it isn't open, don't show the button
     List reqs = CityData().users_resp.submitted_request_ids;
+    if (reqs == null) {
+        return Container(height:0);
+    }
 
-    if ((reqs != null &&
-         reqs.indexOf(req.service_request_id) == -1 ) ||
-        req.status != "open") {
+    if (reqs.indexOf(req.service_request_id) == -1 || req.status != "open") {
+      // This isn't our request or the request isn't open, so we can't cancel it.
       return Container(height:0);
     } else {
+      // The request is ours and it's open, so it can be cancelled
       return RaisedButton(
         onPressed: () {
           showRequestCancelConfirmDialog(req);
           },
-        child: const Text('Cancel Request', style: TextStyle(fontSize: 18)),
+        child: const Text('Cancel Request', style: TextStyle(fontSize: 16)),
       );
     }
   }
@@ -355,7 +358,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                           InkWell(
                             onTap: () {
                               if ( (globals.userGroups != null) && globals.userGroups.contains("admin-"+CityData().cities_resp.cities[globals.cityIdx].city_name.split(",")[0].toLowerCase()) ) {
-                                UpdateData().req = new Requests.fromJson(CityData().req_resp.requests[CityData().prevReqIdx].toJson());
+                                UpdateData().req = new Requests.fromJson(curReq.toJson());
                                 Navigator.of(context).pushNamed('/update_report_status');
                               }
                             },
@@ -364,12 +367,12 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                               height: DeviceData().ButtonHeight * 0.4,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(9.0)),
-                                  color: getStatusColor(CityData().req_resp.requests[CityData().prevReqIdx].status),
+                                  color: getStatusColor(curReq.status),
                               ),
                               child: Column(
                                 children: [
                                   Text(
-                                    CityData().req_resp.requests[CityData().prevReqIdx].status,
+                                    curReq.status,
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ]
@@ -386,6 +389,14 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                 Expanded(
                   child: _getProgressList(),
                 ),
+                Row(
+                  children:[
+                    RaisedButton(onPressed: () {
+                        Navigator.of(context).pushNamed('/report_inappropriate', arguments:curReq);
+                      },
+                      child: Text("Report inappropriate"))
+                  ]
+                )
               ]
             ),
           ),
