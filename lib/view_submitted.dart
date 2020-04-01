@@ -66,7 +66,23 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
         ]
       );
     }
-
+/*    RichText(
+      text: new TextSpan(
+        children: [
+          new TextSpan(
+            text: 'By clicking submit, you agree to our ',
+            style: new TextStyle(color: Colors.black),
+          ),
+          new TextSpan(
+            text: 'Terms and Conditions',
+            style: new TextStyle(color: Colors.blue),
+            recognizer: new TapGestureRecognizer()
+              ..onTap = () { launch(globals.termsURL);
+              },
+          ),
+        ],
+      ),
+    )*/
     return new Expanded(
       child: new ListView.builder (
         itemCount: req_list.length,
@@ -86,9 +102,15 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
+                      new Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(req_list[Index].service_name + " " + getBasicAddress(req_list[Index].address)),
+                          SizedBox(
+                            child: Text(
+                              req_list[Index].service_name + " " + getBasicAddress(req_list[Index].address),
+                            ),
+                          ),
                           Row(
                             children: [
                               Text(getTimeString(req_list[Index].requested_datetime)),
@@ -114,7 +136,7 @@ class ViewSubmittedBodyState extends State<ViewSubmittedBody> {
                             ]
                           ),
                         ]
-                      ),
+                      )),
                       Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
                     ]
                   ),

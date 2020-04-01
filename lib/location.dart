@@ -11,6 +11,7 @@ import 'custom_widgets.dart';
 import 'custom_icons.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
+import 'package:latlong/latlong.dart';
 import 'globals.dart' as globals;
 
 class LocationUiPage extends Page {
@@ -36,6 +37,7 @@ class LocationUiBodyState extends State<LocationUiBody> {
   //Map variables
   var _defaultLoc = LatLng(42.8137, -73.9398);
   LatLng _markerLoc = null;
+  String _reqAddress = null;
   var _defaultZoom = 15.0;
   MapController _mapController = MapController();
   bool usingDevLoc = true;
@@ -207,6 +209,34 @@ class LocationUiBodyState extends State<LocationUiBody> {
     }
   }
 
+  void _LatLngToAddress(LatLng latLng) async {
+    try {
+      var coords = new Coordinates(latLng.latitude, latLng.longitude);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(coords);
+      if (addresses.length > 0) {
+        var first = addresses.first;
+        assert(() {
+          //Using assert here for debug only prints
+          print("${first.featureName} : ${first.coordinates}");
+          return true;
+        } ());
+        setState(() {
+            _reqAddress = first.addressLine;
+            // This just shoves the address into the ReportData type
+            // itself for later use by submit. Essentially a global
+            // variable.
+            ReportData().addr = first.addressLine;
+        });
+      }
+    } catch (error, stacktrace) {
+      assert(() {
+        //Using assert here for debug only prints
+        print("_LatLngToAddr Exception occured: $error stackTrace: $stacktrace");
+        return true;
+      }());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -355,7 +385,8 @@ class LocationUiBodyState extends State<LocationUiBody> {
                       onPressed: () {
                         var rp = new ReportData();
                         rp.latlng = _markerLoc;
-                        rp.addr = "";
+                        _LatLngToAddress(_markerLoc);
+                        rp.addr = _reqAddress;
                          assert(() {
                            //Using assert here for debug only prints
                            print(rp);

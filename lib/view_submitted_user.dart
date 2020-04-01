@@ -110,9 +110,15 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                    new Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(users_list[Index].service_name + " " + getBasicAddress(users_list[Index].address)),
+                            SizedBox(
+                              child: Text(
+                                users_list[Index].service_name + " " + getBasicAddress(users_list[Index].address),
+                              ),
+                            ),
                             Row(
                               children: [
                                 Text(getTimeString(users_list[Index].requested_datetime)),
@@ -138,7 +144,7 @@ class ViewSubmittedUserBodyState extends State<ViewSubmittedUserBody> {
                               ]
                             ),
                           ]
-                        ),
+                        )),
                         Icon(Icons.arrow_forward_ios, color: CustomColors.appBarColor),
                       ]
                     ),
