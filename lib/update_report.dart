@@ -16,6 +16,7 @@ import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as p;
 import 's3endpoint.dart';
+import 'requests.dart';
 
 class UpdateReportPage extends Page {
   UpdateReportPage() : super(const Icon(Icons.map), APP_NAME);
@@ -88,7 +89,7 @@ class UpdateReportBodyState extends State<UpdateReportBody> {
         );
       }
       UpdateData().req.status = UpdateData().status;
-      UpdateData().req.status_notes = descController.text;
+      UpdateData().req.audit_log.add(AuditEntry("Status: "+UpdateData().status+"\n"+descController.text, globals.userName, DateTime.now().toUtc().toString()));
 
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";

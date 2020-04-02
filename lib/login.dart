@@ -87,8 +87,9 @@ class AuthPageBodyState extends State<AuthPageBody> {
   void authenticate() async {
     _cog_user = new CognitoUser(emailController.text, userPool);
     final authDetails = new AuthenticationDetails(
-        username: emailController.text, password:
-    passwordController.text);
+        username: emailController.text,
+        password: passwordController.text
+      );
     try {
       _cog_user_session = await _cog_user.authenticateUser(authDetails);
       _scaffoldKey.currentState.showSnackBar(
@@ -101,7 +102,7 @@ class AuthPageBodyState extends State<AuthPageBody> {
       globals.userIdToken = _cog_user_session.getIdToken().getJwtToken();
       globals.userGroups = new List<String>.from(_cog_user_session.getIdToken().payload['cognito:groups'] ?? [ "nada" ]);
       globals.userRefreshToken = _cog_user_session.getRefreshToken().getToken();
-      globals.userName = globals.userName = emailController.text.replaceAll('@','_AT_').replaceAll('+','_PLUS_');
+      globals.userName = globals.userName = emailController.text;
       globals.userPass = passwordController.text;
 
       //Save creds into persistent storage

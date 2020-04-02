@@ -19,6 +19,7 @@ import 'custom_colors.dart';
 import 'select_city_common.dart';
 import "globals.dart" as globals;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class SubmitPage extends Page {
   SubmitPage() : super(const Icon(Icons.map), 'Submit Report');
@@ -170,7 +171,9 @@ class SubmitBodyState extends State<SubmitBody> {
       }
 
       //Populate our request with user data
-      var ae = new List.filled(1, AuditEntry("Issue Submitted", globals.userName, DateTime.now().toUtc().toString()));
+      var ae = new List.filled(1, AuditEntry("Status: open   Issue submitted   Description: "+ReportData().description, 
+                                              globals.userName, 
+                                              DateTime.now().toUtc().toIso8601String().split('.')[0]+"Z"));
       Requests req = new Requests(
         "",
         "",
@@ -191,6 +194,9 @@ class SubmitBodyState extends State<SubmitBody> {
         media_url,
         ae);
 
+      print(req.toJson());
+
+/*
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";
       Response response;
@@ -211,6 +217,7 @@ class SubmitBodyState extends State<SubmitBody> {
         print(response.request);
         return true;
       }());
+*/
       retval = successBody();
       //For guests log request time since we limit how often they can submit
       if (globals.userName == globals.guestName) {

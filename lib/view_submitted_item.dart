@@ -121,6 +121,33 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
     //Create progress blurbs from datetime information and status from backend [open, accepted, inProgress, closed]
     List<List<String> > status = new List<List<String> >();
     List<String> date_stat_descript = new List<String>();
+    
+    for(final ae in CityData().req_resp.requests[CityData().prevReqIdx].audit_log) {
+      var timeStr = "";
+      if (ae.timestamp != "") {
+        timeStr = getTimeString(ae.timestamp);
+      }
+      date_stat_descript.add(timeStr);
+
+      var notesStrTmp = "";
+      var notesStr1 = "";
+      var notesStr2 = "";
+      if (ae.change_note != "") {
+        notesStrTmp = ae.change_note;
+      }
+      var notesStrListTmp = notesStrTmp.split('\n');
+      if (notesStrListTmp.length > 1) {
+        notesStr1 = notesStrListTmp[0];
+        notesStrListTmp.removeAt(0);
+        notesStr2 = notesStrListTmp.join();
+      }
+      date_stat_descript.add(notesStr1);
+      date_stat_descript.add(notesStr2);
+      status.add(new List<String>.from(date_stat_descript));
+      date_stat_descript.clear();
+    }
+
+    /*
     date_stat_descript.add(getTimeString(CityData().req_resp.requests[CityData().prevReqIdx].requested_datetime));
     date_stat_descript.add("Issue Submitted");
     String desc = "N/A";
@@ -178,6 +205,8 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
       status.add(new List<String>.from(date_stat_descript));
     }
 
+*/
+
     Widget retval = new ListView.builder (
       itemCount: status.length,
       itemBuilder: (BuildContext ctxt, int Index) {
@@ -221,8 +250,6 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                     ),
                   ),
                   Text(status[Index].elementAt(2)),
-                  Text(status[Index].length >=4 ? status[Index].elementAt(3) : ""),
-                  Text(status[Index].length >=5 ? status[Index].elementAt(4) : ""),
                 ]  
               ),
             ),

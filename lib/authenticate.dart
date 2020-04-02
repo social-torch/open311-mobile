@@ -47,8 +47,6 @@ void authenticate() async {
       } else {
         final iv = encrypt.IV.fromLength(16);
         final encrypter = encrypt.Encrypter(encrypt.AES(globals.key));
-        print("globals.userName");
-        print(globals.userName);
         globals.userName = encrypter.decrypt16(encryptedUid, iv: iv);
         globals.userPass = encrypter.decrypt16(encryptedPass, iv: iv);
       }

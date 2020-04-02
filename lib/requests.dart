@@ -21,12 +21,14 @@ class AuditEntry{
     );
   }
 
-  Map toJson() =>
+  Map toJson()
   {
-    'change_note':change_note,
-    'account_id':account_id,
-    'timestamp':timestamp
-  };
+    return {
+      'change_note':change_note,
+      'account_id':account_id,
+      'timestamp':timestamp
+    };
+  }
 }
 
 class Requests {
@@ -70,54 +72,60 @@ class Requests {
     this.audit_log);
 
   factory Requests.fromJson(dynamic json) {
-    if ( (json['audit_logs'] != null) && (json['audit_logs'] != "[]") ) {
-      var objsJson = json['audit_logs'] as List;
+    print("1");
+    if ( (json['audit_log'] != null) && (json['audit_log'] != "[]") ) {
+      print("2");
+      var objsJson = json['audit_log'] as List;
+      print("3");
       List<AuditEntry> _ae = objsJson.map((aeJson) => AuditEntry.fromJson(aeJson)).toList();
+      print("4");
       return Requests(
-        json["service_request_id"] as String,
-        json["status"] as String,
-        json["status_notes"] as String,
-        json["service_name"] as String,
-        json["service_code"] as String,
-        json["description"] as String,
-        json["agency_responsible"] as String,
-        json["service_notice"] as String,
-        json["requested_datetime"] as String,
-        json["update_datetime"] as String,
-        json["expected_datetime"] as String,
-        json["address"] as String,
-        json["address_id"] as String,
-        json["zipcode"] as int,
-        json["lat"] as double,
-        json["lon"] as double,
-        json["media_url"] as String,
+        json['service_request_id'] as String,
+        json['status'] as String,
+        json['status_notes'] as String,
+        json['service_name'] as String,
+        json['service_code'] as String,
+        json['description'] as String,
+        json['agency_responsible'] as String,
+        json['service_notice'] as String,
+        json['requested_datetime'] as String,
+        json['update_datetime'] as String,
+        json['expected_datetime'] as String,
+        json['address'] as String,
+        json['address_id'] as String,
+        json['zipcode'] as int,
+        json['lat'] as double,
+        json['lon'] as double,
+        json['media_url'] as String,
         _ae
       );
     } else {
+      print("5");
       return Requests(
-        json["service_request_id"] as String,
-        json["status"] as String,
-        json["status_notes"] as String,
-        json["service_name"] as String,
-        json["service_code"] as String,
-        json["description"] as String,
-        json["agency_responsible"] as String,
-        json["service_notice"] as String,
-        json["requested_datetime"] as String,
-        json["update_datetime"] as String,
-        json["expected_datetime"] as String,
-        json["address"] as String,
-        json["address_id"] as String,
-        json["zipcode"] as int,
-        json["lat"] as double,
-        json["lon"] as double,
-        json["media_url"] as String,
+        json['service_request_id'] as String,
+        json['status'] as String,
+        json['status_notes'] as String,
+        json['service_name'] as String,
+        json['service_code'] as String,
+        json['description'] as String,
+        json['agency_responsible'] as String,
+        json['service_notice'] as String,
+        json['requested_datetime'] as String,
+        json['update_datetime'] as String,
+        json['expected_datetime'] as String,
+        json['address'] as String,
+        json['address_id'] as String,
+        json['zipcode'] as int,
+        json['lat'] as double,
+        json['lon'] as double,
+        json['media_url'] as String,
         List()
       );
     }
   }
 
   Map toJson() {
+    List<Map> ae = this.audit_log != null ? this.audit_log.map((i) => i.toJson()).toList() : null;
     return {
       'service_request_id':service_request_id,
       'status':status,
@@ -136,7 +144,7 @@ class Requests {
       'lat':lat,
       'lon':lon,
       'media_url':media_url,
-      'audit_logs':jsonEncode(audit_log)
+      'audit_log':ae,
     };
   }
 }
