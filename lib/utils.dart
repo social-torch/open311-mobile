@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'custom_colors.dart';
 import 'dart:io';
+import 'package:latlong/latlong.dart';
+import 'package:geocoder/geocoder.dart';
 
 Color getStatusColor(status) {
   var retval = CustomColors.salmon;
@@ -64,4 +66,50 @@ String getLatestDateString(datestr1, datestr2) {
 int sleepThread(int input) {
   sleep(const Duration(seconds: 1));
   return input;
+}
+
+Future<LatLng> addressToLatLng(String address) async {
+  LatLng retval = LatLng(0,0);
+  try {
+    var addresses = await Geocoder.local.findAddressesFromQuery(address);
+    if (addresses.length > 0) {
+      var first = addresses.first;
+      assert(() {
+        //Using assert here for debug only prints
+        print("${first.addressLine} : ${first.coordinates}");
+        return true;
+      } ());
+      retval = LatLng(first.coordinates.latitude, first.coordinates.longitude);
+    }
+  } catch (error, stacktrace) {
+    assert(() {
+      //Using assert here for debug only prints
+      print("addressToLatLng Exception occured: $error stackTrace: $stacktrace");
+      return true;
+    }());
+  }
+  return retval;
+}
+
+Future<String> latLngToAddress(LatLng latLng) async {
+  String retval = "";
+  try {
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(latLng.latitude, latLng.longitude));
+    if (addresses.length > 0) {
+      var first = addresses.first;
+      assert(() {
+        //Using assert here for debug only prints
+        print("${first.addressLine} : ${first.coordinates}");
+        return true;
+      } ());
+      retval = addresses.first?.addressLine ?? "";
+    }
+  } catch (error, stacktrace) {
+    assert(() {
+      //Using assert here for debug only prints
+      print("latLngToAddress Exception occured: $error stackTrace: $stacktrace");
+      return true;
+    }());
+  }
+  return retval;
 }

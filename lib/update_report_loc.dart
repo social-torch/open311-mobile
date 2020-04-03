@@ -12,6 +12,7 @@ import 'custom_icons.dart';
 import 'custom_colors.dart';
 import 'bottom_app_bar.dart';
 import 'globals.dart' as globals;
+import 'utils.dart';
 
 class UpdateReportLocPage extends Page {
   UpdateReportLocPage() : super(const Icon(Icons.map), APP_NAME);
@@ -184,7 +185,11 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
   void _confirmedLoc(double lat, double lon, BuildContext context) async{
     UpdateData().lat = lat;
     UpdateData().lon = lon;
-    await _latLngToAddress(lat, lon);
+    latLngToAddress(LatLng(lat, lon)).then((addr) {
+      setState(() {
+        _markerLocAddrStr = addr;
+      });
+    });
     UpdateData().address = _markerLocAddrStr;
     assert(() {
       //Using assert here for debug only prints
@@ -194,37 +199,6 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
       return true;
     }());
     Navigator.of(context).pop();
-  }
-
-  void _latLngToAddress(double lat, double lon) async {
-    var addr = await Geocoder.local.findAddressesFromCoordinates(new Coordinates(lat, lon));
-    setState(() {
-      _markerLocAddrStr = addr.first?.addressLine ?? "";
-    });
-  }
-
-  void _addressToLatLng(String address) async {
-    try {
-      var addresses = await Geocoder.local.findAddressesFromQuery(address);
-      if (addresses.length > 0) {
-        var first = addresses.first;
-        assert(() {
-          //Using assert here for debug only prints
-          print("${first.featureName} : ${first.coordinates}");
-          return true;
-        } ());
-        setState(() {
-          _markerLoc = LatLng(first.coordinates.latitude, first.coordinates.longitude);
-        });
-        _mapController.move(_markerLoc, _defaultZoom);
-      }
-    } catch (error, stacktrace) {
-      assert(() {
-        //Using assert here for debug only prints
-        print("_addressToLatLng Exception occured: $error stackTrace: $stacktrace");
-        return true;
-      }());
-    }
   }
 
   @override
@@ -320,7 +294,12 @@ class UpdateReportLocBodyState extends State<UpdateReportLocBody> {
                   labelText: 'Enter a location',
                   onEditingComplete: () {
                     if ( addrController.text != "" ) {
-                      _addressToLatLng(addrController.text);
+                      addressToLatLng(addrController.text).then((ll) {
+                        setState(() {
+                          _markerLoc = ll;
+                        });
+                        _mapController.move(_markerLoc, _defaultZoom);
+                      });
                     }
                     FocusScope.of(context).unfocus();
                   },
