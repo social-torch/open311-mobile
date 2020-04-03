@@ -72,13 +72,9 @@ class Requests {
     this.audit_log);
 
   factory Requests.fromJson(dynamic json) {
-    print("1");
     if ( (json['audit_log'] != null) && (json['audit_log'] != "[]") ) {
-      print("2");
       var objsJson = json['audit_log'] as List;
-      print("3");
       List<AuditEntry> _ae = objsJson.map((aeJson) => AuditEntry.fromJson(aeJson)).toList();
-      print("4");
       return Requests(
         json['service_request_id'] as String,
         json['status'] as String,

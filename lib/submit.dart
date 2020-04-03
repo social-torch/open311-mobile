@@ -171,7 +171,7 @@ class SubmitBodyState extends State<SubmitBody> {
       }
 
       //Populate our request with user data
-      var ae = new List.filled(1, AuditEntry("Status: open   Issue submitted   Description: "+ReportData().description, 
+      var ae = new List.filled(1, AuditEntry("Status: open\nIssue submitted\nDescription: "+ReportData().description, 
                                               globals.userName, 
                                               DateTime.now().toUtc().toIso8601String().split('.')[0]+"Z"));
       Requests req = new Requests(
@@ -194,9 +194,8 @@ class SubmitBodyState extends State<SubmitBody> {
         media_url,
         ae);
 
-      print(req.toJson());
+      //print(req.toJson());
 
-/*
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";
       Response response;
@@ -217,7 +216,7 @@ class SubmitBodyState extends State<SubmitBody> {
         print(response.request);
         return true;
       }());
-*/
+
       retval = successBody();
       //For guests log request time since we limit how often they can submit
       if (globals.userName == globals.guestName) {

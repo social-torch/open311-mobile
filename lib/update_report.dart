@@ -88,8 +88,13 @@ class UpdateReportBodyState extends State<UpdateReportBody> {
           headers: {"Content-Type": "image/" + media_url.split(".").last}
         );
       }
-      UpdateData().req.status = UpdateData().status;
-      UpdateData().req.audit_log.add(AuditEntry("Status: "+UpdateData().status+"\n"+descController.text, globals.userName, DateTime.now().toUtc().toString()));
+      var quickStatus = "Issue State Change";
+      if (UpdateData().status == UpdateData().req.status) {
+        quickStatus = "Issue Details Update";
+      } else {
+        UpdateData().req.status = UpdateData().status;
+      }
+      UpdateData().req.audit_log.add(AuditEntry("Status: "+UpdateData().status+"\n"+quickStatus+"\nNotes: "+descController.text, globals.userName, DateTime.now().toUtc().toString()));
 
       //Send post of user request to backend
       var endpoint = globals.endpoint311 + "/request";
@@ -115,7 +120,7 @@ class UpdateReportBodyState extends State<UpdateReportBody> {
     } catch (e) {
       print(e);
     }
-    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/view_submitted_item');
   }
 
   @override

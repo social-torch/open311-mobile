@@ -130,19 +130,23 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
       date_stat_descript.add(timeStr);
 
       var notesStrTmp = "";
-      var notesStr1 = "";
-      var notesStr2 = "";
+      var notesStr = "";
       if (ae.change_note != "") {
         notesStrTmp = ae.change_note;
       }
       var notesStrListTmp = notesStrTmp.split('\n');
-      if (notesStrListTmp.length > 1) {
-        notesStr1 = notesStrListTmp[0];
+      var cnt = 0; //Only allow up to 3 lines
+      while (notesStrListTmp.length > 0) {
+        notesStr = notesStrListTmp[0];
+        date_stat_descript.add(notesStr);
         notesStrListTmp.removeAt(0);
-        notesStr2 = notesStrListTmp.join();
+        cnt++;
+        if (cnt >= 2 && notesStrListTmp.length > 0) {
+          notesStr = notesStrListTmp.join();
+          date_stat_descript.add(notesStr);
+          break;
+        }
       }
-      date_stat_descript.add(notesStr1);
-      date_stat_descript.add(notesStr2);
       status.add(new List<String>.from(date_stat_descript));
       date_stat_descript.clear();
     }
@@ -250,6 +254,7 @@ class ViewSubmittedItemBodyState extends State<ViewSubmittedItemBody> {
                     ),
                   ),
                   Text(status[Index].elementAt(2)),
+                  Text(status[Index].elementAt(3)),
                 ]  
               ),
             ),
