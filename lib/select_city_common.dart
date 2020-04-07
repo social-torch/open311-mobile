@@ -29,10 +29,12 @@ Future<int> getUsers(endpoint) async {
     }
   } catch (error, stacktrace) {
     assert(() {
+
       //Using assert here for debug only prints
-      print("getUsers($endpoint) Exception occured: $error stackTrace: $stacktrace");
+      print("getUsers($endpoint) Exception occured: $error : ${error.response}");
       return true;
     }());
+
     //This is a poor mans threadish way to doing processing on the side without deadlocking async
     compute(sleepThread, 1).then((num) { 
       getUsers(endpoint).then((cnt) { retval += cnt; });

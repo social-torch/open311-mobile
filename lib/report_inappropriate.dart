@@ -28,7 +28,7 @@ class FeedbackInfo {
 
   Map<String, dynamic> toJson() =>
       {
-        'type':'feedback',
+        'type':'concern',
         'account_id': account_id,
         'request_id': request_id,
         'description': description
